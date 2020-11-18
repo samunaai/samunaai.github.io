@@ -9,7 +9,8 @@
 		<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap" rel="stylesheet">
 		<style>
 			:root {
-			  --wide: 650px;
+			  --wide1: 710px;
+			  --wide2: 650px;
 			}
 			* {
 				font-family: 'Montserrat';
@@ -21,7 +22,7 @@
 			
 			.bio-div { 
  				float: top;   
-				width: var(--wide);
+				width: var(--wide1);
 				background-color: white; 
 				/*margin: 50px; */
 				/*width: 660px;*/
@@ -38,9 +39,16 @@
 				float: top; 
 				border: 1px solid black;
 				height: 300px;
-				width: var(--wide);
+				width: var(--wide2);
+				margin:30px;
 			} 
 			
+			.bio-inner { 
+				position: relative;
+				float: top; 
+				width: var(--wide2);
+				margin:30px;
+			} 
 			.personal-div { 
 				position: relative;
 				float: left; 
@@ -78,16 +86,20 @@
 	        </div>
      	</div>
 		<div class = "bio-div">
-			<p > Hi! I am Munachiso. I am currently working on getting MSc in computer vision at the world's first AI-focused research university.
-			</p>
-			<p>
-			I got a BSc in computer science at NYU, where  I worked on projects like my
-			<a href="https://github.com/munachisonwadike/ASL-NET-API/blob/master/ASLNET_Final_Report.pdf">mobile app</a> that interprets sign language, and neural nets that interpret satellite images. After graduating, I spent some time working with Rhodes scholar Dr. Farah Shamout, at the NYU Abu Dhabi Clinical AI lab on deep learning for healthcare. I enjoy coding, tutoring, and reading academic papers. 
-			</p> 
-	     
+			<div class = "bio-inner">
+				<p > Hi! I am Munachiso. I am currently working on getting MSc in computer vision at the world's first AI-focused research university.
+				</p>
+				<p>
+				I got a BSc in computer science at NYU, where  I worked on projects like my
+				<a href="https://github.com/munachisonwadike/ASL-NET-API/blob/master/ASLNET_Final_Report.pdf">mobile app</a> that interprets sign language, and neural nets that interpret satellite images. After graduating, I spent some time working with Rhodes scholar Dr. Farah Shamout, at the NYU Abu Dhabi Clinical AI lab on deep learning for healthcare. I enjoy coding, tutoring, and reading academic papers. 
+				</p> 
+		    </div>
 	    </div>
 		<div class = "bio-div">
-			<p><a href="https://medium.com/@munachisonwadike/the-mythical-man-month-5a08324dd0e">On Software Engineering</a></p>
+			<div class = "bio-inner">
+				<p><a href="https://medium.com/@munachisonwadike/the-mythical-man-month-5a08324dd0e">On Software Engineering</a></p>
+			</div>
     	</div>
 	</body>
 </html> 
+
