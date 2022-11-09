@@ -78,9 +78,15 @@
 			<br>
 			<center><img src="cost_landscape.PNG" alt="Cost" style="marin-top:10px;max-width:80%;"> </center>
 			<div class = "caption-div"> 
-				<br>
-				$$\frac{a}{b}$$When $a \ne 0$, there are two solutions to \(ax^2 + bx + c = 0\) and they are
-				$$x = {-b \pm \sqrt{b^2-4ac} \over 2a}.$$ 
+			<br>
+			Consider $x = [x_1,\cdots,x_6] \in \mathcal{X} = [-5,5]^6 \subset \mathbb{R}^6$. 
+				For  objective function in (a), $\mathrm{obj}(x) = |x_1^2 + x_2^2 + x_3^2 + x_4^2 + x_5^2 + x_6|$. 
+				The corresponding $\mathrm{cost}(x)$ in (b) is the sum of costs in (c), (d), and (e). In (c) is the cost in $|\sin(x_1^2)+\cos(x_1+x_2)|$. 
+				In (d)  the cost function is $|\sin(x_3)\cdot \cos(10+x_4)|$ and in (e) the cost function is $|\cos(x_5/x_6) \cdot \sin(4-x_5x_6)\cdot \sin(0.5\cdot x_5) |$. 
+				Note that while the functions in (a) and (b) are 6-dimensional, we represent them in 2D. 
+				The figure (b) indicates the high cost and low cost regions occur in different parts of the space from the high and low objective function regions. 
+				Our work is particular concerned with settings where cost and objective are uncorrelated.
+				Our goals, with multi-stage ML pipelines, is to minimise total cost, while optimising the objective function shown in (a).  
 			</div>
 		</div>
 		</div>
