@@ -63,43 +63,43 @@
 			<br><br><br><br>
 		</div>
 		
-		<div class = "section-div" style="float:left;margin-left: 200px;"> 
-			<center><p style="font-family: 'Montserrat'; font-size: 40px; text-align: center;">Abstract</p> </center>
-			<p>Bayesian optimization (BO) offers a simple mechanism of optimising functions whose
-				closed form expression may not be known, within a limited iteration budget. This is
-				particularly useful in the problem of hyperparameter tuning. At each iteration, different
-				regions in a search space of inputs may incur different costs, i.e time units required to
-				perform a query. The function which assigns a cost to each point in the input space may
-				also not be known. Much of the BO literature, however, tends to focus on the number of
-				iterations incurred for convergence, rather than the total costs incurred. Furthermore, little
-				research has been done on specified formulations of BO which are needed for ML pipeline
-				hyperparameter tuning. In the ML pipeline setting, we wish to tune hyperparameters of
-				not just a machine learning model, but also of any additional steps involved in the overall
-				artificial intelligence system. For example, in computer vision, we may be concerned with
-				image preprocessing and output postprocessing steps, and the hyperparameters involved
-				in these stages our pipeline. When performing hyperparameter search in an ML pipeline
-				setting, we can cache hyperparameter combinations from earlier stages of a pipeline, once
-				queried, to be reused with hyperparameter combinations of latter stages in a pipeline, for
-				a more effecient search. This cache-and-reuse is referred to as memoisation. We propose
-				a new acquisition function for BO, referred to as EEIPU, that is uniquely suited to the
-				pipeline setting. Furthermore, we explore techniques regarding the combination of EEIPU,
-				with memoised hyperparameter search. One key feature of EEIPU is that we design it to
-				work in a scenario whereby the closed form of the cost function at each pipeline stage
-				is unknown. In addition, we devote extensive resources to designing ML pipeline tuning
-				systems, which can work hand-in-hand with our acquisition function. These systems are
-				built towards allowing our acquisition function to be deployed in real-world industry or
-				research use cases, for entire-pipeline hyperparameter tuning. We study the experimental
-				behaviour of EEIPU, and compare it with related acquisition functions in the literature,
-				to better understand its performance, and propose future research directions</p>
-		</div>
-		<div class = "section-div"  style="float:right;margin-left: 200px;"> 
-			<center><p style= "font-family: 'Montserrat'; font-size: 40px; text-align: center;">Example</p> <center>
-			<center><img src="3_stage_ppln.PNG" alt="Cost" style="max-width:70%;" ></center> 
-		</div> 
+		<div class="section-div" style="float:center">
+			<div class = "section-div" style="float:left;margin-left: 200px;"> 
+				<center><p style="font-family: 'Montserrat'; font-size: 40px; text-align: center;">Abstract</p> </center>
+				<p>Bayesian optimization (BO) offers a simple mechanism of optimising functions whose
+					closed form expression may not be known, within a limited iteration budget. This is
+					particularly useful in the problem of hyperparameter tuning. At each iteration, different
+					regions in a search space of inputs may incur different costs, i.e time units required to
+					perform a query. The function which assigns a cost to each point in the input space may
+					also not be known. Much of the BO literature, however, tends to focus on the number of
+					iterations incurred for convergence, rather than the total costs incurred. Furthermore, little
+					research has been done on specified formulations of BO which are needed for ML pipeline
+					hyperparameter tuning. In the ML pipeline setting, we wish to tune hyperparameters of
+					not just a machine learning model, but also of any additional steps involved in the overall
+					artificial intelligence system. For example, in computer vision, we may be concerned with
+					image preprocessing and output postprocessing steps, and the hyperparameters involved
+					in these stages our pipeline. When performing hyperparameter search in an ML pipeline
+					setting, we can cache hyperparameter combinations from earlier stages of a pipeline, once
+					queried, to be reused with hyperparameter combinations of latter stages in a pipeline, for
+					a more effecient search. This cache-and-reuse is referred to as memoisation. We propose
+					a new acquisition function for BO, referred to as EEIPU, that is uniquely suited to the
+					pipeline setting. Furthermore, we explore techniques regarding the combination of EEIPU,
+					with memoised hyperparameter search. One key feature of EEIPU is that we design it to
+					work in a scenario whereby the closed form of the cost function at each pipeline stage
+					is unknown. In addition, we devote extensive resources to designing ML pipeline tuning
+					systems, which can work hand-in-hand with our acquisition function. These systems are
+					built towards allowing our acquisition function to be deployed in real-world industry or
+					research use cases, for entire-pipeline hyperparameter tuning. We study the experimental
+					behaviour of EEIPU, and compare it with related acquisition functions in the literature,
+					to better understand its performance, and propose future research directions</p>
+			</div>
+			<div class = "section-div"  style="float:right;margin-left: 200px;"> 
+				<center><p style= "font-family: 'Montserrat'; font-size: 40px; text-align: center;">Example</p> <center>
+				<center><img src="3_stage_ppln.PNG" alt="Cost" style="max-width:70%;" ></center> 
+			</div> 
+		</div>		
 		<div class = "section-div" > 
-			<br>
-			<br>
-			<br>
+			<br><br><br>
 			<center><img src="cost_landscape.PNG" alt="Cost" style="marin-top:10px;max-width:80%;"> </center>
 			<div class = "caption-div"> 
 			<br>
