@@ -7,105 +7,65 @@
 		
 		<link rel="preconnect" href="https://fonts.gstatic.com">
 		<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap" rel="stylesheet">
-		<style>
-			:root {
-			  --wide1: 710px;
-			  --wide2: 710px;
-			}
-
-			a { 
-				color: inherit;
-			} 
-			
-			p {
-				font-family: 'Montserrat';
+		<style>   
+			.title-div { 
+ 				float: top;    
+				font-family: 'Montserrat'; 
 				font-size: 20px;
+				background-color: white;   
+				border-bottom: 3px solid black;  
 			} 
-			
-			.bio-div { 
- 				float: top;   
-				width: var(--wide1);
-				background-color: white;  
-				margin: auto;
-				border-bottom: 3px solid black;
-				text-align: justify;
-				text-justify: inter-word; 
-			} 
-			.top-div { 
+			.section-title-div { 
 				position: relative;
 				float: top;  
-				height: auto
-				width: var(--wide2);
-				margin:30px;
-				margin-left: 84px;
+				height: auto  
 			} 
 			
 			.section-div { 
 				display: inline-block
 				float: center; 
-			}  
-			.div-inner { 
-				position: relative;
-				float: top; 
-				width: var(--wide2);
-				margin:30px;
-				margin-left: 84px;
-			}  
-			.personal-div { 
-				position: relative;
-				float: top; 
-				color: black;
-				width: 890px;
-				margin-left: -120px 
+			}   
+			p {
+				font-family: 'Montserrat';
+				font-size: 20px;
 			} 
-
 		 </style>
 		  <title> Hyperparameter Tuning Project Page </title>
 	</head>
     
 	<body>
-       	<div class = "bio-div" >
-	        <div class = "top-div" > 
-	        	<div class = "personal-div">
-				<p style="font-size:35px" align="center"> <b>Bayesian Optimisation <br> for Efficient ML Pipeline Hyperparameter Tuning <br> Under a Cost Budget </b>
-				</p>
-			</div>
-				<p > <img src="cost_landscape.PNG" alt="Cost" style="width:550px;
-						    display: center; 
-						    margin-top: 23px; border:3px solid black;"> 
-				</p>
-				
-	        </div>
-     	</div>
-	<div class = "bio-div">
-		<div class = "div-inner">
-			<div class = "section-div">
-				<p > 1. Abstract 
-				</p>
-			</div>
-			<p > <img src="memoisation.PNG" alt="Memoisation" style="width:550px;
-					    display: center; 
-					    margin-top: 23px; border:3px solid black;"> 
-			</p>
-
-			<p > <img src="3_stage_ppln.PNG" alt="Cost" style="width:550px;
-						    display: center; 
-						    margin-top: 23px; border:3px solid black;"> 
-			</p>
-			<div class = "section-div">
-				<p> 2. Examples
-				</p>
-			</div>
-			<div class = "section-div">
-				<p> 3. Project Overview
-				</p>  
-			</div>
-	    </div>
+       	<div class = "title-div" >
+		<p style="font-size:35px" align="center"> <b>Bayesian Optimisation <br> for Efficient ML Pipeline Hyperparameter Tuning <br> Under a Cost Budget </b>
+		</p>
 	</div>
-	<div class = "bio-div">
-			<div class = "div-inner">
-				<p> 4. Methodology and Experiments </p>
-			</div>
-    	</div>
+	<div class = "section-div" > 
+		<p > <img src="cost_landscape.PNG" alt="Cost" > 
+		</p>
+	</div>
+     	</div>
+	<div class = "section-title-div"> 
+		<p > 1. Abstract 
+		</p>
+	</div>
+	<div class = "section-div" > 
+		<p > <img src="memoisation.PNG" alt="Memoisation" > 
+		</p>
+	</div>
+	<div class = "section-title-div"> 
+		<p > 2. Examples
+		</p>
+	</div>		 
+	<div class = "section-div" > 
+		<p > <img src="3_stage_ppln.PNG" alt="Cost"  > 
+		</p>
+	</div> 
+	<div class = "section-title-div"> 
+		<p > 3. Project Overview
+		</p>
+	</div>	  
+	<div class = "section-title-div"> 
+		<p > 4. Methodology and Experiments 
+		</p>
+	</div> 
 	</body>
 </html>
