@@ -34,10 +34,17 @@
 				width: 710px;
 				margin: auto;
 			} 
-			.exp-div { 
+			.matplotlib-div { 
 				float: center; 
 				width: 900px;
 				margin: auto;
+			} 
+			.caption-div { 
+				float: center; 
+				width: 900px;
+				margin: auto;
+				font-family: 'Montserrat';
+				font-size: 12px;
 			} 
 			p {
 				font-family: 'Montserrat';
@@ -66,8 +73,10 @@
 			<br>
 			<br>
 			<img src="cost_landscape.PNG" alt="Cost" style="marin-top:10px"> 
-			<p> When $a \ne 0$, there are two solutions to \(ax^2 + bx + c = 0\) and they are
-				$$x = {-b \pm \sqrt{b^2-4ac} \over 2a}.$$ </p>
+			<div class = "caption-div"> 
+				<b>When $a \ne 0$, there are two solutions to \(ax^2 + bx + c = 0\) and they are
+				$$x = {-b \pm \sqrt{b^2-4ac} \over 2a}.$$ </b>
+			</div>
 		</div>
 		</div>
 		<div class = "section-title-div"> 
@@ -123,7 +132,7 @@
 			<b><u>3. Experiments</u> </b> 
 			<br>
 		</div>	
-		<div class = "exp-div" > 
+		<div class = "matplotlib-div" > 
 			<center><img src="norm3d_2.png" alt="Cost" style="max-width:100%;" ></center> 
 			<center><img src="branin4d.png" alt="Cost" style="max-width:100%;" ></center> 
 		</div> 
