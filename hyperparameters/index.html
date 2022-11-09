@@ -54,16 +54,10 @@
 			img {
 				max-width:100%;
 			} 
-		 </style>
-		<script type="text/x-mathjax-config">
-		    MathJax.Hub.Config({
-		      tex2jax: {
-			skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
-			inlineMath: [['$','$']]
-		      }
-		    });
-		</script>
-		<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script> 
+		</style>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" integrity="sha384-yFRtMMDnQtDRO8rLpMIKrtPCD5jdktao2TV19YiZYWMDkUR5GQZR/NOVTdquEx1j" crossorigin="anonymous">
+		<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.js" integrity="sha384-9Nhn55MVVN0/4OFx7EE5kpFBPsEMZxKTCnA+4fqDmg12eCTqGi6+BB2LjY8brQxJ" crossorigin="anonymous"></script>
+		<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
 		<title> Hyperparameter Tuning Project Page </title>
 	</head>
     
@@ -79,7 +73,7 @@
 			<center><img src="cost_landscape.PNG" alt="Cost" style="marin-top:10px;max-width:80%;"> </center>
 			<div class = "caption-div"> 
 				<br>
-				<b>When $a \ne 0$, there are two solutions to \(ax^2 + bx + c = 0\) and they are
+				<b>$$\frac{a}{b}$$When $a \ne 0$, there are two solutions to \(ax^2 + bx + c = 0\) and they are
 				$$x = {-b \pm \sqrt{b^2-4ac} \over 2a}.$$ </b>
 			</div>
 		</div>
