@@ -121,20 +121,22 @@
 					Consider, for example, the below 3-stage pipeline with 2 hyperparameters per stage. 
 					$[x_1, x_2]$, $[x_3, x_4]$, and $[x_5, x_6]$ represent the hyperparameters for stage 1, 2 and 3 respectively.
 					Meanwhile, the cost functions for the 3 stages are represented by $|\sin(x_1^2)+\cos(x_1+x_2)|$, $|\sin(x_3)\cdot \cos(10+x_4)|$,
-					and $|\cos(x_5/x_6) \cdot \sin(4-x_5x_6)\cdot \sin(0.5\cdot x_5) |$ respectively. If we consider the heatmaps of cost values for each stage, wherein the hyperparameters are restricted to
+					and $|\cos(x_5/x_6) \cdot \sin(4-x_5x_6)\cdot \sin(0.5\cdot x_5) |$ respectively. If we consider the heatmaps of cost values for each stage, wherein the hyperparameter values are restricted to
 					$[-5,5]$, the cost function spaces will appears as shown on the right hand side of the below image. </p>
 
 					<center><img src="cost_landscape.PNG" alt="Cost" style="margin-top:10px;max-width:70%;"> </center>
 
 				<p>
-					The overall cost function of the pipeline is therefore $|\sin(x_1^2)+\cos(x_1+x_2)|$ + $|\sin(x_3)\cdot \cos(10+x_4)|$ + $|\cos(x_5/x_6) \cdot \sin(4-x_5x_6)\cdot \sin(0.5\cdot x_5) |$. The addition of the costs 
-					is the direct result of composition of pipelines stages. The heatmap of the total cost is represented 
-					in the top left corner of the above image. Note that while this is a function in $\mathbb{R}^6$, we 
-					represent it in two-dimensions for ease of viewing. 
-					The  objective function is defined as $\mathrm{obj}(x) = |x_1^2 + x_2^2 + x_3^2 + x_4^2 + x_5^2 + x_6|$, 
+					The overall cost function of the pipeline is therefore $|\sin(x_1^2)+\cos(x_1+x_2)|$ + $|\sin(x_3)\cdot \cos(10+x_4)|$ + $|\cos(x_5/x_6) \cdot \sin(4-x_5x_6)\cdot \sin(0.5\cdot x_5) |$. It is visualised in the top left corner of the above image.  Note that while this is a function in $\mathbb{R}^6$, we 
+					provide a 2-dimensional visualisation  of the function upon the 6-dimensional domain. The addition of the costs 
+					is the direct result of composition of pipelines stages. <br><br>
+
+					Our goals, with our novel BO algorithm for ML pipelines, is to is to minimise total cost over all pipeline stages, while optimising the objective function. In this case, the objective function is defined as $\mathrm{obj}(x) = |x_1^2 + x_2^2 + x_3^2 + x_4^2 + x_5^2 + x_6|$, 
 					also represented in 2D.
  					Observe that the high cost and low cost regions occur in different parts of the space from the high and low objective function regions. 
-					Our goals, with ournovel BO algorithm for ML pipelines, is to is to minimise total cost, while optimising the objective function. </p>
+
+
+					 </p>
 
 		</div>
 
@@ -151,15 +153,27 @@
 				setting, we can cache hyperparameter combinations from earlier stages of a pipeline, once
 				queried, to be reused with hyperparameter combinations of latter stages in a pipeline, for
 				a more effecient search. This cache-and-reuse is referred to as memoisation. For example, to the left of the image below, we have a 3-stage pipeline where $x_1=1.2$, $x_2=4.0$, and $x_3=1.0$, 
-				are the hyperparameters for the 3 respective pipeline stages. 
-				The costs associated with the hyperparameter at each stage, is shown in orange, so for instance, the cost for the first stage is 5.1, while that of the last stage is 2.0 </p>
+				are the hyperparameters for 3 respective ML pipeline stages. 
+				The costs associated with the hyperparameter is shown in orange, e.g the cost for the stage 1 is 5.1. </p>
 
 			<center><img src="memoisation.PNG" alt="Memoisation" style="max-width:80%;"> </center>
-			<p> We propose
-				a new acquisition function for BO, referred to as EEIPU, that is uniquely suited to the
-				pipeline setting.  We show how it can be combined with memoised hyperparameter search for efficient BO. 
-				For instance, to the right of the image below, we have what is known as a "prefix pool", resulting from the single queried hyperparameter combination on the left. 
-				This prefix pool has two entries: the first is a hyperparameter combination where only the first stage is fixed at 1.2, and the second is a hyperparameter combination where the first 2 stages are fixed. Our EEIPU acquisition function is built to bias towards regions of the space which have already been queried. For the first entry, we would only need to query within a square region to find optimal values for $x_2$ and $x_3$, while for the secon entry, we would need to perform a <i>line search</i>. Entries in our prefix pool represent a unique opportunity to achieve cost minimisation, since previously queried hyperparameter combinations for a  stage can be discounted from the total cost for all stages. </p>
+			<p> To the right of the image below, we have a "prefix pool", resulting from the queried hyperparameter combination
+				This prefix pool has two entries: the first is a hyperparameter combination where $x_1=1.2$ was stored from a prior run, and the second is one where $x_1=1.2$ and  $x_2=4.0$ were both stored. Our proposed EEIPU acquisition function 
+				would discount costs from prior queried hyperparameters in both cases, when calculating expected improvement per unit costs. 
+
+			</p>
+
+			<center><img src="algorithm_eeipu.PNG" alt="eeipu_mem" style="max-width:70%;"> </center>
+			<p> We discount the cost of non-memoised stages within our acqusition function as above. Expected inverse cost excludes 
+			costs from stages which have been memoised. $\delta$ is a threshold variables that tells us the earliest non-memoised 
+			stage from which to begin considering costs (i.e where we end our discounting). Discounting memoised costs in this way may result in over-biasing towards previously queried points. Our research finds the needed balance between exploration and exploitation.  
+
+			<br><br>
+			While we have analytical, closed form expressions for the cost functions for the above pipeline, this is 
+				often not the case for real world piplines. For example, one usually does not know the relationship between hyperparmaeters 
+				of a computer vision pipeline and pipeline latency/speed. As a result, we model cost at each pipeline stage
+				as a Guassian process, and log latency measurements for queried hyperparameter combinations, to use in iteratively modeling the stagewise costs.
+				 </p>
 		</div>
 		
 		<div class = "section-div" style="float:center;width:1050;"> 
@@ -167,16 +181,17 @@
 			<center><p style="font-family: 'Montserrat'; font-size: 40px; text-align: center;">Experiments</p> </center>  
 		</div>
 		<div class = "section-div" style="float:center;width:850;">  
-			<p>If indeed our algorithm worked, we would expect to see that our EEIPU function would perform identically to EIPU. This is precisely what happens. EIPU has the advantage of having an oracle available to it. However EEIPU does not. All methods outpuerform random search. Typical expected improvement, which does not factor in cost at all, would perform well in terms of 
-			the number of iterations, but underperform in terms of cumulative cost, this is precisely the nature of our observed results.</p>
+			<p>BO algorithms are often tested on a range of synthetic functions designed to assess convergence.
+			Compositions of these functions can be use to form a pipeline. Below are results for 2-stage pipeline where the 
+			cost objective for each stage is a 2-dimensional negative Branin function, while the objective function is a sum of logistic functions. The overall objective, is given by $-$Branin$(x_1,x_2)$ $-$Branin$(x_3,x_4)$. Stagewise costs are $-\texttt{logistic}(x_1) -\texttt{logistic}(x_2)$ for stage 1, and $-\texttt{logistic}(x_3) + (1/x_4)$ for stage 2.</p>
 		</div>
 		<div class = "section-div" style="float:center;width:1050;"> 
-			<center><img src="norm3d_2.png" alt="Cost" style="max-width:95%;" ></center> 
+			<!-- <center><img src="norm3d_2.png" alt="Cost" style="max-width:95%;" ></center>  -->
 			<center><img src="branin4d.png" alt="Cost" style="max-width:95%;" ></center> 	
 		</div>
 		<div class = "section-div" style="float:center;width:850;"> 
 			<br><br>
-			<p>If indeed our algorithm worked, we would expect to see that our EEIPU function would perform identically to EIPU. This is precisely what happens. EIPU has the advantage of having an oracle available to it. However EEIPU does not. All methods outpuerform random search. Typical expected improvement, which does not factor in cost at all, would perform well in terms of 
+			<p>Our EEIPU algorithm If indeed our algorithm worked, we would expect to see that our EEIPU function would perform identically to EIPU. This is precisely what happens. EIPU has the advantage of having an oracle available to it. However EEIPU does not. All methods outpuerform random search. Typical expected improvement, which does not factor in cost at all, would perform well in terms of 
 			the number of iterations, but underperform in terms of cumulative cost, this is precisely the nature of our observed results.</p>
 			<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 		</div> 
