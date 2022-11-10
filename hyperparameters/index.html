@@ -14,7 +14,7 @@
 				font-size: 40px;
 				background-color: white;   
 				border-bottom: 0px solid black;  
-				width: 950px;
+				width: 1200px;
 				margin: auto;
 				text-align: center;
 			} 
@@ -34,6 +34,7 @@
 				margin: auto;
 				font-family: 'Open Sans';
 				font-size: 14px;
+				text-align:justify;
 			} 
 			p {
 				font-family: 'Open Sans';
@@ -60,72 +61,86 @@
 		<div class = "title-div" >
 			<br><br> 
 			<b>Bayesian Optimisation <br> for Efficient ML Pipeline Hyperparameter Tuning <br> Under a Cost Budget </b>
-			<br><br><br><br>
+
 		</div>
+		<div class = "title-div"  style="font-family:'Montserrat';font-size:20px;color:#209CEE;" >
+			<br>
+			<b>
+			<a style="color:#209CEE;" href="https://munachisonwadike.github.io/">Munachiso S. Nwadike</a>,
+			Navish Kumar, 
+			Kirill Vishniakov,  
+			<a style="color:#209CEE;" href="https://willieneis.github.io/">Willie Neiswanger</a>,
+			<a style="color:#209CEE;" href="https://www.andrew.cmu.edu/user/kunz1/index.html">Kun Zhang</a>,
+			<a style="color:#209CEE;" href="https://sites.google.com/site/hoqirong/home">Qirong Ho</a>,
+			<a style="color:#209CEE;" href="http://www.cs.cmu.edu/~epxing/">Eric Xing</a>
+			</b>
+		</div>
+		<div class = "title-div"  style="font-family: 'Montserrat'; font-size: 30px;" >
+			</br>
+			<a href="https://munachisonwadike.github.io/"> 
+			<button style="background-color:#363636;border-color:#363636;color:white;font-size: 25px;padding: 5px 10px;border-radius: 12px;">📝 Paper</button> 
+			</a>
+		</div> 
+
+		<div class = "title-div"  style="font-family: 'Montserrat'; font-size: 16px;color:#209CEE" >
+			<br>
+			<b>In Publication, Coming Soon.</b>
+		</div> 
+
+		<div class = "title-div"  style="font-family: 'Montserrat'; font-size: 18px;color:#4A4A4A;width:800px" >
+			<br><br><br>
+			<b>One Sentence Summary: <span style="color:#38761D">Bayesian Optimisation </span>, 
+				<span style="color:#38761D">Pipelines</span> setting in ML, Learned Cost, <span style="color:#38761D">Memoisation</span></b>
+			<br>
+			<br>
+			<br>
+			<br> 
+		</div> 
 		
-		<div class="section-div" style="float:center;width:auto">
-			<div class = "section-div" style="float:left;margin-left: 200px;"> 
+		<div class="section-div" style="float:center;width:1050;height:700 ">
+			<div class = "section-div" style="float:left;width:500;"> 
 				<center><p style="font-family: 'Montserrat'; font-size: 40px; text-align: center;">Abstract</p> </center>
-				<p>Bayesian optimization (BO) offers a simple mechanism of optimising functions whose
-					closed form expression may not be known, within a limited iteration budget. This is
-					particularly useful in the problem of hyperparameter tuning. At each iteration, different
-					regions in a search space of inputs may incur different costs, i.e time units required to
-					perform a query. The function which assigns a cost to each point in the input space may
-					also not be known. Much of the BO literature, however, tends to focus on the number of
-					iterations incurred for convergence, rather than the total costs incurred. Furthermore, little
-					research has been done on specified formulations of BO which are needed for ML pipeline
-					hyperparameter tuning. In the ML pipeline setting, we wish to tune hyperparameters of
-					not just a machine learning model, but also of any additional steps involved in the overall
-					artificial intelligence system. For example, in computer vision, we may be concerned with
-					image preprocessing and output postprocessing steps, and the hyperparameters involved
-					in these stages our pipeline. When performing hyperparameter search in an ML pipeline
+				<p>Bayesian optimization (BO) is particularly useful for 
+					hyperparameter tuning. At each iteration of BO, different
+					hyperparameters may incur different costs, i.e time units required to
+					perform a query. Thus measuring covergence speed in terms of number of iterations,
+					may not be representative of the true cost of a hyperparameter. For instance, 
+					different learning ratesin a model training step may result in different convergence times.
+					Training hyperparameters alone may not be sufficient to train. 
+					For eaxmple preprocessing and postprocessing steps form part of the ML pipeline. 
+					When performing hyperparameter search in an ML pipeline
 					setting, we can cache hyperparameter combinations from earlier stages of a pipeline, once
 					queried, to be reused with hyperparameter combinations of latter stages in a pipeline, for
 					a more effecient search. This cache-and-reuse is referred to as memoisation. We propose
 					a new acquisition function for BO, referred to as EEIPU, that is uniquely suited to the
 					pipeline setting. Furthermore, we explore techniques regarding the combination of EEIPU,
-					with memoised hyperparameter search. One key feature of EEIPU is that we design it to
-					work in a scenario whereby the closed form of the cost function at each pipeline stage
-					is unknown. In addition, we devote extensive resources to designing ML pipeline tuning
-					systems, which can work hand-in-hand with our acquisition function. These systems are
-					built towards allowing our acquisition function to be deployed in real-world industry or
-					research use cases, for entire-pipeline hyperparameter tuning. We study the experimental
-					behaviour of EEIPU, and compare it with related acquisition functions in the literature,
-					to better understand its performance, and propose future research directions</p>
+					with memoised hyperparameter search.</p>
 			</div>
-			<div class = "section-div"  style="float:right;"> 
+			<div class = "section-div" style="float:right;width:500;">  
+				<center><p style="font-family: 'Montserrat'; font-size: 40px; text-align: center;">Methodology</p> </center>  
+				<center><img src="cost_landscape.PNG" alt="Cost" style="margin-top:10px;max-width:100%;"> </center>
+				<div class = "caption-div" style="width:500;"> 
+				<br>
+				Consider $x = [x_1,\cdots,x_6] \in \mathcal{X} = [-5,5]^6 \subset \mathbb{R}^6$. 
+					For  objective function in (a), $\mathrm{obj}(x) = |x_1^2 + x_2^2 + x_3^2 + x_4^2 + x_5^2 + x_6|$. 
+					The corresponding $\mathrm{cost}(x)$ in (b) is the sum of costs in (c), (d), and (e). In (c) is the cost in $|\sin(x_1^2)+\cos(x_1+x_2)|$. 
+					In (d)  the cost function is $|\sin(x_3)\cdot \cos(10+x_4)|$ and in (e) the cost function is $|\cos(x_5/x_6) \cdot \sin(4-x_5x_6)\cdot \sin(0.5\cdot x_5) |$. 
+					Note that while the functions in (a) and (b) are 6-dimensional, we represent them in 2D. 
+					The figure (b) indicates the high cost and low cost regions occur in different parts of the space from the high and low objective function regions. 
+					Our work is particular concerned with settings where cost and objective are uncorrelated.
+					Our goals, with multi-stage ML pipelines, is to minimise total cost, while optimising the objective function shown in (a).  
+				</div> 
+			
+			</div> 
+		</div>	
+
+		<div class = "section-div"  style="float:center;width:500;"> 
 				<center><p style= "font-family: 'Montserrat'; font-size: 40px; text-align: center;">Example</p> <center>
 				<center><img src="3_stage_ppln.PNG" alt="Cost" style="max-width:70%;" ></center> 
-			</div> 
-		</div>		
-		<div class = "section-div" > 
-			<br><br><br>
-			<center><img src="cost_landscape.PNG" alt="Cost" style="marin-top:10px;max-width:80%;"> </center>
-			<div class = "caption-div"> 
-			<br>
-			Consider $x = [x_1,\cdots,x_6] \in \mathcal{X} = [-5,5]^6 \subset \mathbb{R}^6$. 
-				For  objective function in (a), $\mathrm{obj}(x) = |x_1^2 + x_2^2 + x_3^2 + x_4^2 + x_5^2 + x_6|$. 
-				The corresponding $\mathrm{cost}(x)$ in (b) is the sum of costs in (c), (d), and (e). In (c) is the cost in $|\sin(x_1^2)+\cos(x_1+x_2)|$. 
-				In (d)  the cost function is $|\sin(x_3)\cdot \cos(10+x_4)|$ and in (e) the cost function is $|\cos(x_5/x_6) \cdot \sin(4-x_5x_6)\cdot \sin(0.5\cdot x_5) |$. 
-				Note that while the functions in (a) and (b) are 6-dimensional, we represent them in 2D. 
-				The figure (b) indicates the high cost and low cost regions occur in different parts of the space from the high and low objective function regions. 
-				Our work is particular concerned with settings where cost and objective are uncorrelated.
-				Our goals, with multi-stage ML pipelines, is to minimise total cost, while optimising the objective function shown in (a).  
-			</div>
+				<center><img src="memoisation.PNG" alt="Memoisation" style="max-width:85%;"> </center>
 		</div>
-		</div>
-		<div class = "section-div"> 
-			<br>
-			<br>
-			<br>
-			<center><p style="font-family: 'Montserrat'; font-size: 40px; text-align: center;">Methodology</p> </center>  
-			<br><br>
-			<center><img src="memoisation.PNG" alt="Memoisation" style="max-width:85%;"> </center>
-		</div> 
-		<div class = "section-title-div"> 
-			<br>
-			<br>
-			<br>
+		
+		<div class = "section-title-div">  	
 			<center><p style="font-family: 'Montserrat'; font-size: 40px; text-align: center;">Experiments</p> </center>  
 			<br>
 		</div>	
