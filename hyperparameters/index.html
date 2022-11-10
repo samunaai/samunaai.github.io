@@ -27,15 +27,7 @@
 				float: center; 
 				width: 900px;
 				margin: auto;
-			} 
-			.caption-div { 
-				float: center; 
-				width: 710px;
-				margin: auto;
-				font-family: 'Open Sans';
-				font-size: 14px;
-				text-align:justify;
-			} 
+			}  
 			p {
 				font-family: 'Open Sans';
 				font-size: 16px;
@@ -97,8 +89,8 @@
 			<br> 
 		</div> 
 		
-		<div class="section-div" style="float:center;width:1050;height:700 ">
-			<div class = "section-div" style="float:left;width:500;"> 
+		<div class="section-div" style="float:center;width:1000;height:550 ">
+			<div class = "section-div" style="float:left;width:500;height:550"> 
 				<center><p style="font-family: 'Montserrat'; font-size: 40px; text-align: center;">Abstract</p> </center>
 				<p>Bayesian optimization (BO) is particularly useful for 
 					hyperparameter tuning. At each iteration of BO, different
@@ -116,39 +108,55 @@
 					pipeline setting. Furthermore, we explore techniques regarding the combination of EEIPU,
 					with memoised hyperparameter search.</p>
 			</div>
-			<div class = "section-div" style="float:right;width:500;">  
-				<center><p style="font-family: 'Montserrat'; font-size: 40px; text-align: center;">Methodology</p> </center>  
-				<center><img src="cost_landscape.PNG" alt="Cost" style="margin-top:10px;max-width:100%;"> </center>
-				<div class = "caption-div" style="width:500;"> 
-				<br>
-				Consider $x = [x_1,\cdots,x_6] \in \mathcal{X} = [-5,5]^6 \subset \mathbb{R}^6$. 
+			<div class = "section-div" style="float:right;width:450;height:550">  
+				<center><p style="font-family: 'Montserrat'; font-size: 40px; text-align: center;">Example</p> </center>  
+				<center><img src="problem_visualisation.PNG" alt="Cost" style="margin-top:10px;max-width:90%;">  <center>
+			</div> 
+		</div>	
+
+		<div class = "section-div"  style="float:center;width:850;"> 
+				<center><p style= "font-family: 'Montserrat'; font-size: 40px; text-align: center;">Heterogenous Cost</p> <center>
+				<!-- <center><img src="memoisation.PNG" alt="Memoisation" style="max-width:85%;"> </center> -->
+				<center><img src="cost_landscape.PNG" alt="Cost" style="margin-top:10px;max-width:70%;"> </center>
+				<p>Consider $x = [x_1,\cdots,x_6] \in \mathcal{X} = [-5,5]^6 \subset \mathbb{R}^6$. 
 					For  objective function in (a), $\mathrm{obj}(x) = |x_1^2 + x_2^2 + x_3^2 + x_4^2 + x_5^2 + x_6|$. 
 					The corresponding $\mathrm{cost}(x)$ in (b) is the sum of costs in (c), (d), and (e). In (c) is the cost in $|\sin(x_1^2)+\cos(x_1+x_2)|$. 
 					In (d)  the cost function is $|\sin(x_3)\cdot \cos(10+x_4)|$ and in (e) the cost function is $|\cos(x_5/x_6) \cdot \sin(4-x_5x_6)\cdot \sin(0.5\cdot x_5) |$. 
 					Note that while the functions in (a) and (b) are 6-dimensional, we represent them in 2D. 
-					The figure (b) indicates the high cost and low cost regions occur in different parts of the space from the high and low objective function regions. 
+					The figure (b) infdicates the high cost and low cost regions occur in different parts of the space from the high and low objective function regions. 
 					Our work is particular concerned with settings where cost and objective are uncorrelated.
-					Our goals, with multi-stage ML pipelines, is to minimise total cost, while optimising the objective function shown in (a).  
-				</div> 
-			
-			</div> 
-		</div>	
+					Our goals, with multi-stage ML pipelines, is to minimise total cost, while optimising the objective function shown in (a). </p>
 
-		<div class = "section-div"  style="float:center;width:500;"> 
-				<center><p style= "font-family: 'Montserrat'; font-size: 40px; text-align: center;">Example</p> <center>
-				<center><img src="3_stage_ppln.PNG" alt="Cost" style="max-width:70%;" ></center> 
-				<center><img src="memoisation.PNG" alt="Memoisation" style="max-width:85%;"> </center>
+				<p>We usually think of just the model stage, as visualised in the image above. Now let us think about
+				individual hyperparameter, as in the image below: what do you see? The answer is ... </p>
+
+				<p>The question is how we can address the problem of .. </p>
+
+		</div>
+
+		<div class = "section-div"  style="float:center;width:850;"> 
+
+				<center><p style= "font-family: 'Montserrat'; font-size: 40px; text-align: center;">Methodology</p> <center>
+				
+
+				<p>We usually think of just the model stage, as visualised in the image above. Now let us think about
+				individual hyperparameter, as in the image below: what do you see? The answer is ... </p>
+				<center><img src="3_stage_ppln.PNG" alt="Cost" style="max-width:55%;" ></center> 
+
+				<p>The question is how we can address the problem of .. </p>
+
+				<!-- <center><img src="memoisation.PNG" alt="Memoisation" style="max-width:70%;"> </center> -->
+
 		</div>
 		
-		<div class = "section-title-div">  	
+		<div class = "section-div" style="float:center;width:1050;"> 
+			<br><br> 	
 			<center><p style="font-family: 'Montserrat'; font-size: 40px; text-align: center;">Experiments</p> </center>  
-			<br>
-		</div>	
-		<div class = "matplotlib-div" > 
-			<br><br>
-			<center><img src="norm3d_2.png" alt="Cost" style="max-width:100%;" ></center> 
-			<center><img src="branin4d.png" alt="Cost" style="max-width:100%;" ></center> 
-			<br><br><br><br><br><br><br><br>
+			<center><img src="norm3d_2.png" alt="Cost" style="max-width:90%;" ></center> 
+			<center><img src="branin4d.png" alt="Cost" style="max-width:90%;" ></center> 
+			
+
+			<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 		</div> 
 	</body>
 </html>
