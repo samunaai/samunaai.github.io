@@ -81,8 +81,8 @@
 
 		<div class = "title-div"  style="font-family: 'Montserrat'; font-size: 18px;color:#4A4A4A;width:800px" >
 			<br><br><br>
-			<b>One Sentence Summary: <span style="color:#38761D">Bayesian Optimisation </span>, 
-				<span style="color:#38761D">Pipelines</span> setting in ML, Learned Cost, <span style="color:#38761D">Memoisation</span></b>
+			<b>Key Words: <span style="color:#38761D">Bayesian </span>Optimisation, 
+				<span style="color:#38761D">Pipelines</span> setting in <span style="color:#38761D">ML</span>, <span style="color:#38761D">Learned Cost</span>, <span style="color:#38761D"> Memoisation</span>, <span style="color:#38761D">Cumulative</span> Cost.</b>
 			<br>
 			<br>
 			<br>
@@ -191,8 +191,7 @@
 		</div>
 		<div class = "section-div" style="float:center;width:850;"> 
 			<br><br>
-			<p>Our EEIPU algorithm If indeed our algorithm worked, we would expect to see that our EEIPU function would perform identically to EIPU. This is precisely what happens. EIPU has the advantage of having an oracle available to it. However EEIPU does not. All methods outpuerform random search. Typical expected improvement, which does not factor in cost at all, would perform well in terms of 
-			the number of iterations, but underperform in terms of cumulative cost, this is precisely the nature of our observed results.</p>
+			<p>Our EEIPU algorithm If indeed our algorithm worked, we would expect to see that our EEIPU function would perform identically to EIPU. This is what we observe from our initial experiments, as can be seen from green line sits in between the red and the yello in the second plot from the left, above. Regular expected improvement (EI), is represented by the red line. EI, which does not factor in cost at all, naturally performs well in terms of the traditional number of iterations required for convergence, but underperforms EEIPU and EIPU when cumulative cost is considered EIPU has the advantage of having an oracle available to it, which specifies the true cost at each point in the hyperparameter space. This is not realistic in real-world scenarios, where one does  not know the cost of a hyperparameter combination until after it has been evaluated - an expensive operation. It is thus impressive that without access to an oracle as such, EEIPU is able to compete with EIPU in terms of objective value delta per cumulative cost incurred.</p>
 			<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 		</div> 
 	</body>
