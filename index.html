@@ -1,122 +1,95 @@
+<!DOCTYPE html>
 <html lang="en">
-	</head>
-		<meta charset="utf-8">
-		<meta name="description" content="Munachiso Nwadike's research page">
-		<meta name="author" content="Munachiso Nwadike">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		
-		<link rel="preconnect" href="https://fonts.gstatic.com">
-		<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap" rel="stylesheet">
-		<style>
-			:root {
-			  --wide1: 710px;
-			  --wide2: 650px;
-			}
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="Munachiso Nwadike's research page">
+    <meta name="author" content="Munachiso Nwadike">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --wide1: 710px;
+            --wide2: 650px;
+        }
 
-			a { 
-				color: inherit;
-			} 
-			
-			* {
-				font-family: 'Montserrat';
-				font-size: 20px;
-			}
-			/*#div-l1 { 
-				 
-			} */
-			
-			.bio-div { 
- 				float: top;   
-				width: var(--wide1);
-				background-color: white; 
-				/*margin: 50px; */
-				/*width: 660px;*/
-				margin: auto;
-				border-bottom: 3px solid black;
-				text-align: justify;
-				text-justify: inter-word;
-				/*align-items: center;*/
-				/*font-size: 25px; */
-			} 
-			.top-div { 
-				position: relative;
-				float: top; 
-				/*border: 1px solid black;*/
-				height: 445px;
-				width: var(--wide2);
-				margin:30px;
-			} 
-			
-			.bio-inner { 
-				position: relative;
-				float: top; 
-				width: var(--wide2);
-				margin:30px;
-			} 
-			.pic-div { 
-				position: relative;
-				float: top; 
-				color: black;
-				width: 550px;
-				margin:0px auto
-			} 
-			.personal-div { 
-				position: relative;
-				float: top; 
-				color: black;
-				width: 550px;
-				margin-left: 50px
-			} 
+        body {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 20px;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
 
-		 </style>
-		  <title> Munachiso Nwadike--research page </title>
-	</head>
-    
-	<body>
-<!--     <h1 style="text-align:left"> Munachiso Nwadike </h1> -->
-      	<div class = "bio-div" >
-	        <div class = "top-div" >
-	        	<div class = "pic-div" >
-	          		<img src="dec28_southcreek_visit_website.jpg" alt="Munachiso" style="width:550px;
-	                                                    display: left; 
-	                                                    margin-top: 23px; border:3px solid black;"> 
-	        	</div>
-	        	<div class = "personal-div">
-					<p ><b><a href="https://samunaai.github.io">SAM</a>💥</b><br>Munachiso Samuel Nwadike  <br> 
-					<a href="https://scholar.google.com/citations?user=wtjOZ9UAAAAJ&hl=en"><b>Google Scholar</b></a> • <a href="https://x.com/samunaai"><b>Twitter</b></a> 
-					<br>
-					<b>Currently:</b> Research Associate (III) with <a href="https://scholar.google.com/citations?hl=en&user=38_o3-kAAAAJ&view_op=list_works&sortby=pubdate">Dr. Kentaro Inui</a>
-					MSc in Machine Learning, <a href="https://mbzuai.ac.ae/">MBZUAI</a><br> 
-					BSc in CS and Math, <a href="https://nyuad.nyu.edu/en/">New York University</a> <br>  
-					E: munachiso.nwadike@mbzuai.ac.ae or msn307@nyu.edu <br> 
-					</p>
-	        	</div>
-	        </div>
-     	</div>
-     	<div class = "bio-div">
-			<div class = "bio-inner">
-				<p><i>Blog Post Link: <a href="https://medium.com/@munachisonwadike/the-mythical-man-month-5a08324dd0e">Why Small Teams Still Work Big Magic</a>✨🪄🎩</i></p>
-			</div>
-    	</div>
-	<div class = "bio-div">
-		<div class = "bio-inner">
-			<p > Hi! I'm Sam, a passionate researcher building modern machine learning methods!  	 
-			</p>
-			<p>
-			These days, I focus on mechanistic interpretability of large language models (LLMs), the core tech powering AI such as ChatGPT, Bard, Meta AI, and Grok.
-			</p>
-			<p>
-				I started my research career, much like the beginnings of a Bayesian Optimisation algorithm, excitedly and enthusiastically studying fairly different topics within AI. 
-				This allowed me to update my priors and build a good posterior distribution over the objective function of "contributing the best quality to the AI research community".  
-			</p><p> Along the way to optimising that objective, I've had the utmost honor & privilege of working, <b>even more so excitedly and enthusiastically</b>, on fundamental research topics, both at NYU and MBZUAI 
-				- the latter being a new and vibrant research institute led by Dr. Eric Xing (from Carnegie Mellon).
-			</p>
-			<p>Welcome to have a look at my Google Scholar, and connect over email or Twitter (X) for collaborations!
-			</p> 
-			
-	    </div>
-	    
-	    </div>
-		
-	</body>
-</html>  
+        a {
+            color: inherit;
+            text-decoration: none;
+        } 
+
+        .top-div,
+        .bio-inner {
+            width: var(--wide2);
+            margin: 20px auto;
+        }
+        .bio-div {
+              width: var(--wide1);
+             margin: 20px auto;
+             background-color: white;
+             border-bottom: 3px solid black;
+             text-align: justify;
+
+            /* Subtle, one-sided shadow on the right */
+         box-shadow: 4px 0 8px rgba(0, 0, 0, 0.1); /* Horizontal shadow */
+         border-radius: 0; /* Solid corners */
+         padding: 20px; /* Inner spacing */
+        }
+
+        .pic-div img {
+            width: 100%;
+            border: 3px solid black;
+            display: block;
+            margin: 23px auto;
+        }
+
+        .personal-div {
+            margin: 0 auto; 
+            width: 100%; 
+        }
+    </style>
+    <title>Munachiso Nwadike - Research Page</title>
+</head>
+<body>
+    <div class="bio-div">
+        <div class="top-div">
+            <div class="pic-div">
+                <img src="dec28_southcreek_visit_website.jpg" alt="Munachiso">
+            </div>
+            <div class="personal-div">
+                <p>
+                    <b><a href="https://samunaai.github.io">SAM</a>💥</b><br>
+                    Munachiso Samuel Nwadike<br>
+                    <a href="https://scholar.google.com/citations?user=wtjOZ9UAAAAJ&hl=en"><b><u>Google Scholar</u></b></a> • <a href="https://x.com/samunaai"><b><u>Twitter</u></b></a><br>
+                    <b>Currently:</b> Research Associate (III) with 
+                    <a href="https://scholar.google.com/citations?hl=en&user=38_o3-kAAAAJ&view_op=list_works&sortby=pubdate">Dr. Kentaro Inui</a><br>
+                    MSc in Machine Learning, <a href="https://mbzuai.ac.ae/">MBZUAI</a><br>
+                    BSc in CS and Math, <a href="https://nyuad.nyu.edu/en/">New York University</a><br>
+                    E: munachiso.nwadike@mbzuai.ac.ae or msn307@nyu.edu
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="bio-div">
+        <div class="bio-inner">
+            <p><i>Blog Post Link: <a href="https://medium.com/@munachisonwadike/the-mythical-man-month-5a08324dd0e">Why Small Teams Still Work Big Magic</a>✨🪄🎩</i></p>
+        </div>
+    </div>
+    <div class="bio-div">
+        <div class="bio-inner">
+            <p>Hi! I'm Sam, a passionate researcher building modern machine learning methods!</p>
+            <p>These days, I focus on mechanistic interpretability of large language models (LLMs), the core tech powering AI such as ChatGPT, Bard, Meta AI, and Grok.</p>
+            <p>I started my research career, much like the beginnings of a Bayesian Optimisation algorithm, excitedly and enthusiastically studying fairly different topics within AI. This allowed me to update my priors and build a good posterior distribution over the objective function of "contributing the best quality to the AI research community".</p>
+            <p>Along the way to optimising that objective, I've had the utmost honor & privilege of working, <b>even more so excitedly and enthusiastically</b>, on fundamental research topics, both at NYU and MBZUAI - the latter being a new and vibrant research institute led by Dr. Eric Xing (from Carnegie Mellon).</p>
+            <p>Welcome to have a look at my Google Scholar, and connect over email or Twitter (X) for collaborations!</p>
+        </div>
+    </div>
+</body>
+</html>
