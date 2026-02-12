@@ -161,8 +161,8 @@
   const damp = 0.97;            
   const injectStrength = 1.8;   
   const curl = 1.2;             
-  const showArrows = true;      
-  const arrowAlpha = 0.20;      // Faint black arrows
+  const showArrows = false;      
+  const arrowAlpha = 0.08;      // Faint black arrows
   // =========================================================
 
   let w = 0, h = 0, cols = 0, rows = 0;
@@ -225,7 +225,7 @@
     const i01 = y1 * cols + x0, i11 = y1 * cols + x1;
 
     const vx = (fx[i00] * (1 - tx) + fx[i10] * tx) * (1 - ty) + (fx[i01] * (1 - tx) + fx[i11] * tx) * ty;
-    const vy = (fy[i00] * (1 - tx) + fy[i10] * tx) * (1 - ty) + (fx[i01] * (1 - tx) + fx[i11] * tx) * ty;
+    const vy = (fy[i00] * (1 - tx) + fy[i10] * tx) * (1 - ty) + (fy[i01] * (1 - tx) + fy[i11] * tx) * ty;
     return [vx, vy];
   }
 
