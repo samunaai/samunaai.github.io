@@ -26,12 +26,14 @@
         } 
 
         .top-div,
-        .bio-inner {
-            width: var(--wide2);
-            margin: 20px auto;
-        }
+		.bio-inner {
+		    width: 100%;
+		    max-width: var(--wide2);
+		    margin: 20px auto;
+		}
         .bio-div {
-              width: var(--wide1);
+             width: 100%;
+			 max-width: var(--wide1);
              margin: 20px auto;
              background-color: white;
              border-bottom: 3px solid black;
@@ -54,6 +56,19 @@
 		    margin: 23px auto;
 		    display: block;
 		}
+		/* Safety: prevent any image from overflowing */
+		img { max-width: 100%; height: auto; }
+		/* Mobile: keep cards floating + readable */
+        @media (max-width: 768px) {
+          body { font-size: 17px; }
+          .bio-div {
+            width: calc(100% - 24px);
+            padding: 16px;
+            text-align: left;
+          }
+          .pic-div img.sam-img { width: 100%; }
+        }
+
         .personal-div {
             margin: 0 auto; 
             width: 100%; 
