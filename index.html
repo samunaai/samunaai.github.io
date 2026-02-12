@@ -90,13 +90,18 @@
     		}
     		/* Mobile zoom-out - transform method (better browser support) */
     		@media (max-width: 710px) {
-    		    body {
-    		        transform: scale(calc(100vw / 710px));
-    		        transform-origin: top left;
-    		        width: 710px;
-    		        min-height: 100vh;
-    		    }
-    		}
+          html, body {
+            margin: 0;
+            overflow-x: hidden;
+          }
+
+          body {
+            transform: scale(calc(100vw / 710px));
+            transform-origin: top left;
+            width: 710px;
+            /* REMOVE: min-height: 100vh; */
+          }
+        }
         #life-canvas {
           width: 100%;
           height: 360px;          /* adjust as you like */
