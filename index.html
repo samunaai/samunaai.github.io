@@ -151,21 +151,22 @@
   if (!canvas) return;
   const ctx = canvas.getContext('2d', { alpha: false });
 
-  // ====== Tunables ======
-  const cell = 26;              // grid spacing for arrows/field
-  const arrowLen = 10;          // arrow length in px
-  const nParticlesBase = 900;   // will scale with canvas area
-  const speed = 0.85;           // particle step size
-  const trail = 0.10;           // 0..1 (lower = longer trails)
-  const damp = 0.965;           // field decay per frame (closer to 1 = longer lasting)
-  const injectStrength = 1.35;  // how strong drag/click affects field
-  const curl = 1.0;             // swirl amount injected
-  const showArrows = true;      // set false if you only want particles
-  const arrowAlpha = 0.40;      // arrow opacity
-  // ======================
+  // ====== Tunables (The logic you liked, strictly B&W) ======
+  const cell = 24;              
+  const arrowLen = 9;           
+  const nParticlesBase = 1100;  
+  const speed = 0.55;           
+  const inertia = 0.94;         // High inertia for that "heavy drift" feel
+  const trail = 0.08;           
+  const damp = 0.97;            
+  const injectStrength = 1.8;   
+  const curl = 1.2;             
+  const showArrows = true;      
+  const arrowAlpha = 0.20;      // Faint black arrows
+  // =========================================================
 
   let w = 0, h = 0, cols = 0, rows = 0;
-  let fx, fy;                   // field vectors
+  let fx, fy; 
   let particles = [];
   let pointerDown = false;
   let lastPt = null;
@@ -180,223 +181,165 @@
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
     w = cssW; h = cssH;
-    cols = Math.max(1, Math.floor(w / cell));
-    rows = Math.max(1, Math.floor(h / cell));
+    cols = Math.ceil(w / cell) + 1;
+    rows = Math.ceil(h / cell) + 1;
 
     fx = new Float32Array(cols * rows);
     fy = new Float32Array(cols * rows);
 
-    // Seed a gentle base flow so it is not static before interaction
+    // Seed organic "Latent Space" flow
     for (let y = 0; y < rows; y++) {
       for (let x = 0; x < cols; x++) {
         const nx = x / cols;
         const ny = y / rows;
-        const a = (Math.sin(nx * 6.0) + Math.cos(ny * 6.0)) * 0.7;
+        let a = (Math.sin(nx * 4) * Math.cos(ny * 4));
+        a += Math.sin(nx * 8 + ny * 5) * 0.5;
         const i = y * cols + x;
-        fx[i] = Math.cos(a) * 0.35;
-        fy[i] = Math.sin(a) * 0.35;
+        fx[i] = Math.cos(a * Math.PI) * 0.2;
+        fy[i] = Math.sin(a * Math.PI) * 0.2;
       }
     }
 
     const area = w * h;
-    const nParticles = Math.max(300, Math.floor(nParticlesBase * (area / (700 * 360))));
+    const nParticles = Math.max(400, Math.floor(nParticlesBase * (area / (700 * 360))));
     particles = new Array(nParticles).fill(0).map(() => ({
       x: Math.random() * w,
       y: Math.random() * h,
-      vx: 0,
-      vy: 0
+      vx: (Math.random() - 0.5) * 2,
+      vy: (Math.random() - 0.5) * 2
     }));
 
-    // Clear
     ctx.fillStyle = '#ffffff';
     ctx.fillRect(0, 0, w, h);
   }
 
-  function idx(cx, cy) { return cy * cols + cx; }
-
+  // Smooth sub-grid sampling (Bilinear Interpolation)
   function sampleField(x, y) {
-    const cx = Math.max(0, Math.min(cols - 1, (x / w) * cols | 0));
-    const cy = Math.max(0, Math.min(rows - 1, (y / h) * rows | 0));
-    const i = idx(cx, cy);
-    return [fx[i], fy[i]];
+    const gx = (x / w) * (cols - 1);
+    const gy = (y / h) * (rows - 1);
+    const x0 = Math.floor(gx), y0 = Math.floor(gy);
+    const x1 = Math.min(x0 + 1, cols - 1), y1 = Math.min(y0 + 1, rows - 1);
+    const tx = gx - x0, ty = gy - y0;
+
+    const i00 = y0 * cols + x0, i10 = y0 * cols + x1;
+    const i01 = y1 * cols + x0, i11 = y1 * cols + x1;
+
+    const vx = (fx[i00] * (1 - tx) + fx[i10] * tx) * (1 - ty) + (fx[i01] * (1 - tx) + fx[i11] * tx) * ty;
+    const vy = (fy[i00] * (1 - tx) + fy[i10] * tx) * (1 - ty) + (fx[i01] * (1 - tx) + fx[i11] * tx) * ty;
+    return [vx, vy];
   }
 
-  function decayField() {
-    for (let i = 0; i < fx.length; i++) {
-      fx[i] *= damp;
-      fy[i] *= damp;
-    }
-  }
-
-  // Inject a swirl centered at (x,y). Drag direction influences rotation.
   function inject(x, y, dx, dy, strength) {
-    const cx0 = (x / w) * cols;
-    const cy0 = (y / h) * rows;
-
-    // radius in grid cells
-    const r = 4.2;
-
-    // direction for swirl: based on drag vector; if tiny, default
+    const cx0 = (x / w) * cols, cy0 = (y / h) * rows;
+    const r = 5.0; 
     const mag = Math.hypot(dx, dy) || 1;
-    const ux = dx / mag;
-    const uy = dy / mag;
+    const ux = dx / mag, uy = dy / mag;
 
-    const minX = Math.max(0, Math.floor(cx0 - r));
-    const maxX = Math.min(cols - 1, Math.ceil(cx0 + r));
-    const minY = Math.max(0, Math.floor(cy0 - r));
-    const maxY = Math.min(rows - 1, Math.ceil(cy0 + r));
-
-    for (let cy = minY; cy <= maxY; cy++) {
-      for (let cx = minX; cx <= maxX; cx++) {
-        const ox = cx - cx0;
-        const oy = cy - cy0;
+    for (let cy = Math.max(0, Math.floor(cy0 - r)); cy <= Math.min(rows - 1, Math.ceil(cy0 + r)); cy++) {
+      for (let cx = Math.max(0, Math.floor(cx0 - r)); cx <= Math.min(cols - 1, Math.ceil(cx0 + r)); cx++) {
+        const ox = cx - cx0, oy = cy - cy0;
         const d2 = ox * ox + oy * oy;
         if (d2 > r * r) continue;
 
-        // falloff
-        const fall = Math.exp(-d2 / (r * r));
-
-        // swirl vector (perpendicular to radial)
-        // Use drag direction to bias curl direction.
-        // Perp radial: (-oy, ox). Multiply by sign from drag orientation.
+        const fall = Math.exp(-d2 / (r * 1.5));
         const sign = (ux * oy - uy * ox) >= 0 ? 1 : -1;
-        const sx = -oy * sign;
-        const sy =  ox * sign;
-
-        const i = idx(cx, cy);
-
-        fx[i] += (sx * curl + ux * 1.1) * strength * fall * injectStrength;
-        fy[i] += (sy * curl + uy * 1.1) * strength * fall * injectStrength;
-      }
-    }
-  }
-
-  function drawArrow(x, y, vx, vy) {
-    const m = Math.hypot(vx, vy);
-    if (m < 0.0001) return;
-
-    const ux = vx / m;
-    const uy = vy / m;
-
-    const x2 = x + ux * arrowLen;
-    const y2 = y + uy * arrowLen;
-
-    // arrow head
-    const hx = -uy;
-    const hy =  ux;
-
-    ctx.beginPath();
-    ctx.moveTo(x, y);
-    ctx.lineTo(x2, y2);
-    ctx.lineTo(x2 - ux * 3 - hx * 3, y2 - uy * 3 - hy * 3);
-    ctx.moveTo(x2, y2);
-    ctx.lineTo(x2 - ux * 3 + hx * 3, y2 - uy * 3 + hy * 3);
-    ctx.stroke();
-  }
-
-  function renderArrows() {
-    ctx.strokeStyle = `rgba(17,17,17,${arrowAlpha})`;
-    ctx.lineWidth = 1;
-
-    for (let cy = 0; cy < rows; cy++) {
-      for (let cx = 0; cx < cols; cx++) {
-        const i = idx(cx, cy);
-        const x = (cx + 0.5) * cell;
-        const y = (cy + 0.5) * cell;
-        drawArrow(x, y, fx[i], fy[i]);
+        const i = cy * cols + cx;
+        fx[i] += (-oy * sign * curl + ux * 1.5) * strength * fall * injectStrength * 0.1;
+        fy[i] += (ox * sign * curl + uy * 1.5) * strength * fall * injectStrength * 0.1;
       }
     }
   }
 
   function stepParticles() {
-    ctx.strokeStyle = 'rgba(17,17,17,0.35)';
-    ctx.lineWidth = 1;
-
     for (const p of particles) {
-      const [vx, vy] = sampleField(p.x, p.y);
+      const [fvX, fvY] = sampleField(p.x, p.y);
+
+      p.vx = p.vx * inertia + fvX * (1 - inertia);
+      p.vy = p.vy * inertia + fvY * (1 - inertia);
 
       const x0 = p.x, y0 = p.y;
+      p.x += p.vx * speed * 15;
+      p.y += p.vy * speed * 15;
 
-      // follow field with smoothing
-      p.vx = 0.80 * p.vx + 0.20 * vx;
-      p.vy = 0.80 * p.vy + 0.20 * vy;
+      // WRAP FIX: Detect if we crossed the boundary
+      let wrapped = false;
+      if (p.x < 0) { p.x += w; wrapped = true; } 
+      else if (p.x >= w) { p.x -= w; wrapped = true; }
+      if (p.y < 0) { p.y += h; wrapped = true; } 
+      else if (p.y >= h) { p.y -= h; wrapped = true; }
 
-      p.x += p.vx * speed;
-      p.y += p.vy * speed;
-
-      // wrap
-      if (p.x < 0) p.x += w;
-      if (p.x >= w) p.x -= w;
-      if (p.y < 0) p.y += h;
-      if (p.y >= h) p.y -= h;
-
-      ctx.beginPath();
-      ctx.moveTo(x0, y0);
-      ctx.lineTo(p.x, p.y);
-      ctx.stroke();
+      // Only draw the line segment if the particle didn't wrap around
+      if (!wrapped) {
+        const speedMag = Math.hypot(p.vx, p.vy);
+        const alpha = Math.min(0.05 + speedMag * 2, 0.4);
+        ctx.strokeStyle = `rgba(0, 0, 0, ${alpha})`;
+        ctx.lineWidth = 1.0;
+        ctx.beginPath();
+        ctx.moveTo(x0, y0);
+        ctx.lineTo(p.x, p.y);
+        ctx.stroke();
+      }
     }
   }
 
-  function fade() {
-    ctx.fillStyle = `rgba(255,255,255,${trail})`;
-    ctx.fillRect(0, 0, w, h);
-  }
-
   function frame() {
-    fade();
-    decayField();
-    if (showArrows) renderArrows();
+    // Fill white with trail opacity
+    ctx.fillStyle = `rgba(255, 255, 255, ${trail})`;
+    ctx.fillRect(0, 0, w, h);
+
+    // Decay field
+    for (let i = 0; i < fx.length; i++) {
+      fx[i] *= damp; fy[i] *= damp;
+    }
+
+    if (showArrows) {
+      ctx.strokeStyle = `rgba(0, 0, 0, ${arrowAlpha})`;
+      ctx.lineWidth = 0.7;
+      for (let cy = 0; cy < rows; cy++) {
+        for (let cx = 0; cx < cols; cx++) {
+          const i = cy * cols + cx;
+          const m = Math.hypot(fx[i], fy[i]);
+          if (m < 0.01) continue;
+          const x = (cx + 0.5) * cell, y = (cy + 0.5) * cell;
+          ctx.beginPath();
+          ctx.moveTo(x, y);
+          ctx.lineTo(x + (fx[i]/m) * arrowLen, y + (fy[i]/m) * arrowLen);
+          ctx.stroke();
+        }
+      }
+    }
+
     stepParticles();
     requestAnimationFrame(frame);
   }
 
   function getPoint(e) {
     const rect = canvas.getBoundingClientRect();
-    const x = (e.clientX - rect.left) * (canvas.clientWidth / rect.width);
-    const y = (e.clientY - rect.top) * (canvas.clientHeight / rect.height);
-    return { x, y };
+    return {
+      x: (e.clientX - rect.left) * (w / rect.width),
+      y: (e.clientY - rect.top) * (h / rect.height)
+    };
   }
 
-  function onDown(e) {
+  canvas.addEventListener('pointerdown', (e) => {
     pointerDown = true;
-    const pt = getPoint(e);
-    lastPt = pt;
+    lastPt = getPoint(e);
+    inject(lastPt.x, lastPt.y, (Math.random()-0.5)*10, (Math.random()-0.5)*10, 2.5);
+  });
 
-    // click/tap pulse
-    inject(pt.x, pt.y, 1, 0, 0.9);
-  }
-
-  function onMove(e) {
+  canvas.addEventListener('pointermove', (e) => {
     if (!pointerDown) return;
     const pt = getPoint(e);
     if (!lastPt) lastPt = pt;
-
-    const dx = pt.x - lastPt.x;
-    const dy = pt.y - lastPt.y;
-
-    // stronger while dragging
-    inject(pt.x, pt.y, dx, dy, 1.2);
-
+    inject(pt.x, pt.y, pt.x - lastPt.x, pt.y - lastPt.y, 1.5);
     lastPt = pt;
-  }
+  });
 
-  function onUp() {
-    pointerDown = false;
-    lastPt = null;
-  }
-
-  // Pointer events (works for mouse + touch)
-  canvas.style.touchAction = 'none';
-  canvas.addEventListener('pointerdown', onDown);
-  canvas.addEventListener('pointermove', onMove);
-  window.addEventListener('pointerup', onUp);
-  window.addEventListener('pointercancel', onUp);
-
-  // optional: double click to reset
-  canvas.addEventListener('dblclick', function () { resize(); });
-
-  resize();
+  window.addEventListener('pointerup', () => { pointerDown = false; lastPt = null; });
   window.addEventListener('resize', resize);
+  
+  canvas.style.touchAction = 'none';
+  resize();
   requestAnimationFrame(frame);
 })();
 </script>
