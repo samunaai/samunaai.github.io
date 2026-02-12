@@ -1,10 +1,47 @@
 <!DOCTYPE html>
 <html lang="en"> 
+<script>
+(function () {
+  var designWidth = 710;
+  var page = document.getElementById('page');
+  if (!page) return;
+
+  function apply() {
+    var vv = window.visualViewport;
+    var vw = vv ? vv.width : window.innerWidth;
+    var vh = vv ? vv.height : window.innerHeight;
+
+    // Only apply on phone-like widths
+    if (vw >= designWidth) {
+      document.body.style.paddingTop = '';
+      document.body.style.paddingBottom = '';
+      return;
+    }
+
+    // getBoundingClientRect includes transforms, so this is the *scaled* height
+    var rect = page.getBoundingClientRect();
+    var spare = Math.max(0, vh - rect.height);
+    var pad = spare / 2;
+
+    document.body.style.paddingTop = pad + 'px';
+    document.body.style.paddingBottom = pad + 'px';
+  }
+
+  window.addEventListener('load', apply);
+  window.addEventListener('resize', apply);
+  window.addEventListener('orientationchange', apply);
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', apply);
+    window.visualViewport.addEventListener('scroll', apply);
+  }
+})();
+</script>
+
 <head>
     <meta charset="utf-8">
     <meta name="description" content="Munachiso Nwadike's research page">
     <meta name="author" content="Munachiso Nwadike">
-    <meta id="vp" name="viewport" content="width=800">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -96,12 +133,12 @@
 	        transform-origin: top center;
 	    }
 
-	    body {
-	        display: flex;
-	        justify-content: center;   /* horizontal centering */
-	        padding: 6vh 0;            /* vertical breathing room */
-	        margin: 0;
-	    }
+      body {
+          margin: 0;
+          display: flex;
+          justify-content: center; /* keep horizontal centering */
+          padding: 0;              /* JS will set top/bottom padding */
+      }
 	}
     </style>
     <title>Munachiso Nwadike - Research Page</title>
