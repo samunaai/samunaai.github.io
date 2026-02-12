@@ -84,19 +84,27 @@
           margin-left: 0.2em; /* small gap from text */
         }
         .ref-highlight {
-		    background: #add0d0ff;     /* soft green */
-		    padding: 0.05em 0.25em;
-		    border-radius: 3px;
-		}
-		/* Mobile zoom-out - transform method (better browser support) */
-		@media (max-width: 710px) {
-		    body {
-		        transform: scale(calc(100vw / 710px));
-		        transform-origin: top left;
-		        width: 710px;
-		        min-height: 100vh;
-		    }
-		}
+    		    background: #add0d0ff;     /* soft green */
+    		    padding: 0.05em 0.25em;
+    		    border-radius: 3px;
+    		}
+    		/* Mobile zoom-out - transform method (better browser support) */
+    		@media (max-width: 710px) {
+    		    body {
+    		        transform: scale(calc(100vw / 710px));
+    		        transform-origin: top left;
+    		        width: 710px;
+    		        min-height: 100vh;
+    		    }
+    		}
+        #life-canvas {
+          width: 100%;
+          height: 360px;          /* adjust as you like */
+          display: block;
+          border: 3px solid black;
+          box-sizing: border-box;
+          margin: 12px auto 0;
+        }
     </style>
     <title>Munachiso Nwadike - Research Page</title>
 </head>
@@ -129,6 +137,271 @@
             <p>E: munachisnwadike@gmail.com</p>
         </div>
     </div>
+    <div class="bio-div">
+      <div class="bio-inner">
+        <p style="text-align:center; margin:0 0 6px 0;"><b>Flow Field</b></p>
+        <p style="text-align:center; margin:0 0 10px 0; font-size:0.82em; opacity:0.75;"><i>Click and drag to stir the field.</i></p>
+        <canvas id="life-canvas"></canvas>
+      </div>
+    </div>
+
+<script>
+(function () {
+  const canvas = document.getElementById('life-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d', { alpha: false });
+
+  // ====== Tunables ======
+  const cell = 26;              // grid spacing for arrows/field
+  const arrowLen = 10;          // arrow length in px
+  const nParticlesBase = 900;   // will scale with canvas area
+  const speed = 0.85;           // particle step size
+  const trail = 0.10;           // 0..1 (lower = longer trails)
+  const damp = 0.965;           // field decay per frame (closer to 1 = longer lasting)
+  const injectStrength = 1.35;  // how strong drag/click affects field
+  const curl = 1.0;             // swirl amount injected
+  const showArrows = true;      // set false if you only want particles
+  const arrowAlpha = 0.40;      // arrow opacity
+  // ======================
+
+  let w = 0, h = 0, cols = 0, rows = 0;
+  let fx, fy;                   // field vectors
+  let particles = [];
+  let pointerDown = false;
+  let lastPt = null;
+
+  function resize() {
+    const dpr = window.devicePixelRatio || 1;
+    const cssW = canvas.clientWidth;
+    const cssH = canvas.clientHeight;
+
+    canvas.width = Math.max(1, Math.floor(cssW * dpr));
+    canvas.height = Math.max(1, Math.floor(cssH * dpr));
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    w = cssW; h = cssH;
+    cols = Math.max(1, Math.floor(w / cell));
+    rows = Math.max(1, Math.floor(h / cell));
+
+    fx = new Float32Array(cols * rows);
+    fy = new Float32Array(cols * rows);
+
+    // Seed a gentle base flow so it is not static before interaction
+    for (let y = 0; y < rows; y++) {
+      for (let x = 0; x < cols; x++) {
+        const nx = x / cols;
+        const ny = y / rows;
+        const a = (Math.sin(nx * 6.0) + Math.cos(ny * 6.0)) * 0.7;
+        const i = y * cols + x;
+        fx[i] = Math.cos(a) * 0.35;
+        fy[i] = Math.sin(a) * 0.35;
+      }
+    }
+
+    const area = w * h;
+    const nParticles = Math.max(300, Math.floor(nParticlesBase * (area / (700 * 360))));
+    particles = new Array(nParticles).fill(0).map(() => ({
+      x: Math.random() * w,
+      y: Math.random() * h,
+      vx: 0,
+      vy: 0
+    }));
+
+    // Clear
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, w, h);
+  }
+
+  function idx(cx, cy) { return cy * cols + cx; }
+
+  function sampleField(x, y) {
+    const cx = Math.max(0, Math.min(cols - 1, (x / w) * cols | 0));
+    const cy = Math.max(0, Math.min(rows - 1, (y / h) * rows | 0));
+    const i = idx(cx, cy);
+    return [fx[i], fy[i]];
+  }
+
+  function decayField() {
+    for (let i = 0; i < fx.length; i++) {
+      fx[i] *= damp;
+      fy[i] *= damp;
+    }
+  }
+
+  // Inject a swirl centered at (x,y). Drag direction influences rotation.
+  function inject(x, y, dx, dy, strength) {
+    const cx0 = (x / w) * cols;
+    const cy0 = (y / h) * rows;
+
+    // radius in grid cells
+    const r = 4.2;
+
+    // direction for swirl: based on drag vector; if tiny, default
+    const mag = Math.hypot(dx, dy) || 1;
+    const ux = dx / mag;
+    const uy = dy / mag;
+
+    const minX = Math.max(0, Math.floor(cx0 - r));
+    const maxX = Math.min(cols - 1, Math.ceil(cx0 + r));
+    const minY = Math.max(0, Math.floor(cy0 - r));
+    const maxY = Math.min(rows - 1, Math.ceil(cy0 + r));
+
+    for (let cy = minY; cy <= maxY; cy++) {
+      for (let cx = minX; cx <= maxX; cx++) {
+        const ox = cx - cx0;
+        const oy = cy - cy0;
+        const d2 = ox * ox + oy * oy;
+        if (d2 > r * r) continue;
+
+        // falloff
+        const fall = Math.exp(-d2 / (r * r));
+
+        // swirl vector (perpendicular to radial)
+        // Use drag direction to bias curl direction.
+        // Perp radial: (-oy, ox). Multiply by sign from drag orientation.
+        const sign = (ux * oy - uy * ox) >= 0 ? 1 : -1;
+        const sx = -oy * sign;
+        const sy =  ox * sign;
+
+        const i = idx(cx, cy);
+
+        fx[i] += (sx * curl + ux * 1.1) * strength * fall * injectStrength;
+        fy[i] += (sy * curl + uy * 1.1) * strength * fall * injectStrength;
+      }
+    }
+  }
+
+  function drawArrow(x, y, vx, vy) {
+    const m = Math.hypot(vx, vy);
+    if (m < 0.0001) return;
+
+    const ux = vx / m;
+    const uy = vy / m;
+
+    const x2 = x + ux * arrowLen;
+    const y2 = y + uy * arrowLen;
+
+    // arrow head
+    const hx = -uy;
+    const hy =  ux;
+
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.lineTo(x2, y2);
+    ctx.lineTo(x2 - ux * 3 - hx * 3, y2 - uy * 3 - hy * 3);
+    ctx.moveTo(x2, y2);
+    ctx.lineTo(x2 - ux * 3 + hx * 3, y2 - uy * 3 + hy * 3);
+    ctx.stroke();
+  }
+
+  function renderArrows() {
+    ctx.strokeStyle = `rgba(17,17,17,${arrowAlpha})`;
+    ctx.lineWidth = 1;
+
+    for (let cy = 0; cy < rows; cy++) {
+      for (let cx = 0; cx < cols; cx++) {
+        const i = idx(cx, cy);
+        const x = (cx + 0.5) * cell;
+        const y = (cy + 0.5) * cell;
+        drawArrow(x, y, fx[i], fy[i]);
+      }
+    }
+  }
+
+  function stepParticles() {
+    ctx.strokeStyle = 'rgba(17,17,17,0.35)';
+    ctx.lineWidth = 1;
+
+    for (const p of particles) {
+      const [vx, vy] = sampleField(p.x, p.y);
+
+      const x0 = p.x, y0 = p.y;
+
+      // follow field with smoothing
+      p.vx = 0.80 * p.vx + 0.20 * vx;
+      p.vy = 0.80 * p.vy + 0.20 * vy;
+
+      p.x += p.vx * speed;
+      p.y += p.vy * speed;
+
+      // wrap
+      if (p.x < 0) p.x += w;
+      if (p.x >= w) p.x -= w;
+      if (p.y < 0) p.y += h;
+      if (p.y >= h) p.y -= h;
+
+      ctx.beginPath();
+      ctx.moveTo(x0, y0);
+      ctx.lineTo(p.x, p.y);
+      ctx.stroke();
+    }
+  }
+
+  function fade() {
+    ctx.fillStyle = `rgba(255,255,255,${trail})`;
+    ctx.fillRect(0, 0, w, h);
+  }
+
+  function frame() {
+    fade();
+    decayField();
+    if (showArrows) renderArrows();
+    stepParticles();
+    requestAnimationFrame(frame);
+  }
+
+  function getPoint(e) {
+    const rect = canvas.getBoundingClientRect();
+    const x = (e.clientX - rect.left) * (canvas.clientWidth / rect.width);
+    const y = (e.clientY - rect.top) * (canvas.clientHeight / rect.height);
+    return { x, y };
+  }
+
+  function onDown(e) {
+    pointerDown = true;
+    const pt = getPoint(e);
+    lastPt = pt;
+
+    // click/tap pulse
+    inject(pt.x, pt.y, 1, 0, 0.9);
+  }
+
+  function onMove(e) {
+    if (!pointerDown) return;
+    const pt = getPoint(e);
+    if (!lastPt) lastPt = pt;
+
+    const dx = pt.x - lastPt.x;
+    const dy = pt.y - lastPt.y;
+
+    // stronger while dragging
+    inject(pt.x, pt.y, dx, dy, 1.2);
+
+    lastPt = pt;
+  }
+
+  function onUp() {
+    pointerDown = false;
+    lastPt = null;
+  }
+
+  // Pointer events (works for mouse + touch)
+  canvas.style.touchAction = 'none';
+  canvas.addEventListener('pointerdown', onDown);
+  canvas.addEventListener('pointermove', onMove);
+  window.addEventListener('pointerup', onUp);
+  window.addEventListener('pointercancel', onUp);
+
+  // optional: double click to reset
+  canvas.addEventListener('dblclick', function () { resize(); });
+
+  resize();
+  window.addEventListener('resize', resize);
+  requestAnimationFrame(frame);
+})();
+</script>
+
+
 </body>
 </html>
 
