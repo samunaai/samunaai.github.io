@@ -1,10 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
+<script>
+  (function () {
+    var designWidth = 710; // must match --wide1
+    var vp = document.getElementById('vp');
+    if (!vp) return;
+
+    var w = Math.min(
+      window.innerWidth || designWidth,
+      screen.width || designWidth
+    );
+
+    var scale = w < designWidth ? (w / designWidth) : 1;
+
+    vp.setAttribute(
+      'content',
+      'width=' + designWidth +
+      ', initial-scale=' + scale +
+      ', minimum-scale=' + scale +
+      ', maximum-scale=' + scale +
+      ', user-scalable=yes'
+    );
+  })();
+</script>
 <head>
     <meta charset="utf-8">
     <meta name="description" content="Munachiso Nwadike's research page">
     <meta name="author" content="Munachiso Nwadike">
-    <meta name="viewport" content="width=800">
+    <meta id="vp" name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap" rel="stylesheet">
     <style>
         :root {
