@@ -139,8 +139,8 @@
     </div>
     <div class="bio-div">
       <div class="bio-inner">
-        <p style="text-align:center; margin:0 0 6px 0; font-size:0.9em; opacity:0.75;"><i>Flow Field</i></p>
-        <p style="text-align:center; margin:0 0 10px 0; font-size:0.82em; opacity:0.75;"><i>(Click or tap inside the box, then drag to stir.)</i></p>
+        <p style="text-align:center; margin:0 0 6px 0; font-size:0.9em; opacity:0.75;">Latent Space</p>
+        <p style="text-align:center; margin:0 0 10px 0; font-size:0.82em; opacity:0.75;"><i>(Click, or tap, and drag)</i></p>
         <canvas id="life-canvas"></canvas>
       </div>
     </div>
@@ -152,21 +152,21 @@
   const ctx = canvas.getContext('2d', { alpha: false });
 
   // ====== Tunables (The logic you liked, strictly B&W) ======
-  const cell = 24;              
-  const arrowLen = 9;           
-  const nParticlesBase = 1100;  
-  const speed = 0.55;           
+  const cell = 24;
+  const arrowLen = 9;
+  const nParticlesBase = 1100;
+  const speed = 0.55;
   const inertia = 0.94;         // High inertia for that "heavy drift" feel
-  const trail = 0.08;           
-  const damp = 0.97;            
-  const injectStrength = 1.8;   
-  const curl = 1.2;             
-  const showArrows = false;      
+  const trail = 0.08;
+  const damp = 0.97;
+  const injectStrength = 1.8;
+  const curl = 1.2;             // lower (e.g. 0.6) if you want less swirl, more "follow finger"
+  const showArrows = false;
   const arrowAlpha = 0.08;      // Faint black arrows
   // =========================================================
 
   let w = 0, h = 0, cols = 0, rows = 0;
-  let fx, fy; 
+  let fx, fy;
   let particles = [];
   let pointerDown = false;
   let lastPt = null;
@@ -229,9 +229,24 @@
     return [vx, vy];
   }
 
+  // Force a handful of particles to originate at the touch point (so lines "start" under your finger)
+  function seedParticles(x, y, n = 16) {
+    for (let k = 0; k < n; k++) {
+      const p = particles[(Math.random() * particles.length) | 0];
+      p.x = x + (Math.random() - 0.5) * 8;
+      p.y = y + (Math.random() - 0.5) * 8;
+      p.vx = (Math.random() - 0.5) * 0.25;
+      p.vy = (Math.random() - 0.5) * 0.25;
+    }
+  }
+
+
   function inject(x, y, dx, dy, strength) {
-    const cx0 = (x / w) * cols, cy0 = (y / h) * rows;
-    const r = 5.0; 
+    // IMPORTANT: match sampleField() mapping so injection aligns with where you touched
+    const cx0 = (x / w) * (cols - 1);
+    const cy0 = (y / h) * (rows - 1);
+
+    const r = 5.0;
     const mag = Math.hypot(dx, dy) || 1;
     const ux = dx / mag, uy = dy / mag;
 
@@ -244,8 +259,9 @@
         const fall = Math.exp(-d2 / (r * 1.5));
         const sign = (ux * oy - uy * ox) >= 0 ? 1 : -1;
         const i = cy * cols + cx;
-        fx[i] += (-oy * sign * curl + ux * 1.5) * strength * fall * injectStrength * 0.1;
-        fy[i] += (ox * sign * curl + uy * 1.5) * strength * fall * injectStrength * 0.1;
+
+        fx[i] += (-oy * sign * curl + ux * 0.45) * strength * fall * injectStrength * 0.1;
+        fy[i] += ( ox * sign * curl + uy * 0.45) * strength * fall * injectStrength * 0.1;
       }
     }
   }
@@ -263,9 +279,9 @@
 
       // WRAP FIX: Detect if we crossed the boundary
       let wrapped = false;
-      if (p.x < 0) { p.x += w; wrapped = true; } 
+      if (p.x < 0) { p.x += w; wrapped = true; }
       else if (p.x >= w) { p.x -= w; wrapped = true; }
-      if (p.y < 0) { p.y += h; wrapped = true; } 
+      if (p.y < 0) { p.y += h; wrapped = true; }
       else if (p.y >= h) { p.y -= h; wrapped = true; }
 
       // Only draw the line segment if the particle didn't wrap around
@@ -303,7 +319,7 @@
           const x = (cx + 0.5) * cell, y = (cy + 0.5) * cell;
           ctx.beginPath();
           ctx.moveTo(x, y);
-          ctx.lineTo(x + (fx[i]/m) * arrowLen, y + (fy[i]/m) * arrowLen);
+          ctx.lineTo(x + (fx[i] / m) * arrowLen, y + (fy[i] / m) * arrowLen);
           ctx.stroke();
         }
       }
@@ -321,27 +337,48 @@
     };
   }
 
+  // Pointer interactions (feels "attached" to your finger)
   canvas.addEventListener('pointerdown', (e) => {
+    canvas.setPointerCapture(e.pointerId);
     pointerDown = true;
     lastPt = getPoint(e);
-    inject(lastPt.x, lastPt.y, (Math.random()-0.5)*10, (Math.random()-0.5)*10, 2.5);
+
+    // No random kick — center the interaction on the touch point
+    inject(lastPt.x, lastPt.y, 0, 0, 0.9);
+    seedParticles(lastPt.x, lastPt.y, 22);
   });
 
   canvas.addEventListener('pointermove', (e) => {
     if (!pointerDown) return;
     const pt = getPoint(e);
     if (!lastPt) lastPt = pt;
-    inject(pt.x, pt.y, pt.x - lastPt.x, pt.y - lastPt.y, 1.5);
+
+    const dx = pt.x - lastPt.x;
+    const dy = pt.y - lastPt.y;
+
+    // Scale strength by how far you actually moved (more intuitive)
+    const dist = Math.hypot(dx, dy);
+    const strength = Math.min(1.6, dist / 14); // gentler = more whimsy
+
+    inject(pt.x, pt.y, dx, dy, strength);
+    // seedParticles(pt.x, pt.y, 18);
+
     lastPt = pt;
   });
 
-  window.addEventListener('pointerup', () => { pointerDown = false; lastPt = null; });
+  window.addEventListener('pointerup', (e) => {
+    pointerDown = false;
+    lastPt = null;
+    try { canvas.releasePointerCapture(e.pointerId); } catch {}
+  });
+
   window.addEventListener('resize', resize);
-  
+
   canvas.style.touchAction = 'none';
   resize();
   requestAnimationFrame(frame);
 })();
+
 </script>
 
 
