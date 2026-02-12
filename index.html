@@ -1,28 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
-<script>
-  (function () {
-    var designWidth = 710; // must match --wide1
-    var vp = document.getElementById('vp');
-    if (!vp) return;
-
-    var w = Math.min(
-      window.innerWidth || designWidth,
-      screen.width || designWidth
-    );
-
-    var scale = w < designWidth ? (w / designWidth) : 1;
-
-    vp.setAttribute(
-      'content',
-      'width=' + designWidth +
-      ', initial-scale=' + scale +
-      ', minimum-scale=' + scale +
-      ', maximum-scale=' + scale +
-      ', user-scalable=yes'
-    );
-  })();
-</script>
+<html lang="en"> 
 <head>
     <meta charset="utf-8">
     <meta name="description" content="Munachiso Nwadike's research page">
@@ -109,6 +86,15 @@
 		    background: #add0d0ff;     /* soft green */
 		    padding: 0.05em 0.25em;
 		    border-radius: 3px;
+		}
+		/* Mobile zoom-out - transform method (better browser support) */
+		@media (max-width: 710px) {
+		    body {
+		        transform: scale(calc(100vw / 710px));
+		        transform-origin: top left;
+		        width: 710px;
+		        min-height: 100vh;
+		    }
 		}
     </style>
     <title>Munachiso Nwadike - Research Page</title>
