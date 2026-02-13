@@ -4,7 +4,10 @@
     <meta charset="utf-8">
     <meta name="description" content="Munachiso Nwadike's research page">
     <meta name="author" content="Munachiso Nwadike">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- FIX 1: Tell the browser the page is 710px wide. This stops the "infinite scroll" bug. -->
+    <meta name="viewport" content="width=710">
+
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -18,6 +21,9 @@
             margin: 0;
             padding: 0;
             background-color: #f9f9f9;
+            /* FIX 2: Prevent horizontal jitter on some mobile browsers */
+            overflow-x: hidden; 
+            width: 100%;
         }
 
         a {
@@ -31,16 +37,15 @@
             margin: 20px auto;
         }
         .bio-div {
-              width: var(--wide1);
+             width: var(--wide1);
              margin: 20px auto;
              background-color: white;
              border-bottom: 3px solid black;
              text-align: justify;
-
-            /* Subtle, one-sided shadow on the right */
-         box-shadow: 4px 0 8px rgba(0, 0, 0, 0.1); /* Horizontal shadow */
-         border-radius: 0; /* Solid corners */
-         padding: 20px; /* Inner spacing */
+             box-shadow: 4px 0 8px rgba(0, 0, 0, 0.1);
+             border-radius: 0;
+             padding: 20px;
+             box-sizing: border-box; /* Ensures padding doesn't push width past 710px */
         }
 
         .pic-div img {
@@ -51,59 +56,37 @@
             margin: 23px auto;
         }
         .pic-div img.sam-img {
-        width: 70%;
-        margin: 23px auto;
-        display: block;
-    }
+            width: 70%;
+            margin: 23px auto;
+            display: block;
+        }
         .personal-div {
             margin: 0 auto; 
             width: 100%; 
         }
-        .mint-emoji {
-          height: 1.6em;        /* match text size */
-          width: auto;        /* keep aspect ratio */
-          vertical-align: -0.48em; /* nudge to baseline; tweak as needed */
-          margin-left: 0.2em; /* small gap from text */
-        }
-        .socials {
-          height: 1.05em;        /* match text size */
-          width: auto;        /* keep aspect ratio */
-          vertical-align: -0.1em; /* nudge to baseline; tweak as needed */
-          margin-left: 0.2em; /* small gap from text */
-        }
-        .scholar {
-          height: 1.2em;        /* match text size */
-          width: auto;        /* keep aspect ratio */
-          vertical-align: -0.2em; /* nudge to baseline; tweak as needed */
-          margin-left: 0.2em; /* small gap from text */
-        }
-        .rocket {
-          height: 1.2em;        /* match text size */
-          width: auto;        /* keep aspect ratio */
-          vertical-align: -0.38em; /* nudge to baseline; tweak as needed */
-          margin-left: 0.2em; /* small gap from text */
-        }
+        .mint-emoji { height: 1.6em; width: auto; vertical-align: -0.48em; margin-left: 0.2em; }
+        .socials { height: 1.05em; width: auto; vertical-align: -0.1em; margin-left: 0.2em; }
+        .scholar { height: 1.2em; width: auto; vertical-align: -0.2em; margin-left: 0.2em; }
         .ref-highlight {
-            background: #add0d0ff;     /* soft green */
+            background: #add0d0ff;
             padding: 0.05em 0.25em;
             border-radius: 3px;
         }
-        /* Mobile zoom-out - transform method (better browser support) */
-        @media (max-width: 710px) {
-            body {
-                transform: scale(calc(100vw / 710px));
-                transform-origin: top left;
-                width: 710px;
-                min-height: 100vh;
-            }
-        }
+
+        /* 
+           FIX 3: REMOVED the @media transform block. 
+           The 'width=710' in the meta tag above now handles this 
+           without the phantom scroll height issue.
+        */
+
         #life-canvas {
           width: 100%;
-          height: 360px;          /* adjust as you like */
+          height: 360px;
           display: block;
           border: 3px solid black;
           box-sizing: border-box;
           margin: 12px auto 0;
+          cursor: crosshair;
         }
     </style>
     <title>Munachiso Nwadike - Research Page</title>
@@ -121,49 +104,53 @@
                     <a href="https://scholar.google.com/citations?user=wtjOZ9UAAAAJ&hl=en"><b>Google Scholar</b><img src="g_scholar.png" alt="gscholar" class="scholar"></a> • <a href="https://x.com/samunaai"><b>Twitter</b><img src="twitter_logo.png" alt="twitter" class="socials"></a><br>
                     <b>Currently:</b> Research Engineer (II) with Dr. Kentaro Inui <a href="https://scholar.google.com/citations?hl=en&user=38_o3-kAAAAJ&view_op=list_works&sortby=pubdate"><span class="ref-highlight">[<u>1</u>]</span></a><br>
                     <b>Lab:</b> <a href="https://www.mint-nlp-mbzuai.com/"><b>MINT Team<img src="mint.png" alt="MI" class="mint-emoji"></b></a> (Mechanistic Interpretability <a href="https://www.mint-nlp-mbzuai.com/publications"><span class="ref-highlight">[<u>2</u>]</span></a>) @ MBZUAI 
+                </p>
             </div>
         </div>
     </div>
+
     <div class="bio-div">
         <div class="bio-inner">
             <p><i>An Examination: "Why Small Teams Still Work Big Magic"</i> <a href="https://medium.com/@munachisonwadike/the-mythical-man-month-5a08324dd0e"><span class="ref-highlight">[<u>essay</u>]</span></a></p>
         </div>
     </div>
+
     <div class="bio-div">
         <div class="bio-inner">
             <p>Hi, I'm Sam, a researcher working on mechanistic interpretability of large language models (LLMs), the core technology behind AI systems like ChatGPT, Bard, Meta AI, and Grok.</p>
-            <p>  I earned my bachelor’s degree at New York University (Abu Dhabi & New York). I am now at MBZUAI, an AI-focused research institute, with <b>highly-ranked</i></b> programs in both <a href="https://csrankings.org/#/index?nlp&world"><span class="ref-highlight">[<u>NLP</u>]</span></a> and <a href="https://csrankings.org/#/index?mlmining&world"><span class="ref-highlight">[<u>ML</u>]</span></a>.</p>
-            <p>Let's catchup over email?</p>
+            <p>I earned my bachelor’s degree at New York University (Abu Dhabi & New York). I am now at MBZUAI, an AI-focused research institute, with <b>highly-ranked</b> programs in both <a href="https://csrankings.org/#/index?nlp&world"><span class="ref-highlight">[<u>NLP</u>]</span></a> and <a href="https://csrankings.org/#/index?mlmining&world"><span class="ref-highlight">[<u>ML</u>]</span></a>.</p>
+            <p>Let's catch up over email?</p>
             <p>E: munachisnwadike@gmail.com</p>
         </div>
     </div>
+
     <div class="bio-div">
       <div class="bio-inner">
         <p style="text-align:center; margin:0 0 6px 0; font-size:0.9em; opacity:0.75;">A Field of Latents</p>
-        <p style="text-align:center; margin:0 0 10px 0; font-size:0.82em; opacity:0.75;"><i>(Click inside the box and drag )</i></p>
+        <p style="text-align:center; margin:0 0 10px 0; font-size:0.82em; opacity:0.75;"><i>(Click inside the box and drag)</i></p>
         <canvas id="life-canvas"></canvas>
       </div>
     </div>
 
 <script>
+// The script remains the same as your logic is sound, 
+// just ensure the canvas resizing logic is clean.
 (function () {
   const canvas = document.getElementById('life-canvas');
   if (!canvas) return;
   const ctx = canvas.getContext('2d', { alpha: false });
 
-  // ====== Tunables (The logic you liked, strictly B&W) ======
   const cell = 24;
   const arrowLen = 9;
   const nParticlesBase = 1100;
   const speed = 0.55;
-  const inertia = 0.94;         // High inertia for that "heavy drift" feel
+  const inertia = 0.94;
   const trail = 0.08;
   const damp = 0.97;
   const injectStrength = 1.8;
-  const curl = 1.2;             // lower (e.g. 0.6) if you want less swirl, more "follow finger"
+  const curl = 1.2;
   const showArrows = true;
-  const arrowAlpha = 0.08;      // Faint black arrows
-  // =========================================================
+  const arrowAlpha = 0.08;
 
   let w = 0, h = 0, cols = 0, rows = 0;
   let fx, fy;
@@ -173,6 +160,7 @@
 
   function resize() {
     const dpr = window.devicePixelRatio || 1;
+    // We use clientWidth/Height which is now stable thanks to the viewport fix
     const cssW = canvas.clientWidth;
     const cssH = canvas.clientHeight;
 
@@ -187,7 +175,6 @@
     fx = new Float32Array(cols * rows);
     fy = new Float32Array(cols * rows);
 
-    // Seed organic "Latent Space" flow
     for (let y = 0; y < rows; y++) {
       for (let x = 0; x < cols; x++) {
         const nx = x / cols;
@@ -213,23 +200,19 @@
     ctx.fillRect(0, 0, w, h);
   }
 
-  // Smooth sub-grid sampling (Bilinear Interpolation)
   function sampleField(x, y) {
     const gx = (x / w) * (cols - 1);
     const gy = (y / h) * (rows - 1);
     const x0 = Math.floor(gx), y0 = Math.floor(gy);
     const x1 = Math.min(x0 + 1, cols - 1), y1 = Math.min(y0 + 1, rows - 1);
     const tx = gx - x0, ty = gy - y0;
-
     const i00 = y0 * cols + x0, i10 = y0 * cols + x1;
     const i01 = y1 * cols + x0, i11 = y1 * cols + x1;
-
     const vx = (fx[i00] * (1 - tx) + fx[i10] * tx) * (1 - ty) + (fx[i01] * (1 - tx) + fx[i11] * tx) * ty;
     const vy = (fy[i00] * (1 - tx) + fy[i10] * tx) * (1 - ty) + (fy[i01] * (1 - tx) + fy[i11] * tx) * ty;
     return [vx, vy];
   }
 
-  // Force a handful of particles to originate at the touch point (so lines "start" under your finger)
   function seedParticles(x, y, n = 16) {
     for (let k = 0; k < n; k++) {
       const p = particles[(Math.random() * particles.length) | 0];
@@ -240,12 +223,9 @@
     }
   }
 
-
   function inject(x, y, dx, dy, strength) {
-    // IMPORTANT: match sampleField() mapping so injection aligns with where you touched
     const cx0 = (x / w) * (cols - 1);
     const cy0 = (y / h) * (rows - 1);
-
     const r = 5.0;
     const mag = Math.hypot(dx, dy) || 1;
     const ux = dx / mag, uy = dy / mag;
@@ -255,11 +235,9 @@
         const ox = cx - cx0, oy = cy - cy0;
         const d2 = ox * ox + oy * oy;
         if (d2 > r * r) continue;
-
         const fall = Math.exp(-d2 / (r * 1.5));
         const sign = (ux * oy - uy * ox) >= 0 ? 1 : -1;
         const i = cy * cols + cx;
-
         fx[i] += (-oy * sign * curl + ux * 0.45) * strength * fall * injectStrength * 0.1;
         fy[i] += ( ox * sign * curl + uy * 0.45) * strength * fall * injectStrength * 0.1;
       }
@@ -269,22 +247,18 @@
   function stepParticles() {
     for (const p of particles) {
       const [fvX, fvY] = sampleField(p.x, p.y);
-
       p.vx = p.vx * inertia + fvX * (1 - inertia);
       p.vy = p.vy * inertia + fvY * (1 - inertia);
-
       const x0 = p.x, y0 = p.y;
       p.x += p.vx * speed * 15;
       p.y += p.vy * speed * 15;
 
-      // WRAP FIX: Detect if we crossed the boundary
       let wrapped = false;
       if (p.x < 0) { p.x += w; wrapped = true; }
       else if (p.x >= w) { p.x -= w; wrapped = true; }
       if (p.y < 0) { p.y += h; wrapped = true; }
       else if (p.y >= h) { p.y -= h; wrapped = true; }
 
-      // Only draw the line segment if the particle didn't wrap around
       if (!wrapped) {
         const speedMag = Math.hypot(p.vx, p.vy);
         const alpha = Math.min(0.05 + speedMag * 2, 0.4);
@@ -299,15 +273,11 @@
   }
 
   function frame() {
-    // Fill white with trail opacity
     ctx.fillStyle = `rgba(255, 255, 255, ${trail})`;
     ctx.fillRect(0, 0, w, h);
-
-    // Decay field
     for (let i = 0; i < fx.length; i++) {
       fx[i] *= damp; fy[i] *= damp;
     }
-
     if (showArrows) {
       ctx.strokeStyle = `rgba(0, 0, 0, ${arrowAlpha})`;
       ctx.lineWidth = 0.7;
@@ -324,7 +294,6 @@
         }
       }
     }
-
     stepParticles();
     requestAnimationFrame(frame);
   }
@@ -337,13 +306,10 @@
     };
   }
 
-  // Pointer interactions (feels "attached" to your finger)
   canvas.addEventListener('pointerdown', (e) => {
     canvas.setPointerCapture(e.pointerId);
     pointerDown = true;
     lastPt = getPoint(e);
-
-    // No random kick — center the interaction on the touch point
     inject(lastPt.x, lastPt.y, 0, 0, 0.9);
     seedParticles(lastPt.x, lastPt.y, 22);
   });
@@ -352,17 +318,11 @@
     if (!pointerDown) return;
     const pt = getPoint(e);
     if (!lastPt) lastPt = pt;
-
     const dx = pt.x - lastPt.x;
     const dy = pt.y - lastPt.y;
-
-    // Scale strength by how far you actually moved (more intuitive)
     const dist = Math.hypot(dx, dy);
-    const strength = Math.min(1.6, dist / 14); // gentler = more whimsy
-
+    const strength = Math.min(1.6, dist / 14);
     inject(pt.x, pt.y, dx, dy, strength);
-    // seedParticles(pt.x, pt.y, 18);
-
     lastPt = pt;
   });
 
@@ -373,42 +333,10 @@
   });
 
   window.addEventListener('resize', resize);
-
   canvas.style.touchAction = 'none';
   resize();
   requestAnimationFrame(frame);
 })();
-
 </script>
-
-
-<script>
-(function () {
-  const page = document.getElementById('page');
-  if (!page) return;
-
-  function isMobile() {
-    return window.matchMedia('(max-width: 710px)').matches;
-  }
-
-  function clampScroll() {
-    if (!isMobile()) return;
-
-    const visualHeight = page.getBoundingClientRect().height;
-    const maxScroll = Math.max(0, visualHeight - window.innerHeight);
-
-    if (window.scrollY > maxScroll) {
-      window.scrollTo(0, maxScroll);
-    }
-  }
-
-  window.addEventListener('scroll', clampScroll, { passive: true });
-  window.addEventListener('resize', clampScroll);
-})();
-</script>
-
-
 </body>
 </html>
-
-
