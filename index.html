@@ -119,13 +119,19 @@
   if (!canvas) return;
   const ctx = canvas.getContext('2d', { alpha: false });
 
-  const concepts = [
+  let concepts = [
     "Causal Cycles", "Chain-of-Thought", "Reasoning", "Residual Stream", "Attention Heads", "Transformers", "Logit Lens", "SAEs", 
     "Circuits", "Features", "Monosemantic", "Polysemantics", "PCA", "Kernel Alignment",  
     "Internal Activations", "Ablation", "Induction Heads", "Grokking", "Phase Change",
     "Steering", "Probing", "Causal Patching", "Memorization", "Comprehension",
     "MLP", "Dictionary Learning", "Tokens", "Extrapolation", "Interpolation"
   ];
+
+  // SHUFFLE LOGIC: Scrambles the list on every load
+  for (let i = concepts.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [concepts[i], concepts[j]] = [concepts[j], concepts[i]];
+  }
 
   let w, h, words = [];
   let mouse = { x: -1000, y: -1000 };
@@ -139,12 +145,9 @@
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
     words = [];
-    
-    // GRID SETTINGS
-    const cols = 4; // Using 4 columns gives long words like "Dictionary Learning" more space
+    const cols = 4; 
     const totalWords = concepts.length;
     const rows = Math.ceil(totalWords / cols);
-    
     const cellW = w / cols;
     const cellH = h / rows;
 
@@ -152,27 +155,22 @@
       const col = i % cols;
       const row = Math.floor(i / cols);
       
-      // Calculate how many words are in this specific row (to center the last row)
       const isLastRow = row === rows - 1;
       const wordsInThisRow = isLastRow ? (totalWords % cols || cols) : cols;
-      
-      // Horizontal centering offset for the last row
       const xRowOffset = isLastRow ? (w - (wordsInThisRow * cellW)) / 2 : 0;
 
-      // Base positions
       const baseX = xRowOffset + (col * cellW) + (cellW / 2);
       const baseY = (row * cellH) + (cellH / 2);
 
       words.push({
         text: text,
-        // Small jitter (15% of cell size) keeps it organic but prevents clumping
         bx: baseX + (Math.random() - 0.5) * (cellW * 0.3),
         by: baseY + (Math.random() - 0.5) * (cellH * 0.3),
         x: 0, y: 0,
         size: 15,
         scale: 1,
         opacity: 0.28,
-        radius: 45 // Clickable area
+        radius: 45 
       });
     });
   }
@@ -232,7 +230,6 @@
   canvas.addEventListener('pointerdown', (e) => {
     const pt = getPoint(e);
     words.forEach(p => {
-      // Check distance from current animated position for better feel
       const dist = Math.hypot(pt.x - p.x, pt.y - p.y);
       if (dist < p.radius) { 
         const query = encodeURIComponent(p.text + " mechanistic interpretability");
