@@ -210,8 +210,8 @@
         const fall = Math.exp(-d2 / (r * 1.5));
         const sign = (ux * oy - uy * ox) >= 0 ? 1 : -1;
         const i = cy * cols + cx;
-        fx[i] += (-oy * sign * curl + ux * 0.75) * strength * fall * injectStrength * 0.1;
-        fy[i] += ( ox * sign * curl + uy * 0.75) * strength * fall * injectStrength * 0.1;
+        fx[i] += (-oy * sign * curl + ux * 0.95) * strength * fall * injectStrength * 0.1;
+        fy[i] += ( ox * sign * curl + uy * 0.95) * strength * fall * injectStrength * 0.1;
       }
     }
   }
