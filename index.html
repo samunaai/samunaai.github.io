@@ -90,11 +90,13 @@
     		}
     		/* Mobile zoom-out - transform method (better browser support) */
     		@media (max-width: 710px) {
-          html, body {
-            margin: 0;
-            overflow-x: hidden;
-          } 
-        }
+    		    body {
+    		        transform: scale(calc(100vw / 710px));
+    		        transform-origin: top left;
+    		        width: 710px;
+    		        min-height: 100vh;
+    		    }
+    		}
         #life-canvas {
           width: 100%;
           height: 360px;          /* adjust as you like */
@@ -138,7 +140,7 @@
     <div class="bio-div">
       <div class="bio-inner">
         <p style="text-align:center; margin:0 0 6px 0; font-size:0.9em; opacity:0.75;">A Field of Latents</p>
-        <p style="text-align:center; margin:0 0 10px 0; font-size:0.82em; opacity:0.75;"><i>(Click inside the box and drag)</i></p>
+        <p style="text-align:center; margin:0 0 10px 0; font-size:0.82em; opacity:0.75;"><i>(Click inside the box and drag )</i></p>
         <canvas id="life-canvas"></canvas>
       </div>
     </div>
