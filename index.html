@@ -108,8 +108,7 @@
 
     <div class="bio-div">
       <div class="bio-inner">
-        <p style="text-align:center; margin:0 0 6px 0; font-size:0.9em; opacity:0.75;">Appendix: A Field of Latents</p>
-        <p style="text-align:center; margin:0 0 10px 0; font-size:0.82em; opacity:0.75;"><i>(Click inside the box and drag)</i></p>
+        <p style="text-align:center; margin:0 0 6px 0; font-size:0.9em; opacity:0.75;">Appendix: Clickable Word Cloud</p>
         <canvas id="life-canvas"></canvas>
       </div>
     </div>
@@ -120,163 +119,101 @@
   if (!canvas) return;
   const ctx = canvas.getContext('2d', { alpha: false });
 
-  const cell = 24;
-  const arrowLen = 9;
-  const nParticlesBase = 1100;
-  const speed = 0.55;
-  const inertia = 0.94;
-  const trail = 0.08;
-  const damp = 0.97;
-  const injectStrength = 1.8;
-  const curl = 0.6;
-  const showArrows = true;
-  const arrowAlpha = 0.08;
+  const concepts = [
+    "Causal Cycles", "Chain-of-Thought", "Reasoning", "Residual Stream", "Attention Heads", "Transformer", "Logit Lens", "SAEs", 
+    "Circuits", "Features", "Monosemantic", "Polysemantic", "Superposition", 
+    "Internal Activations", "Ablation", "Induction", "Grokking", "Phase Change",
+    "Steering", "Probing", "Causal Patching",
+    "MLP", "Dictionary Learning", "Mechanisms", "Tokens"
+  ];
 
-  let w = 0, h = 0, cols = 0, rows = 0;
-  let fx, fy;
-  let particles = [];
-  let pointerDown = false;
-  let lastPt = null;
+  let w, h, words = [];
+  let mouse = { x: -1000, y: -1000 };
 
-  function resize() {
+  function init() {
     const dpr = window.devicePixelRatio || 1;
-    const cssW = canvas.clientWidth;
-    const cssH = canvas.clientHeight;
-    canvas.width = Math.max(1, Math.floor(cssW * dpr));
-    canvas.height = Math.max(1, Math.floor(cssH * dpr));
+    w = canvas.clientWidth;
+    h = canvas.clientHeight;
+    canvas.width = Math.floor(w * dpr);
+    canvas.height = Math.floor(h * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    w = cssW; h = cssH;
-    cols = Math.ceil(w / cell) + 1;
-    rows = Math.ceil(h / cell) + 1;
-    fx = new Float32Array(cols * rows);
-    fy = new Float32Array(cols * rows);
-    for (let y = 0; y < rows; y++) {
-      for (let x = 0; x < cols; x++) {
-        const nx = x / cols;
-        const ny = y / rows;
-        let a = (Math.sin(nx * 4) * Math.cos(ny * 4));
-        a += Math.sin(nx * 8 + ny * 5) * 0.5;
-        const i = y * cols + x;
-        fx[i] = Math.cos(a * Math.PI) * 0.2;
-        fy[i] = Math.sin(a * Math.PI) * 0.2;
-      }
-    }
-    const area = w * h;
-    const nParticles = Math.max(400, Math.floor(nParticlesBase * (area / (700 * 360))));
-    particles = new Array(nParticles).fill(0).map(() => ({
-      x: Math.random() * w,
-      y: Math.random() * h,
-      vx: (Math.random() - 0.5) * 2,
-      vy: (Math.random() - 0.5) * 2
-    }));
-    ctx.fillStyle = '#ffffff';
-    ctx.fillRect(0, 0, w, h);
-  }
 
-  function sampleField(x, y) {
-    const gx = (x / w) * (cols - 1);
-    const gy = (y / h) * (rows - 1);
-    const x0 = Math.floor(gx), y0 = Math.floor(gy);
-    const x1 = Math.min(x0 + 1, cols - 1), y1 = Math.min(y0 + 1, rows - 1);
-    const tx = gx - x0, ty = gy - y0;
-    const i00 = y0 * cols + x0, i10 = y0 * cols + x1;
-    const i01 = y1 * cols + x0, i11 = y1 * cols + x1;
-    const vx = (fx[i00] * (1 - tx) + fx[i10] * tx) * (1 - ty) + (fx[i01] * (1 - tx) + fx[i11] * tx) * ty;
-    const vy = (fy[i00] * (1 - tx) + fy[i10] * tx) * (1 - ty) + (fy[i01] * (1 - tx) + fy[i11] * tx) * ty;
-    return [vx, vy];
-  }
+    words = [];
+    
+    // GRID SETTINGS
+    const cols = 4; // Using 4 columns gives long words like "Dictionary Learning" more space
+    const totalWords = concepts.length;
+    const rows = Math.ceil(totalWords / cols);
+    
+    const cellW = w / cols;
+    const cellH = h / rows;
 
-  function seedParticles(x, y, n = 16) {
-    for (let k = 0; k < n; k++) {
-      const p = particles[(Math.random() * particles.length) | 0];
-      p.x = x + (Math.random() - 0.5) * 8;
-      p.y = y + (Math.random() - 0.5) * 8;
-      p.vx = (Math.random() - 0.5) * 0.25;
-      p.vy = (Math.random() - 0.5) * 0.25;
-    }
-  }
+    concepts.forEach((text, i) => {
+      const col = i % cols;
+      const row = Math.floor(i / cols);
+      
+      // Calculate how many words are in this specific row (to center the last row)
+      const isLastRow = row === rows - 1;
+      const wordsInThisRow = isLastRow ? (totalWords % cols || cols) : cols;
+      
+      // Horizontal centering offset for the last row
+      const xRowOffset = isLastRow ? (w - (wordsInThisRow * cellW)) / 2 : 0;
 
-  function inject(x, y, dx, dy, strength) {
-    const cx0 = (x / w) * (cols - 1);
-    const cy0 = (y / h) * (rows - 1);
-    const r = 5.0;
-    const mag = Math.hypot(dx, dy) || 1;
-    const ux = dx / mag, uy = dy / mag;
-    for (let cy = Math.max(0, Math.floor(cy0 - r)); cy <= Math.min(rows - 1, Math.ceil(cy0 + r)); cy++) {
-      for (let cx = Math.max(0, Math.floor(cx0 - r)); cx <= Math.min(cols - 1, Math.ceil(cx0 + r)); cx++) {
-        const ox = cx - cx0, oy = cy - cy0;
-        const d2 = ox * ox + oy * oy;
-        if (d2 > r * r) continue;
-        const fall = Math.exp(-d2 / (r * 1.5));
-        const sign = (ux * oy - uy * ox) >= 0 ? 1 : -1;
-        const i = cy * cols + cx;
-        fx[i] += (-oy * sign * curl + ux * 0.95) * strength * fall * injectStrength * 0.1;
-        fy[i] += ( ox * sign * curl + uy * 0.95) * strength * fall * injectStrength * 0.1;
-      }
-    }
-  }
+      // Base positions
+      const baseX = xRowOffset + (col * cellW) + (cellW / 2);
+      const baseY = (row * cellH) + (cellH / 2);
 
-  function stepParticles() {
-    for (const p of particles) {
-      const [fvX, fvY] = sampleField(p.x, p.y);
-      p.vx = p.vx * inertia + fvX * (1 - inertia);
-      p.vy = p.vy * inertia + fvY * (1 - inertia);
-      const x0 = p.x, y0 = p.y;
-      p.x += p.vx * speed * 15;
-      p.y += p.vy * speed * 15;
-      let wrapped = false;
-      if (p.x < 0) { p.x += w; wrapped = true; }
-      else if (p.x >= w) { p.x -= w; wrapped = true; }
-      if (p.y < 0) { p.y += h; wrapped = true; }
-      else if (p.y >= h) { p.y -= h; wrapped = true; }
-      if (!wrapped) {
-        const speedMag = Math.hypot(p.vx, p.vy);
-        const alpha = Math.min(0.05 + speedMag * 2, 0.4);
-        ctx.strokeStyle = `rgba(0, 0, 0, ${alpha})`;
-        ctx.lineWidth = 1.0;
-        ctx.beginPath();
-        ctx.moveTo(x0, y0);
-        ctx.lineTo(p.x, p.y);
-        ctx.stroke();
-      }
-    }
+      words.push({
+        text: text,
+        // Small jitter (15% of cell size) keeps it organic but prevents clumping
+        bx: baseX + (Math.random() - 0.5) * (cellW * 0.3),
+        by: baseY + (Math.random() - 0.5) * (cellH * 0.3),
+        x: 0, y: 0,
+        size: 15,
+        scale: 1,
+        opacity: 0.28,
+        radius: 45 // Clickable area
+      });
+    });
   }
 
   function frame() {
-    // Fade to white (trails)
-    ctx.fillStyle = `rgba(255, 255, 255, ${trail})`;
+    ctx.fillStyle = '#ffffff';
     ctx.fillRect(0, 0, w, h);
 
-    // Drop-in fix: decay much less while dragging so back-and-forth doesn't "die"
-    const localDamp = pointerDown ? 1.0 : damp;
-    for (let i = 0; i < fx.length; i++) {
-      fx[i] *= localDamp;
-      fy[i] *= localDamp;
-    }
+    const activeRadius = 140; 
+    let hoveredAny = false;
 
-    if (showArrows) {
-      ctx.strokeStyle = `rgba(0, 0, 0, ${arrowAlpha})`;
-      ctx.lineWidth = 0.7;
+    words.forEach(p => {
+      const dx = mouse.x - p.bx;
+      const dy = mouse.y - p.by;
+      const dist = Math.hypot(dx, dy);
 
-      for (let cy = 0; cy < rows; cy++) {
-        for (let cx = 0; cx < cols; cx++) {
-          const i = cy * cols + cx;
-          const m = Math.hypot(fx[i], fy[i]);
-          if (m < 0.01) continue;
-
-          const x = (cx + 0.5) * cell, y = (cy + 0.5) * cell;
-          ctx.beginPath();
-          ctx.moveTo(x, y);
-          ctx.lineTo(x + (fx[i] / m) * arrowLen, y + (fy[i] / m) * arrowLen);
-          ctx.stroke();
-        }
+      if (dist < activeRadius) {
+        const proximity = 1 - (dist / activeRadius);
+        p.scale += ((1 + proximity * 1.1) - p.scale) * 0.15;
+        p.opacity += ((0.35 + proximity * 0.65) - p.opacity) * 0.15;
+        p.x += ((p.bx - dx * 0.12 * proximity) - p.x) * 0.15;
+        p.y += ((p.by - dy * 0.12 * proximity) - p.y) * 0.15;
+        
+        if (dist < 40) hoveredAny = true;
+      } else {
+        p.scale += (1 - p.scale) * 0.08;
+        p.opacity += (0.28 - p.opacity) * 0.08;
+        p.x += (p.bx - p.x) * 0.08;
+        p.y += (p.by - p.y) * 0.08;
       }
-    }
 
-    stepParticles();
+      ctx.font = `500 ${p.size * p.scale}px 'Montserrat'`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillStyle = `rgba(0, 0, 0, ${p.opacity})`;
+      ctx.fillText(p.text, p.x, p.y);
+    });
+
+    canvas.style.cursor = hoveredAny ? 'pointer' : 'default';
     requestAnimationFrame(frame);
   }
-
 
   function getPoint(e) {
     const rect = canvas.getBoundingClientRect();
@@ -286,37 +223,33 @@
     };
   }
 
-  canvas.addEventListener('pointerdown', (e) => {
-    canvas.setPointerCapture(e.pointerId);
-    pointerDown = true;
-    lastPt = getPoint(e);
-    inject(lastPt.x, lastPt.y, 0, 0, 0.9);
-    seedParticles(lastPt.x, lastPt.y, 22);
-  });
-
   canvas.addEventListener('pointermove', (e) => {
-    if (!pointerDown) return;
     const pt = getPoint(e);
-    if (!lastPt) lastPt = pt;
-    const dx = pt.x - lastPt.x;
-    const dy = pt.y - lastPt.y;
-    const dist = Math.hypot(dx, dy);
-    // YOUR TOUCH FIX IS HERE:
-    const strength = Math.min(2.0, dist / (e.pointerType === 'touch' ? 6 : 14));
-    inject(pt.x, pt.y, dx, dy, strength);
-    lastPt = pt;
+    mouse.x = pt.x;
+    mouse.y = pt.y;
   });
 
-  window.addEventListener('pointerup', (e) => {
-    pointerDown = false;
-    lastPt = null;
-    try { canvas.releasePointerCapture(e.pointerId); } catch {}
+  canvas.addEventListener('pointerdown', (e) => {
+    const pt = getPoint(e);
+    words.forEach(p => {
+      // Check distance from current animated position for better feel
+      const dist = Math.hypot(pt.x - p.x, pt.y - p.y);
+      if (dist < p.radius) { 
+        const query = encodeURIComponent(p.text + " mechanistic interpretability");
+        window.open(`https://scholar.google.com/scholar?q=${query}`, '_blank');
+      }
+    });
   });
 
-  window.addEventListener('resize', resize);
+  canvas.addEventListener('pointerleave', () => {
+    mouse.x = -1000; mouse.y = -1000;
+  });
+
+  window.addEventListener('resize', init);
   canvas.style.touchAction = 'none';
-  resize();
-  requestAnimationFrame(frame);
+
+  init();
+  frame();
 })();
 </script>
 </body>
