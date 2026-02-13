@@ -51,10 +51,10 @@
             margin: 23px auto;
         }
         .pic-div img.sam-img {
-		    width: 70%;
-		    margin: 23px auto;
-		    display: block;
-		}
+        width: 70%;
+        margin: 23px auto;
+        display: block;
+    }
         .personal-div {
             margin: 0 auto; 
             width: 100%; 
@@ -84,19 +84,19 @@
           margin-left: 0.2em; /* small gap from text */
         }
         .ref-highlight {
-    		    background: #add0d0ff;     /* soft green */
-    		    padding: 0.05em 0.25em;
-    		    border-radius: 3px;
-    		}
-    		/* Mobile zoom-out - transform method (better browser support) */
-    		@media (max-width: 710px) {
-    		    body {
-    		        transform: scale(calc(100vw / 710px));
-    		        transform-origin: top left;
-    		        width: 710px;
-    		        min-height: 100vh;
-    		    }
-    		}
+            background: #add0d0ff;     /* soft green */
+            padding: 0.05em 0.25em;
+            border-radius: 3px;
+        }
+        /* Mobile zoom-out - transform method (better browser support) */
+        @media (max-width: 710px) {
+            body {
+                transform: scale(calc(100vw / 710px));
+                transform-origin: top left;
+                width: 710px;
+                min-height: 100vh;
+            }
+        }
         #life-canvas {
           width: 100%;
           height: 360px;          /* adjust as you like */
@@ -379,6 +379,32 @@
   requestAnimationFrame(frame);
 })();
 
+</script>
+
+
+<script>
+(function () {
+  const page = document.getElementById('page');
+  if (!page) return;
+
+  function isMobile() {
+    return window.matchMedia('(max-width: 710px)').matches;
+  }
+
+  function clampScroll() {
+    if (!isMobile()) return;
+
+    const visualHeight = page.getBoundingClientRect().height;
+    const maxScroll = Math.max(0, visualHeight - window.innerHeight);
+
+    if (window.scrollY > maxScroll) {
+      window.scrollTo(0, maxScroll);
+    }
+  }
+
+  window.addEventListener('scroll', clampScroll, { passive: true });
+  window.addEventListener('resize', clampScroll);
+})();
 </script>
 
 
