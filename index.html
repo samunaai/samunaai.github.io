@@ -243,25 +243,40 @@
   }
 
   function frame() {
+    // Fade to white (trails)
     ctx.fillStyle = `rgba(255, 255, 255, ${trail})`;
     ctx.fillRect(0, 0, w, h);
-    for (let i = 0; i < fx.length; i++) { fx[i] *= damp; fy[i] *= damp; }
+
+    // Drop-in fix: decay much less while dragging so back-and-forth doesn't "die"
+    const localDamp = pointerDown ? 1.0 : damp;
+    for (let i = 0; i < fx.length; i++) {
+      fx[i] *= localDamp;
+      fy[i] *= localDamp;
+    }
+
     if (showArrows) {
       ctx.strokeStyle = `rgba(0, 0, 0, ${arrowAlpha})`;
       ctx.lineWidth = 0.7;
+
       for (let cy = 0; cy < rows; cy++) {
         for (let cx = 0; cx < cols; cx++) {
           const i = cy * cols + cx;
           const m = Math.hypot(fx[i], fy[i]);
           if (m < 0.01) continue;
+
           const x = (cx + 0.5) * cell, y = (cy + 0.5) * cell;
-          ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x + (fx[i] / m) * arrowLen, y + (fy[i] / m) * arrowLen); ctx.stroke();
+          ctx.beginPath();
+          ctx.moveTo(x, y);
+          ctx.lineTo(x + (fx[i] / m) * arrowLen, y + (fy[i] / m) * arrowLen);
+          ctx.stroke();
         }
       }
     }
+
     stepParticles();
     requestAnimationFrame(frame);
   }
+
 
   function getPoint(e) {
     const rect = canvas.getBoundingClientRect();
