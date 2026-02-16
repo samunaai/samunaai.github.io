@@ -119,13 +119,21 @@
   if (!canvas) return;
   const ctx = canvas.getContext('2d', { alpha: false });
 
-  let concepts = [
-    "Causal Cycles", "Chain-of-Thought", "Reasoning", "Residual Stream", "Attention Heads", "Transformers", "Logit Lens", "SAEs", 
-    "Circuits", "Features", "Monosemantic", "In-Context Learning", "PCA", "Kernel Alignment",  
-    "Internal Activations", "Ablation", "Induction Heads", "Grokking", "Phase Change",
-    "Steering", "Probing", "Causal Patching", "Memorization", "Comprehension",
-    "MLP", "Dictionary Learning", "Tokens", "Extrapolation", "Interpolation"
-  ];
+  const conceptLinks = {
+    "Backdoor Attacks": "https://arxiv.org/pdf/2101.00008.pdf",
+    "Numerical LLMs": "https://arxiv.org/pdf/2502.16147.pdf",
+    "Bayesian Optimistaion": "https://arxiv.org/pdf/2411.03731.pdf",
+    "Autoregression": "https://arxiv.org/pdf/2501.13491.pdf",
+    "Grokking": "https://arxiv.org/pdf/2505.15624.pdf",
+    "Mamba": "https://arxiv.org/pdf/2506.15156.pdf",
+    "LLM Watermarking": "https://arxiv.org/pdf/2507.07871.pdf",
+    "AI Data Scientist": "https://arxiv.org/pdf/2508.18113.pdf",
+    "Medical AI": "https://arxiv.org/pdf/2511.11212.pdf", 
+    "LLM Personality": "https://arxiv.org/pdf/2601.16644.pdf",
+    "Sycophancy": "https://arxiv.org/pdf/2601.16644.pdf"
+  };
+
+  let concepts = Object.keys(conceptLinks);
 
   // SHUFFLE LOGIC: Scrambles the list on every load
   for (let i = concepts.length - 1; i > 0; i--) {
@@ -164,6 +172,7 @@
 
       words.push({
         text: text,
+        url: conceptLinks[text],    
         bx: baseX + (Math.random() - 0.5) * (cellW * 0.3),
         by: baseY + (Math.random() - 0.5) * (cellH * 0.3),
         x: 0, y: 0,
@@ -232,8 +241,7 @@
     words.forEach(p => {
       const dist = Math.hypot(pt.x - p.x, pt.y - p.y);
       if (dist < p.radius) { 
-        const query = encodeURIComponent(p.text + " mechanistic interpretability");
-        window.open(`https://scholar.google.com/scholar?q=${query}`, '_blank');
+        if (p.url) window.open(p.url, '_blank', 'noopener');
       }
     });
   });
