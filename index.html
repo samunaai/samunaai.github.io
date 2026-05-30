@@ -1,467 +1,402 @@
 <!DOCTYPE html>
-<html lang="en"> 
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="description" content="Munachiso Nwadike's research page">
-    <meta name="author" content="Munachiso Nwadike">
-    
-    <!-- FIX 1: This one line replaces the "transform" CSS and the "syncHeight" JS -->
-    <meta name="viewport" content="width=710">
+  <meta charset="utf-8">
+  <meta name="description" content="Munachiso Nwadike's research page">
+  <meta name="author" content="Munachiso Nwadike">
+  <meta name="viewport" content="width=710">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <title>Munachiso Nwadike - Research Page</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --wide1: 710px;
-            --wide2: 650px;
-        }
+  <style>
+    :root {
+      --page: 710px;
+      --inner: 650px;
+      --teal: 60, 108, 108;
+      --teal-dark: 19, 42, 42;
+      --bg: #f9f9f9;
+      --card: #ffffff;
+      --highlight: #add0d0ff;
+    }
 
-        body {
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 400;
-            font-size: 20px;
-            margin: 0;
-            padding: 0;
-            background-color: #f9f9f9;
-            width: 710px; /* Force consistent width */
-            margin-left: auto;
-            margin-right: auto;
-            overflow-x: hidden;
-        }
+    body {
+      width: var(--page);
+      margin: 0 auto;
+      padding: 0;
+      overflow-x: hidden;
+      background: var(--bg);
+      font-family: 'Montserrat', sans-serif;
+      font-size: 20px;
+      font-weight: 400;
+    }
 
-        a { color: inherit; text-decoration: none; } 
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
 
-        .top-div, .bio-inner {
-            width: var(--wide2);
-            margin: 20px auto;
-        }
+    .card {
+      width: var(--page);
+      margin: 20px auto;
+      padding: 20px;
+      box-sizing: border-box;
+      background: var(--card);
+      border-bottom: 3px solid rgba(var(--teal), 0.654);
+      border-radius: 8px;
+      box-shadow: 4px 0 8px rgba(0, 0, 0, 0.1);
+      text-align: justify;
+    }
 
-        .bio-div {
-             width: var(--wide1);
-             margin: 20px auto;
-             background-color: white;
-             border-bottom: 3px solid rgba(60, 108, 108, 0.654);
-             text-align: justify;
-             border-radius: 8px;
-             box-shadow: 4px 0 8px rgba(0, 0, 0, 0.1);
-             padding: 20px;
-             box-sizing: border-box;
-        }
+    .inner,
+    .profile {
+      width: var(--inner);
+      margin: 20px auto;
+    }
 
-        .pic-div img {
-            width: 100%;
-            border: 0px solid rgba(60, 108, 108, 0.35);
-            border-radius: 12px;
-            box-sizing: border-box;
-            display: block;
-            margin: 23px auto;
-        }
-        .pic-div img.sam-img { width: 70%; margin: 23px auto; display: block; }
-        .personal-div { margin: 0 auto; width: 100%; text-align: center;} 
-        .mint-emoji { height: 1.2em; width: auto; vertical-align: -0.3em; margin-left: 0.2em; }
-        .socials { height: 1.00em; width: auto; vertical-align: -0.2em; margin-left: 0.2em; }
-        .scholar { height: 1.1em; width: auto; vertical-align: -0.2em; margin-left: 0.2em; }
-        .ref-highlight { background: #add0d0ff; padding: 0.05em 0.25em; border-radius: 3px; }
+    .profile-photo img {
+      width: 100%;
+      display: block;
+      margin: 23px auto;
+      border-radius: 12px;
+      box-sizing: border-box;
+    }
 
-        .accent-word {
-          color: rgb(60, 108, 108);
-          font-weight: 500;
-        }        
-        .award-list {
-            margin: 0;
-            padding: 0;
-            list-style: none;
-        }
+    .profile-photo img.sam-img {
+      width: 70%;
+    }
 
-        .award-list li {
-            display: flex;
-            justify-content: space-between;
-            gap: 20px;
-            margin: 10px 0;
-            font-size: 0.85em;
-         }
+    .profile-text {
+      width: 100%;
+      margin: 0 auto;
+      text-align: center;
+    }
 
-        .award-title {
-            font-weight: 400;
-        }
-        
-        .award-title.is-bold {
-            font-weight: 700;
-            color: rgb(60, 108, 108);
-        }
+    .icon {
+      width: auto;
+      margin-left: 0.2em;
+      vertical-align: -0.2em;
+    }
 
-        .award-year {
-            opacity: 0.65;
-            white-space: nowrap;
-        }
-        .compact-bio {
-            font-size: 0.85em; 
-        }
-        .blog-bio {
-            font-size: 0.95em; 
-            text-align: center;
-            font-weight: 400;
-            color: rgb(19, 42, 42);
-        }
-        .section-title {
-            text-align: center;
-            width: fit-content;
-            margin: 0 auto 14px auto;
-            padding: 6px 14px;
-            font-size: 1.1em;
-            color: #3C6C6C;
-            background: rgba(60, 108, 108, 0.10);
-            border: 0px solid rgba(60, 108, 108, 0.25);
-            border-radius: 9px;
-            opacity: 0.9;
-        }
+    .socials {
+      height: 1em;
+    }
 
-        .appendix-title {
-          text-align: center;
-          width: fit-content;
-          margin: 0 auto 12px auto;
-          padding: 6px 14px;
-          font-size: 0.9em;
-          color: #3C6C6C;
-          background: rgba(60, 108, 108, 0.10);
-          border: 0px solid rgba(60, 108, 108, 0.25);
-          border-radius: 9px;
-      }
+    .scholar {
+      height: 1.1em;
+    }
 
-        #life-canvas {
-          width: 100%;
-          height: 360px;
-          display: block;
-          border: 0px solid rgba(60, 108, 108, 0.636);
-          border-radius: 9px;
-          box-shadow: 4px 4px 20px rgba(60, 108, 108, 0.164);
-          box-sizing: border-box;
-          margin: 12px auto 0;
-          cursor: default;
-        }
-    </style>
-    <title>Munachiso Nwadike - Research Page</title>
+    .ref-highlight {
+      background: var(--highlight);
+      padding: 0.05em 0.25em;
+      border-radius: 3px;
+    }
+
+    .accent-word {
+      color: rgb(var(--teal));
+      font-weight: 500;
+    }
+
+    .section-title {
+      width: fit-content;
+      margin: 0 auto 14px auto;
+      padding: 6px 14px;
+      border-radius: 9px;
+      background: rgba(var(--teal), 0.10);
+      color: rgb(var(--teal));
+      font-size: 1.1em;
+      text-align: center;
+      opacity: 0.9;
+    }
+
+    .compact {
+      font-size: 0.85em;
+    }
+
+    .award-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .award-list li {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      margin: 10px 0;
+      font-size: 0.85em;
+    }
+
+    .award-title {
+      font-weight: 400;
+    }
+
+    .award-title.is-bold {
+      color: rgb(var(--teal));
+      font-weight: 700;
+    }
+
+    .award-year {
+      opacity: 0.65;
+      white-space: nowrap;
+    }
+
+    #life-canvas {
+      width: 100%;
+      height: 360px;
+      display: block;
+      margin: 12px auto 0;
+      border-radius: 9px;
+      box-shadow: 4px 4px 20px rgba(var(--teal), 0.164);
+      box-sizing: border-box;
+      cursor: default;
+    }
+  </style>
 </head>
-<body>
-    <!-- No need for <div id="page"> anymore -->
-    <div class="bio-div">
-        <div class="top-div">
-            <div class="pic-div">
-                <img src="seaside.jpg" alt="Munachiso" class="sam-img">
-            </div>
-            <div class="personal-div">
-                <p>
-                    <a href="https://samunaai.github.io"><span class="accent-word"><b>Sam</b></span></a> • Munachiso Samuel Nwadike (MSc, BSc@NYU)<br>
-                    <a href="https://scholar.google.com/citations?user=wtjOZ9UAAAAJ&hl=en">Google Scholar[<img src="g_scholar.png" alt="gscholar" class="scholar">]</a> • <a href="https://x.com/samunaai">  Twitter[<img src="twitter_logo.png" alt="twitter" class="socials">]</a><br>
-                      Research Engineer (II) @ MBZUAI
-                </p>
-            </div>
-        </div>
-    </div> 
 
-    <div class="bio-div">
-        <div class="bio-inner">
-            <p class="section-title"><b>Awards</b></p> 
-            <ul class="award-list" id="award-list"></ul>
-        </div>
-    </div>
-    <div class="bio-div">
-      <div class="bio-inner">
-        <p class="section-title"><b><i>Click To Read A Paper</i></b></p>
-        <canvas id="life-canvas"></canvas>
+<body>
+  <section class="card">
+    <div class="profile">
+      <div class="profile-photo">
+        <img src="seaside.jpg" alt="Munachiso" class="sam-img">
+      </div>
+
+      <div class="profile-text">
+        <p>
+          <a href="https://samunaai.github.io"><span class="accent-word"><b>Sam</b></span></a> • Munachiso Samuel Nwadike (MSc, BSc@NYU)<br>
+          <a href="https://scholar.google.com/citations?user=wtjOZ9UAAAAJ&hl=en">Google Scholar[<img src="g_scholar.png" alt="gscholar" class="icon scholar">]</a> •
+          <a href="https://x.com/samunaai"> Twitter[<img src="twitter_logo.png" alt="twitter" class="icon socials">]</a><br>
+          Research Engineer (II) @ MBZUAI
+        </p>
       </div>
     </div>
-    <div class="bio-div">
-        <div class="bio-inner compact-bio">
-            <p>I earned my bachelors at New York University (Abu Dhabi & New York). I am now a researcher at a highly-ranked AI institute <a href="https://csrankings.org/#/index?mlmining&world"><span class="ref-highlight">[<u>1</u>]</span></a>, with Dr. Kentaro Inui's Mechanistic Interpretability <a href="https://www.mint-nlp-mbzuai.com/publications"><span class="ref-highlight">[<u>2</u>]</span></a> (<a href="https://www.mint-nlp-mbzuai.com/">MINT) team</a>.</p>
-            <p><i>Actively interested in new opportunities, horizons, and collaborations?</i></p>
-            <p><i>Let's communicate over email! (msn307 at nyu.edu)</i></p>
+  </section>
 
-            <p>Here is my reflection from 2019 on why small, "cracked" (talented) teams outperform expectations so consistently" <a href="https://medium.com/@munachisonwadike/the-mythical-man-month-5a08324dd0e"><span class="ref-highlight">[<u>3</u>]</span></a></p>
-        </div>
-    </div> 
-    <script>
-      const awards = [
-        {
-          title: "ICML Gold Reviewer Award",
-          note: " (top machine learning conference)",
-          year: "2026",
-          bold: true
-        },
-        {
-          title: "UAE Golden Visa",
-          note: " for Talented Persons/Specialists in Science",
-          year: "2023",
-          bold: false
-        },
-        {
-          title: "Semifinalist Team Leader",
-          note: ", MBZIRC Robotics Competitions",
-          year: "2022",
-          bold: false
-        },
-        {
-          title: "MBZUAI Fellowship Award",
-          note: " (4.5% acceptance rate)",
-          year: "2021",
-          bold: false
-        },
-        {
-          title: "Deep Learning IndabaX Innovation Grant Awardee",
-          note: ", USD $8000",
-          year: "2020",
-          bold: false
-        },
-        {
-          title: "Winner, CEO for a Day",
-          note: ", Refinitiv Data Co. (London Stock Exchange)",
-          year: "2019",
-          bold: false
-        },
-        {
-          title: "NYU Scholarship Award",
-          note: " (~3.7% acceptance rate)",
-          year: "2016",
-          bold: false
-        },
-        {
-          title: "Best Graduating Student (Valedictorian)",
-          note: ", Whitesands High School",
-          year: "2014",
-          bold: false
+  <section class="card">
+    <div class="inner">
+      <p class="section-title"><b>Awards</b></p>
+      <ul class="award-list" id="award-list"></ul>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="inner">
+      <p class="section-title"><b><i>Click To Read A Paper</i></b></p>
+      <canvas id="life-canvas"></canvas>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="inner">
+      <p class="section-title"><b>About</b></p>
+
+      <div class="compact">
+        <p>I earned my bachelors at New York University (Abu Dhabi & New York). I am now a researcher at a highly-ranked AI institute <a href="https://csrankings.org/#/index?mlmining&world"><span class="ref-highlight">[<u>1</u>]</span></a>, with Dr. Kentaro Inui's Mechanistic Interpretability <a href="https://www.mint-nlp-mbzuai.com/publications"><span class="ref-highlight">[<u>2</u>]</span></a> (<a href="https://www.mint-nlp-mbzuai.com/">MINT) team</a>.</p>
+        <p><i>Actively interested in new opportunities, horizons, and collaborations?</i></p>
+        <p><i>Let's communicate over email! (msn307 at nyu.edu)</i></p>
+        <p>Here is my reflection from 2019 on why small, "cracked" (talented) teams outperform expectations so consistently" <a href="https://medium.com/@munachisonwadike/the-mythical-man-month-5a08324dd0e"><span class="ref-highlight">[<u>3</u>]</span></a></p>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const awards = [
+      ["ICML Gold Reviewer Award", " (top machine learning conference)", "2026", true],
+      ["UAE Golden Visa", " for Talented Persons/Specialists in Science", "2023", false],
+      ["Semifinalist Team Leader", ", MBZIRC Robotics Competitions", "2022", false],
+      ["MBZUAI Fellowship Award", " (4.5% acceptance rate)", "2021", false],
+      ["Deep Learning IndabaX Innovation Grant Awardee", ", USD $8000", "2020", false],
+      ["Winner, CEO for a Day", ", Refinitiv Data Co. (London Stock Exchange)", "2019", false],
+      ["NYU Scholarship Award", " (~3.7% acceptance rate)", "2016", false],
+      ["Best Graduating Student (Valedictorian)", ", Whitesands High School", "2014", false]
+    ];
+
+    const paperLinks = {
+      "Measuring AI Reasoning": "https://arxiv.org/abs/2605.02442",
+      "Medical Explainability": "https://arxiv.org/abs/2101.00008",
+      "Bayesian Optimisation": "https://arxiv.org/abs/2411.03731",
+      "Self-Referencing Causal Cycles": "https://aclanthology.org/2025.acl-long.1232/",
+      "Grokking": "https://arxiv.org/abs/2505.15624",
+      "State Space Models": "https://arxiv.org/abs/2506.15156",
+      "Sycophancy": "https://aclanthology.org/2026.eacl-long.324/"
+    };
+
+    function renderAwards() {
+      document.getElementById("award-list").innerHTML = awards.map(([title, note, year, bold]) => `
+        <li>
+          <span><span class="award-title ${bold ? "is-bold" : ""}">${title}</span>${note}</span>
+          <span class="award-year">${year}</span>
+        </li>
+      `).join("");
+    }
+
+    function shuffle(items) {
+      for (let i = items.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [items[i], items[j]] = [items[j], items[i]];
+      }
+      return items;
+    }
+
+    function clamp(value, min, max) {
+      return Math.max(min, Math.min(max, value));
+    }
+
+    function startPaperCloud() {
+      const canvas = document.getElementById("life-canvas");
+      const ctx = canvas.getContext("2d", { alpha: false });
+      const concepts = shuffle(Object.keys(paperLinks));
+      const mouse = { x: -1000, y: -1000 };
+      let w = 0;
+      let h = 0;
+      let words = [];
+
+      function makeSlots(count) {
+        const rows = count <= 3 ? 1 : count <= 5 ? 2 : count <= 12 ? 3 : Math.ceil(Math.sqrt(count * h / w));
+        const cols = Math.ceil(count / rows);
+        const marginX = 85;
+        const marginY = 55;
+        const usableW = w - marginX * 2;
+        const usableH = h - marginY * 2;
+        const slots = [];
+
+        for (let row = 0; row < rows; row++) {
+          const remaining = count - row * cols;
+          const itemsInRow = Math.min(cols, remaining);
+
+          for (let col = 0; col < itemsInRow; col++) {
+            slots.push({
+              x: itemsInRow === 1 ? w / 2 : marginX + (usableW * col) / (itemsInRow - 1),
+              y: rows === 1 ? h / 2 : marginY + (usableH * row) / (rows - 1)
+            });
+          }
         }
-      ];
 
-      function renderAwards(items, targetId) {
-        const awardList = document.getElementById(targetId);
-        if (!awardList) return;
+        return shuffle(slots);
+      }
 
-        items.forEach(({ title, note, year, bold }) => {
-          const li = document.createElement("li");
+      function init() {
+        const dpr = window.devicePixelRatio || 1;
+        w = canvas.clientWidth;
+        h = canvas.clientHeight;
+        canvas.width = Math.floor(w * dpr);
+        canvas.height = Math.floor(h * dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-          const text = document.createElement("span");
-          const titleSpan = document.createElement("span");
-          titleSpan.className = bold ? "award-title is-bold" : "award-title";
-          titleSpan.textContent = title;
+        const slots = makeSlots(concepts.length);
+        const jitterX = w * 0.045;
+        const jitterY = h * 0.055;
 
-          text.appendChild(titleSpan);
-          if (note) text.append(`${note}`);
+        words = concepts.map((text, i) => {
+          const slot = slots[i];
+          const rawX = slot.x + (Math.random() - 0.5) * jitterX;
+          const rawY = slot.y + (Math.random() - 0.5) * jitterY;
 
-          const date = document.createElement("span");
-          date.className = "award-year";
-          date.textContent = year;
+          ctx.font = "300 15px Montserrat";
+          const halfText = Math.min(ctx.measureText(text).width / 2 + 10, w / 2 - 10);
 
-          li.appendChild(text);
-          li.appendChild(date);
-          awardList.appendChild(li);
+          return {
+            text,
+            url: paperLinks[text],
+            bx: clamp(rawX, halfText, w - halfText),
+            by: clamp(rawY, 24, h - 24),
+            x: 0,
+            y: 0,
+            size: 15,
+            scale: 1,
+            opacity: 0.78,
+            hover: 0,
+            radius: 45
+          };
         });
       }
 
-      renderAwards(awards, "award-list");
-    </script>
+      function getPoint(event) {
+        const rect = canvas.getBoundingClientRect();
 
-
-
-<script>
-(function () {
-  const canvas = document.getElementById('life-canvas');
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d', { alpha: false });
-
-  const conceptLinks = {
-    "Measuring AI Reasoning": "https://arxiv.org/abs/2605.02442",
-    "Medical Explainability": "https://arxiv.org/abs/2101.00008",
-    "Bayesian Optimisation": "https://arxiv.org/abs/2411.03731",
-    "Self-Referencing Causal Cycles": "https://aclanthology.org/2025.acl-long.1232/",
-    "Grokking": "https://arxiv.org/abs/2505.15624",
-    "State Space Models": "https://arxiv.org/abs/2506.15156",
-    "Sycophancy": "https://aclanthology.org/2026.eacl-long.324/", 
-  };
- 
-
-  let concepts = Object.keys(conceptLinks);
-
-  // SHUFFLE LOGIC: Scrambles the list on every load
-  for (let i = concepts.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [concepts[i], concepts[j]] = [concepts[j], concepts[i]];
-  }
-
-  let w, h, words = [];
-  let mouse = { x: -1000, y: -1000 };
-
-  function init() {
-    const dpr = window.devicePixelRatio || 1;
-    w = canvas.clientWidth;
-    h = canvas.clientHeight;
-    canvas.width = Math.floor(w * dpr);
-    canvas.height = Math.floor(h * dpr);
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-    words = [];
-    const totalWords = concepts.length;
-
-    const slots = [];
-    const count = concepts.length;
-
-    const rows =
-      count <= 3 ? 1 :
-      count <= 5 ? 2 :
-      count <= 12 ? 3 :
-      Math.ceil(Math.sqrt(count * h / w));
-
-    const cols = Math.ceil(count / rows);
-
-    const marginX = 85;
-    const marginY = 55;
-    const usableW = w - marginX * 2;
-    const usableH = h - marginY * 2;
-
-    for (let row = 0; row < rows; row++) {
-      const remaining = count - row * cols;
-      const itemsInRow = Math.min(cols, remaining);
-      if (itemsInRow <= 0) break;
-
-      for (let col = 0; col < itemsInRow; col++) {
-        const x =
-          itemsInRow === 1
-            ? w / 2
-            : marginX + (usableW * col) / (itemsInRow - 1);
-
-        const y =
-          rows === 1
-            ? h / 2
-            : marginY + (usableH * row) / (rows - 1);
-
-        slots.push({ x, y });
+        return {
+          x: (event.clientX - rect.left) * (w / rect.width),
+          y: (event.clientY - rect.top) * (h / rect.height)
+        };
       }
-    }
 
-    const jitterX = w * 0.045;
-    const jitterY = h * 0.055;
+      function draw() {
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, w, h);
 
-    for (let i = slots.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [slots[i], slots[j]] = [slots[j], slots[i]];
-    }
+        let hoveredAny = false;
 
-    concepts.forEach((text, i) => {
-      const slot = slots[i];
+        words.forEach(word => {
+          const dx = mouse.x - word.bx;
+          const dy = mouse.y - word.by;
+          const dist = Math.hypot(dx, dy);
+          const targetHover = dist < 140 ? 1 - dist / 140 : 0;
+          const ease = targetHover > word.hover ? 0.15 : 0.08;
 
-      const rawX = slot.x + (Math.random() - 0.5) * jitterX;
-      const rawY = slot.y + (Math.random() - 0.5) * jitterY;
+          word.hover += (targetHover - word.hover) * ease;
+          word.scale = 1 + word.hover * 0.18;
+          word.opacity = 0.78 + word.hover * 0.22;
+          word.x += (word.bx - dx * 0.12 * word.hover - word.x) * ease;
+          word.y += (word.by - dy * 0.12 * word.hover - word.y) * ease;
 
-      ctx.font = `300 15px 'Montserrat'`;
-      const halfText = Math.min(ctx.measureText(text).width / 2 + 10, w / 2 - 10);
+          hoveredAny ||= dist < 40;
 
-      const baseX = Math.max(halfText, Math.min(w - halfText, rawX));
-      const baseY = Math.max(24, Math.min(h - 24, rawY));
+          ctx.font = `300 ${word.size * word.scale}px Montserrat`;
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
 
-      words.push({
-        text: text,
-        url: conceptLinks[text],    
-        bx: baseX,
-        by: baseY,
-        x: 0, y: 0,
-        size: 15,
-        scale: 1,
-        opacity: 0.78,
-        hover: 0,
-        radius: 45 
+          const isHovered = word.hover > 0.05;
+          const wordColor = isHovered ? "rgba(60, 108, 108, 1)" : `rgba(0, 0, 0, ${word.opacity})`;
+          const strokePadding = 1.1 * word.hover;
+          const halfText = ctx.measureText(word.text).width / 2 + 12 + strokePadding;
+          const halfHeight = word.size * word.scale / 2 + 18 + strokePadding;
+
+          word.x = clamp(word.x, halfText, w - halfText);
+          word.y = clamp(word.y, halfHeight, h - halfHeight);
+
+          ctx.fillStyle = wordColor;
+
+          if (word.hover > 0.02) {
+            ctx.lineJoin = "round";
+            ctx.lineWidth = 1.1 * word.hover;
+            ctx.strokeStyle = wordColor;
+            ctx.strokeText(word.text, word.x, word.y);
+          }
+
+          ctx.fillText(word.text, word.x, word.y);
+        });
+
+        canvas.style.cursor = hoveredAny ? "pointer" : "default";
+        requestAnimationFrame(draw);
+      }
+
+      canvas.addEventListener("pointermove", event => {
+        Object.assign(mouse, getPoint(event));
       });
-    });
-  }
 
-  function frame() {
-    ctx.fillStyle = '#ffffff';
-    ctx.fillRect(0, 0, w, h);
+      canvas.addEventListener("pointerdown", event => {
+        const point = getPoint(event);
 
-    const activeRadius = 140; 
-    let hoveredAny = false;
+        words.forEach(word => {
+          if (Math.hypot(point.x - word.x, point.y - word.y) < word.radius) {
+            window.open(word.url, "_blank", "noopener");
+          }
+        });
+      });
 
-    words.forEach(p => {
-      const dx = mouse.x - p.bx;
-      const dy = mouse.y - p.by;
-      const dist = Math.hypot(dx, dy);
-      const targetHover = dist < activeRadius ? 1 - (dist / activeRadius) : 0;
-      const ease = targetHover > p.hover ? 0.15 : 0.08;
+      canvas.addEventListener("pointerleave", () => {
+        mouse.x = -1000;
+        mouse.y = -1000;
+      });
 
-      p.hover += (targetHover - p.hover) * ease;
-      p.scale = 1 + p.hover * 0.18;
-      p.opacity = 0.78 + p.hover * 0.22;
-      p.x += ((p.bx - dx * 0.12 * p.hover) - p.x) * ease;
-      p.y += ((p.by - dy * 0.12 * p.hover) - p.y) * ease;
+      window.addEventListener("resize", init);
+      canvas.style.touchAction = "none";
 
-      if (dist < 40) hoveredAny = true;
+      init();
+      draw();
+    }
 
-      ctx.font = `300 ${p.size * p.scale}px 'Montserrat'`;
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-
-      const isHovered = p.hover > 0.05;
-      const hoverOpacity = 1;
-      const wordColor = isHovered
-        ? `rgba(60, 108, 108, ${hoverOpacity})`
-        : `rgba(0, 0, 0, ${p.opacity})`;
-        
-      ctx.fillStyle = wordColor;
-
-
-      const edgePaddingX = 12;
-      const edgePaddingY = 18;
-      const strokePadding = 1.1 * p.hover;
-      const halfText = ctx.measureText(p.text).width / 2 + edgePaddingX + strokePadding;
-      const halfHeight = (p.size * p.scale) / 2 + edgePaddingY + strokePadding;
-      p.x = Math.max(halfText, Math.min(w - halfText, p.x));
-      p.y = Math.max(halfHeight, Math.min(h - halfHeight, p.y));
-
-      if (p.hover > 0.02) {
-        ctx.lineJoin = 'round';
-        ctx.lineWidth = 1.1 * p.hover;
-        ctx.strokeStyle = wordColor;
-        ctx.strokeText(p.text, p.x, p.y);
-      }
-
-      ctx.fillText(p.text, p.x, p.y);
-    });
-
-    canvas.style.cursor = hoveredAny ? 'pointer' : 'default';
-    requestAnimationFrame(frame);
-  }
-
-  function getPoint(e) {
-    const rect = canvas.getBoundingClientRect();
-    return {
-      x: (e.clientX - rect.left) * (w / rect.width),
-      y: (e.clientY - rect.top) * (h / rect.height)
-    };
-  }
-
-  canvas.addEventListener('pointermove', (e) => {
-    const pt = getPoint(e);
-    mouse.x = pt.x;
-    mouse.y = pt.y;
-  });
-
-  canvas.addEventListener('pointerdown', (e) => {
-    const pt = getPoint(e);
-    words.forEach(p => {
-      const dist = Math.hypot(pt.x - p.x, pt.y - p.y);
-      if (dist < p.radius) { 
-        if (p.url) window.open(p.url, '_blank', 'noopener');
-      }
-    });
-  });
-
-  canvas.addEventListener('pointerleave', () => {
-    mouse.x = -1000; mouse.y = -1000;
-  });
-
-  window.addEventListener('resize', init);
-  canvas.style.touchAction = 'none';
-
-  init();
-  frame();
-})();
-</script>
+    renderAwards();
+    startPaperCloud();
+  </script>
 </body>
 </html>
