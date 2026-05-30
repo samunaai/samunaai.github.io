@@ -8,7 +8,7 @@
     <!-- FIX 1: This one line replaces the "transform" CSS and the "syncHeight" JS -->
     <meta name="viewport" content="width=710">
 
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --wide1: 710px;
@@ -17,6 +17,7 @@
 
         body {
             font-family: 'Montserrat', sans-serif;
+            font-weight: 400;
             font-size: 20px;
             margin: 0;
             padding: 0;
@@ -38,8 +39,9 @@
              width: var(--wide1);
              margin: 20px auto;
              background-color: white;
-             border-bottom: 3px solid black;
+             border-bottom: 3px solid rgba(60, 108, 108, 0.654);
              text-align: justify;
+             border-radius: 8px;
              box-shadow: 4px 0 8px rgba(0, 0, 0, 0.1);
              padding: 20px;
              box-sizing: border-box;
@@ -47,26 +49,23 @@
 
         .pic-div img {
             width: 100%;
-            border: 3px solid black;
+            border: 0px solid rgba(60, 108, 108, 0.35);
+            border-radius: 12px;
             box-sizing: border-box;
             display: block;
             margin: 23px auto;
         }
         .pic-div img.sam-img { width: 70%; margin: 23px auto; display: block; }
-        .personal-div { margin: 0 auto; width: 100%; }
-        
-        .mint-emoji { height: 1.6em; width: auto; vertical-align: -0.48em; margin-left: 0.2em; }
+        .personal-div { margin: 0 auto; width: 100%; text-align: center;} 
+        .mint-emoji { height: 1.2em; width: auto; vertical-align: -0.3em; margin-left: 0.2em; }
         .socials { height: 1.00em; width: auto; vertical-align: -0.2em; margin-left: 0.2em; }
         .scholar { height: 1.1em; width: auto; vertical-align: -0.2em; margin-left: 0.2em; }
         .ref-highlight { background: #add0d0ff; padding: 0.05em 0.25em; border-radius: 3px; }
 
-        .section-title {
-            text-align: center;
-            margin: 0 0 14px 0;
-            font-size: 0.9em;
-            opacity: 1.0;
-        }
-
+        .accent-word {
+          color: rgb(60, 108, 108);
+          font-weight: 500;
+        }        
         .award-list {
             margin: 0;
             padding: 0;
@@ -87,18 +86,54 @@
         
         .award-title.is-bold {
             font-weight: 700;
+            color: rgb(60, 108, 108);
         }
 
         .award-year {
             opacity: 0.65;
             white-space: nowrap;
         }
+        .compact-bio {
+            font-size: 0.85em; 
+        }
+        .blog-bio {
+            font-size: 0.95em; 
+            text-align: center;
+            font-weight: 400;
+            color: rgb(19, 42, 42);
+        }
+        .section-title {
+            text-align: center;
+            width: fit-content;
+            margin: 0 auto 14px auto;
+            padding: 6px 14px;
+            font-size: 1.1em;
+            color: #3C6C6C;
+            background: rgba(60, 108, 108, 0.10);
+            border: 0px solid rgba(60, 108, 108, 0.25);
+            border-radius: 9px;
+            opacity: 0.9;
+        }
+
+        .appendix-title {
+          text-align: center;
+          width: fit-content;
+          margin: 0 auto 12px auto;
+          padding: 6px 14px;
+          font-size: 0.9em;
+          color: #3C6C6C;
+          background: rgba(60, 108, 108, 0.10);
+          border: 0px solid rgba(60, 108, 108, 0.25);
+          border-radius: 9px;
+      }
 
         #life-canvas {
           width: 100%;
           height: 360px;
           display: block;
-          border: 3px solid black;
+          border: 0px solid rgba(60, 108, 108, 0.636);
+          border-radius: 9px;
+          box-shadow: 4px 4px 20px rgba(60, 108, 108, 0.164);
           box-sizing: border-box;
           margin: 12px auto 0;
           cursor: default;
@@ -115,24 +150,13 @@
             </div>
             <div class="personal-div">
                 <p>
-                    <b><a href="https://samunaai.github.io"><u>Sam</u></a></b><br>
-                    Munachiso Samuel Nwadike (MSc, BSc@NYU)<br>
-                    <a href="https://scholar.google.com/citations?user=wtjOZ9UAAAAJ&hl=en"><b>Google Scholar </b><b>[</b><img src="g_scholar.png" alt="gscholar" class="scholar"><b>]</b></a> • <a href="https://x.com/samunaai"><b>  Twitter </b><b>[</b><img src="twitter_logo.png" alt="twitter" class="socials"><b>]</b></a><br>
-                    <b>Currently:</b> Research Engineer (II) with Dr. Kentaro Inui <a href="https://scholar.google.com/citations?hl=en&user=38_o3-kAAAAJ&view_op=list_works&sortby=pubdate"><span class="ref-highlight">[<u>1</u>]</span></a><br>
-                    <b>Lab:</b> <a href="https://www.mint-nlp-mbzuai.com/"><b>MINT Team<img src="mint.png" alt="MI" class="mint-emoji"></b></a> (Mechanistic Interpretability <a href="https://www.mint-nlp-mbzuai.com/publications"><span class="ref-highlight">[<u>2</u>]</span></a>) @ MBZUAI 
+                    <a href="https://samunaai.github.io"><span class="accent-word"><b>Sam</b></span></a> • Munachiso Samuel Nwadike (MSc, BSc@NYU)<br>
+                    <a href="https://scholar.google.com/citations?user=wtjOZ9UAAAAJ&hl=en">Google Scholar[<img src="g_scholar.png" alt="gscholar" class="scholar">]</a> • <a href="https://x.com/samunaai">  Twitter[<img src="twitter_logo.png" alt="twitter" class="socials">]</a><br>
+                      Research Engineer (II) @ MBZUAI
                 </p>
             </div>
         </div>
-    </div>
-
-    <div class="bio-div">
-        <div class="bio-inner">
-            <p>Hi, I'm Sam, a researcher working on mechanistic interpretability of large language models (LLMs), the core technology behind AI systems like ChatGPT, Bard, Meta AI, and Grok.</p>
-            <p>I earned my bachelor’s degree at New York University (Abu Dhabi & New York). I am now at MBZUAI, an AI-focused research institute, with <b>highly-ranked</b> programs in both NLP and <a href="https://csrankings.org/#/index?mlmining&world"><span class="ref-highlight">[<u>ML</u>]</span></a>.</p>
-            <p>Let's catchup over email?</p>
-            <p>E: munachisnwadike@gmail.com</p>
-        </div>
-    </div>
+    </div> 
 
     <div class="bio-div">
         <div class="bio-inner">
@@ -140,7 +164,21 @@
             <ul class="award-list" id="award-list"></ul>
         </div>
     </div>
- 
+    <div class="bio-div">
+      <div class="bio-inner">
+        <p class="section-title"><b><i>Click To Read A Paper</i></b></p>
+        <canvas id="life-canvas"></canvas>
+      </div>
+    </div>
+    <div class="bio-div">
+        <div class="bio-inner compact-bio">
+            <p>I earned my bachelors at New York University (Abu Dhabi & New York). I am now a researcher at a highly-ranked AI institute <a href="https://csrankings.org/#/index?mlmining&world"><span class="ref-highlight">[<u>1</u>]</span></a>, with Dr. Kentaro Inui's Mechanistic Interpretability <a href="https://www.mint-nlp-mbzuai.com/publications"><span class="ref-highlight">[<u>2</u>]</span></a> (<a href="https://www.mint-nlp-mbzuai.com/">MINT) team</a>.</p>
+            <p><i>Actively interested in new opportunities, horizons, and collaborations?</i></p>
+            <p><i>Let's communicate over email! (msn307 at nyu.edu)</i></p>
+
+            <p>Here is my reflection from 2019 on why small, "cracked" (talented) teams outperform expectations so consistently" <a href="https://medium.com/@munachisonwadike/the-mythical-man-month-5a08324dd0e"><span class="ref-highlight">[<u>3</u>]</span></a></p>
+        </div>
+    </div> 
     <script>
       const awards = [
         {
@@ -203,17 +241,7 @@
       renderAwards(awards, "award-list");
     </script>
 
-    <div class="bio-div">
-      <div class="bio-inner">
-        <p style="text-align:center; margin:0 0 6px 0; font-size:0.9em; opacity:0.80;"><b><i>Appendix: Click To Read A Paper</b></i></p> 
-        <canvas id="life-canvas"></canvas>
-      </div>
-    </div>
-    <div class="bio-div">
-        <div class="bio-inner">
-            <p><i>An Examination: "Why Small Teams Still Work Big Magic"</i> <a href="https://medium.com/@munachisonwadike/the-mythical-man-month-5a08324dd0e"><span class="ref-highlight">[<u>essay</u>]</span></a></p>
-        </div>
-    </div>
+
 
 <script>
 (function () {
@@ -223,12 +251,12 @@
 
   const conceptLinks = {
     "Measuring AI Reasoning": "https://arxiv.org/abs/2605.02442",
-    "Numerical Representation": "https://arxiv.org/abs/2502.16147",
+    "Medical Explainability": "https://arxiv.org/abs/2101.00008",
     "Bayesian Optimisation": "https://arxiv.org/abs/2411.03731",
-    "Self-Referencing Causal Cycles": "https://arxiv.org/abs/2501.13491",
+    "Self-Referencing Causal Cycles": "https://aclanthology.org/2025.acl-long.1232/",
     "Grokking": "https://arxiv.org/abs/2505.15624",
     "State Space Models": "https://arxiv.org/abs/2506.15156",
-    "Sycophancy": "https://arxiv.org/abs/sdfsdf", 
+    "Sycophancy": "https://aclanthology.org/2026.eacl-long.324/", 
   };
  
 
@@ -350,7 +378,14 @@
       ctx.font = `300 ${p.size * p.scale}px 'Montserrat'`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.fillStyle = `rgba(0, 0, 0, ${p.opacity})`;
+
+      const isHovered = p.hover > 0.05;
+      const hoverOpacity = 1;
+      const wordColor = isHovered
+        ? `rgba(60, 108, 108, ${hoverOpacity})`
+        : `rgba(0, 0, 0, ${p.opacity})`;
+        
+      ctx.fillStyle = wordColor;
 
 
       const edgePaddingX = 12;
@@ -364,7 +399,7 @@
       if (p.hover > 0.02) {
         ctx.lineJoin = 'round';
         ctx.lineWidth = 1.1 * p.hover;
-        ctx.strokeStyle = `rgba(0, 0, 0, ${p.opacity})`;
+        ctx.strokeStyle = wordColor;
         ctx.strokeText(p.text, p.x, p.y);
       }
 
