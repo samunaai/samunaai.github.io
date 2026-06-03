@@ -29,7 +29,7 @@
     body {
       width: var(--page);
       margin: 0 auto;
-      padding: 0 0 80px 0;
+      padding: 0;
       overflow-x: hidden;
       background: var(--bg);
       font-family: 'Montserrat', sans-serif;
@@ -183,6 +183,27 @@
       font-weight: 700;
     }
 
+    .top-bounce,
+    .top-rest {
+      height: 0;
+    }
+
+    .top-bounce-ready .top-bounce {
+      height: 220px;
+    }
+
+    .top-bounce-ready .top-rest {
+      height: 70px;
+    }
+
+    .bottom-rest {
+      height: 100px;
+    }
+
+    .bottom-bounce {
+      height: 360px;
+    }
+
     #life-canvas {
       width: 100%;
       height: 360px;
@@ -197,6 +218,9 @@
 </head>
 
 <body>
+  <div class="top-bounce"></div>
+  <div class="top-rest"></div>
+
   <section class="card">
     <div class="profile">
       <p class="section-title image-title">IRL Photo: Sam by the Bay</p>
@@ -273,6 +297,9 @@
       </div>
     </div>
   </section>
+
+  <div class="bottom-rest"></div>
+  <div class="bottom-bounce"></div>
 
   <script>
     const awards = [
@@ -471,8 +498,129 @@
       draw();
     }
 
+    function startTopBounce() {
+      const bounce = document.querySelector(".top-bounce");
+      const rest = document.querySelector(".top-rest");
+      let scrollTimer = null;
+      let snapping = false;
+      let armed = false;
+
+      if (!bounce || !rest) return;
+
+      function topSpace() {
+        return bounce.offsetHeight + rest.offsetHeight;
+      }
+
+      function armTopBounce() {
+        if (armed || snapping || window.scrollY < 140) return;
+
+        const current = window.scrollY;
+        document.body.classList.add("top-bounce-ready");
+        armed = true;
+        window.scrollTo(0, current + topSpace());
+      }
+
+      function disarmTopBounce() {
+        const current = window.scrollY;
+        const space = topSpace();
+        document.body.classList.remove("top-bounce-ready");
+        armed = false;
+        window.scrollTo(0, Math.max(0, current - space));
+      }
+
+      function snapDown() {
+        if (!armed) return;
+
+        const target = topSpace();
+
+        if (window.scrollY < target) {
+          snapping = true;
+
+          const start = window.scrollY;
+          const distance = target - start;
+          const duration = 650;
+          const startTime = performance.now();
+
+          function animate(now) {
+            const elapsed = now - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            const eased = 1 - Math.pow(1 - progress, 3);
+
+            window.scrollTo(0, start + distance * eased);
+
+            if (progress < 1) {
+              requestAnimationFrame(animate);
+            } else {
+              snapping = false;
+              disarmTopBounce();
+            }
+          }
+
+          requestAnimationFrame(animate);
+        }
+      }
+
+      window.addEventListener("scroll", () => {
+        if (snapping) return;
+
+        armTopBounce();
+        clearTimeout(scrollTimer);
+
+        if (armed && window.scrollY < topSpace()) {
+          scrollTimer = setTimeout(snapDown, 160);
+        }
+      });
+    }
+
+
+    function startBottomBounce() {
+      const bounce = document.querySelector(".bottom-bounce");
+      let scrollTimer = null;
+      let snapping = false;
+
+      if (!bounce) return;
+
+      function snapBack() {
+        const restingScroll = Math.max(0, bounce.offsetTop - window.innerHeight);
+
+        if (window.scrollY > restingScroll) {
+          snapping = true;
+
+      const start = window.scrollY;
+      const distance = restingScroll - start;
+      const duration = 850;
+      const startTime = performance.now();
+
+      function animate(now) {
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+
+        window.scrollTo(0, start + distance * eased);
+
+        if (progress < 1) {
+          requestAnimationFrame(animate);
+        } else {
+          snapping = false;
+        }
+      }
+
+      requestAnimationFrame(animate);
+        }
+      }
+
+      window.addEventListener("scroll", () => {
+        if (snapping) return;
+
+        clearTimeout(scrollTimer);
+        scrollTimer = setTimeout(snapBack, 220);
+      });
+    }
+
     renderAwards();
     startPaperCloud();
+    startTopBounce();
+    startBottomBounce();
   </script>
 </body>
 </html>
