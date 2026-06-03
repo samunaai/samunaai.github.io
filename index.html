@@ -184,7 +184,10 @@
     }
 
     .nav-card {
-      display: block;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45em;
       width: calc(var(--page) * 0.5);
       margin: 20px auto;
       padding: 10px 16px;
@@ -201,6 +204,12 @@
 
     .nav-card:hover {
       background: rgba(var(--teal), 0.06);
+    }
+
+    .nav-arrow {
+      width: 0.95em;
+      height: 0.95em;
+      fill: currentColor;
     }
 
     .top-bounce,
@@ -318,7 +327,12 @@
     </div>
   </section>
 
-  <button class="card nav-card" id="navigate-top" type="button">↑ Navigate to top</button>
+  <button class="card nav-card" id="navigate-top" type="button">
+    <svg class="nav-arrow" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M12 2 24 22 12 17 0 22Z"/>
+    </svg>
+    <span>Navigate to top</span>
+  </button>
 
   <div class="bottom-rest"></div>
   <div class="bottom-bounce"></div>
