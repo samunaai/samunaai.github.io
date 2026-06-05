@@ -25,6 +25,9 @@
       --card: #ffffff;
       --highlight: #add0d0ff;
     }
+    html {
+      overscroll-behavior-y: none;
+    }
 
     body {
       width: var(--page);
@@ -215,22 +218,16 @@
     .top-bounce,
     .top-rest {
       height: 0;
+      pointer-events: none;
     }
-
-    .top-bounce-ready .top-bounce {
-      height: 220px;
-    }
-
-    .top-bounce-ready .top-rest {
-      height: 70px;
-    }
-
+    
     .bottom-rest {
       height: 100px;
     }
 
     .bottom-bounce {
-      height: 360px;
+      height: 0;
+      pointer-events: none;
     }
 
     #life-canvas {
@@ -248,7 +245,6 @@
 
 <body>
   <div class="top-bounce"></div>
-  <div class="top-rest"></div>
 
   <section class="card">
     <div class="profile">
@@ -338,6 +334,17 @@
   <div class="bottom-bounce"></div>
 
   <script>
+
+    const bounceSettings = {
+      topMax: 220,
+      bottomMax: 360,
+      inputStep: 42,
+      releaseDelay: 80,
+      returnDuration: 1450,
+      cooldown: 20,
+      navigateTopDuration: 700
+    };
+
     const awards = [
       ["ICML Gold Reviewer Award", " (top machine learning conference)", "2026", true],
       ["UAE Golden Residency", " for Talented Persons/Specialists in Science", "2023", false],
@@ -535,82 +542,172 @@
     }
 
     function startTopBounce() {
-      const bounce = document.querySelector(".top-bounce");
-      const rest = document.querySelector(".top-rest");
-      let scrollTimer = null;
-      let snapping = false;
-      let armed = false;
+      const maxTopBounce = bounceSettings.topMax;
+      let animationFrame = null;
+      let releaseTimer = null;
+      let phase = "idle";
+      let offset = 0;
+      let cooldownUntil = 0;
 
-      if (!bounce || !rest) return;
-
-      function topSpace() {
-        return bounce.offsetHeight + rest.offsetHeight;
+      function normalizedDeltaY(event) {
+        if (event.deltaMode === 1) return event.deltaY * 16;
+        if (event.deltaMode === 2) return event.deltaY * window.innerHeight;
+        return event.deltaY;
       }
 
-      function armTopBounce() {
-        if (armed || snapping || window.scrollY < 140) return;
+      function stopInput(event) {
+        if (event.cancelable) {
+          event.preventDefault();
+        }
 
+        if (event.stopImmediatePropagation) {
+          event.stopImmediatePropagation();
+        }
+      }
+
+      function clearReleaseTimer() {
+        if (releaseTimer) {
+          clearTimeout(releaseTimer);
+          releaseTimer = null;
+        }
+      }
+
+      function cancelAnimation() {
+        if (animationFrame) {
+          cancelAnimationFrame(animationFrame);
+          animationFrame = null;
+        }
+      }
+
+      function setOffset(value) {
+        offset = Math.max(0, Math.min(maxTopBounce, value));
+        document.body.style.transform = `translateY(${offset}px)`;
+        document.body.style.willChange = offset > 0 ? "transform" : "auto";
+        window.scrollTo(0, 0);
+      }
+
+      function hitTopWall() {
+        return offset >= maxTopBounce - 1;
+      }
+
+      function finishTopBounce() {
+        clearReleaseTimer();
+        cancelAnimation();
+        offset = 0;
+        phase = "idle";
+        cooldownUntil = performance.now() + bounceSettings.cooldown;
+        document.body.style.transform = "";
+        document.body.style.willChange = "";
+        window.scrollTo(0, 0);
+      }
+
+      function releaseTopBounce() {
+        clearReleaseTimer();
+
+        if (phase !== "stretching" || offset <= 0) return;
+
+        phase = "returning";
+
+        const start = offset;
+        const duration = bounceSettings.returnDuration;
+        const startTime = performance.now();
+
+        function animate(now) {
+          const elapsed = now - startTime;
+          const progress = Math.min(elapsed / duration, 1);
+          const eased = 1 - Math.pow(1 - progress, 3);
+
+          setOffset(start * (1 - eased));
+
+          if (progress < 1) {
+            animationFrame = requestAnimationFrame(animate);
+          } else {
+            finishTopBounce();
+          }
+        }
+
+        animationFrame = requestAnimationFrame(animate);
+      }
+
+      function scheduleRelease() {
+        clearReleaseTimer();
+        releaseTimer = setTimeout(releaseTopBounce, bounceSettings.releaseDelay);
+      }
+
+      function handleWheel(event) {
+        const rawDeltaY = normalizedDeltaY(event);
+        const deltaY = Math.sign(rawDeltaY) * Math.min(Math.abs(rawDeltaY), bounceSettings.inputStep);
         const current = window.scrollY;
-        document.body.classList.add("top-bounce-ready");
-        armed = true;
-        window.scrollTo(0, current + topSpace());
-      }
+        const pullingUp = deltaY < 0;
+        const wouldCrossTop = pullingUp && current + rawDeltaY <= 0;
 
-      function disarmTopBounce() {
-        const current = window.scrollY;
-        const space = topSpace();
-        document.body.classList.remove("top-bounce-ready");
-        armed = false;
-        window.scrollTo(0, Math.max(0, current - space));
-      }
-
-      function snapDown() {
-        if (!armed) return;
-
-        const target = topSpace();
-
-        if (window.scrollY < target) {
-          snapping = true;
-
-          const start = window.scrollY;
-          const distance = target - start;
-          const duration = 650;
-          const startTime = performance.now();
-
-          function animate(now) {
-            const elapsed = now - startTime;
-            const progress = Math.min(elapsed / duration, 1);
-            const eased = 1 - Math.pow(1 - progress, 3);
-
-            window.scrollTo(0, start + distance * eased);
-
-            if (progress < 1) {
-              requestAnimationFrame(animate);
-            } else {
-              snapping = false;
-              disarmTopBounce();
-            }
+        if (phase === "returning") {
+          if (pullingUp) {
+            stopInput(event);
+            window.scrollTo(0, 0);
+            return;
           }
 
-          requestAnimationFrame(animate);
+          finishTopBounce();
+          return;
+        }
+
+        if (performance.now() < cooldownUntil && pullingUp && current <= 1) {
+          stopInput(event);
+          window.scrollTo(0, 0);
+          return;
+        }
+
+        if (phase === "idle" && !pullingUp) return;
+        if (phase === "idle" && !wouldCrossTop) return;
+
+        stopInput(event);
+        cancelAnimation();
+
+        if (phase === "idle") {
+          phase = "stretching";
+          window.scrollTo(0, 0);
+          offset = 0;
+        }
+
+        if (pullingUp) {
+          const crossingOffset = Math.min(
+            Math.max(0, -(current + rawDeltaY)),
+            Math.abs(deltaY)
+          );
+
+          const nextOffset = current > 0 ? crossingOffset : offset + Math.abs(deltaY);
+          setOffset(nextOffset);
+
+          if (hitTopWall()) {
+            releaseTopBounce();
+            return;
+          }
+
+          scheduleRelease();
+          return;
+        }
+
+        setOffset(offset - deltaY);
+
+        if (offset <= 1) {
+          finishTopBounce();
+        } else {
+          scheduleRelease();
         }
       }
 
       function scrollToRealTop() {
-        clearTimeout(scrollTimer);
-        snapping = true;
-
-        if (armed) {
-          const current = window.scrollY;
-          const space = topSpace();
-          document.body.classList.remove("top-bounce-ready");
-          armed = false;
-          window.scrollTo(0, Math.max(0, current - space));
-        }
+        clearReleaseTimer();
+        cancelAnimation();
+        offset = 0;
+        phase = "idle";
+        document.body.style.transform = "";
+        document.body.style.willChange = "";
 
         const start = window.scrollY;
         const distance = -start;
-        const duration = 700;
+        const duration = bounceSettings.navigateTopDuration;
         const startTime = performance.now();
 
         function animate(now) {
@@ -621,13 +718,13 @@
           window.scrollTo(0, start + distance * eased);
 
           if (progress < 1) {
-            requestAnimationFrame(animate);
+            animationFrame = requestAnimationFrame(animate);
           } else {
-            snapping = false;
+            animationFrame = null;
           }
         }
 
-        requestAnimationFrame(animate);
+        animationFrame = requestAnimationFrame(animate);
       }
 
       const topButton = document.getElementById("navigate-top");
@@ -636,63 +733,187 @@
         topButton.addEventListener("click", scrollToRealTop);
       }
 
+      window.addEventListener("wheel", handleWheel, { passive: false, capture: true });
 
       window.addEventListener("scroll", () => {
-        if (snapping) return;
-
-        armTopBounce();
-        clearTimeout(scrollTimer);
-
-        if (armed && window.scrollY < topSpace()) {
-          scrollTimer = setTimeout(snapDown, 160);
+        if (phase === "returning") {
+          window.scrollTo(0, 0);
         }
-      });
+      }, { passive: true });
     }
-
 
     function startBottomBounce() {
       const bounce = document.querySelector(".bottom-bounce");
-      let scrollTimer = null;
-      let snapping = false;
+      const maxBounce = bounceSettings.bottomMax;
+      let animationFrame = null;
+      let releaseTimer = null;
+      let phase = "idle";
+      let offset = 0;
+      let cooldownUntil = 0;
 
       if (!bounce) return;
 
-      function snapBack() {
-        const restingScroll = Math.max(0, bounce.offsetTop - window.innerHeight);
+      function restingScroll() {
+        return Math.max(0, bounce.offsetTop - window.innerHeight);
+      }
 
-        if (window.scrollY > restingScroll) {
-          snapping = true;
+      function normalizedDeltaY(event) {
+        if (event.deltaMode === 1) return event.deltaY * 16;
+        if (event.deltaMode === 2) return event.deltaY * window.innerHeight;
+        return event.deltaY;
+      }
 
-      const start = window.scrollY;
-      const distance = restingScroll - start;
-      const duration = 850;
-      const startTime = performance.now();
+      function stopInput(event) {
+        if (event.cancelable) {
+          event.preventDefault();
+        }
 
-      function animate(now) {
-        const elapsed = now - startTime;
-        const progress = Math.min(elapsed / duration, 1);
-        const eased = 1 - Math.pow(1 - progress, 3);
+        if (event.stopImmediatePropagation) {
+          event.stopImmediatePropagation();
+        }
+      }
 
-        window.scrollTo(0, start + distance * eased);
+      function clearReleaseTimer() {
+        if (releaseTimer) {
+          clearTimeout(releaseTimer);
+          releaseTimer = null;
+        }
+      }
 
-        if (progress < 1) {
-          requestAnimationFrame(animate);
+      function cancelAnimation() {
+        if (animationFrame) {
+          cancelAnimationFrame(animationFrame);
+          animationFrame = null;
+        }
+      }
+
+      function setOffset(value) {
+        offset = Math.max(0, Math.min(maxBounce, value));
+        document.body.style.transform = `translateY(${-offset}px)`;
+        document.body.style.willChange = offset > 0 ? "transform" : "auto";
+        window.scrollTo(0, restingScroll());
+      }
+
+      function hitBounceWall() {
+        return offset >= maxBounce - 1;
+      }
+
+      function finishBounce() {
+        clearReleaseTimer();
+        cancelAnimation();
+        offset = 0;
+        phase = "idle";
+        cooldownUntil = performance.now() + bounceSettings.cooldown;
+        document.body.style.transform = "";
+        document.body.style.willChange = "";
+        window.scrollTo(0, restingScroll());
+      }
+
+      function releaseBounce() {
+        clearReleaseTimer();
+
+        if (phase !== "stretching" || offset <= 0) return;
+
+        phase = "returning";
+
+        const start = offset;
+        const duration = bounceSettings.returnDuration;
+        const startTime = performance.now();
+
+        function animate(now) {
+          const elapsed = now - startTime;
+          const progress = Math.min(elapsed / duration, 1);
+          const eased = 1 - Math.pow(1 - progress, 3);
+
+          setOffset(start * (1 - eased));
+
+          if (progress < 1) {
+            animationFrame = requestAnimationFrame(animate);
+          } else {
+            finishBounce();
+          }
+        }
+
+        animationFrame = requestAnimationFrame(animate);
+      }
+
+      function scheduleRelease() {
+        clearReleaseTimer();
+        releaseTimer = setTimeout(releaseBounce, bounceSettings.releaseDelay);
+      }
+
+      function handleWheel(event) {
+        const rawDeltaY = normalizedDeltaY(event);
+        const deltaY = Math.sign(rawDeltaY) * Math.min(Math.abs(rawDeltaY), bounceSettings.inputStep);
+        const target = restingScroll();
+        const current = window.scrollY;
+        const pushingDown = deltaY > 0;
+        const wouldCrossReturnPoint = pushingDown && current + rawDeltaY >= target;
+
+        if (phase === "returning") {
+          if (pushingDown) {
+            stopInput(event);
+            window.scrollTo(0, target);
+            return;
+          }
+
+          finishBounce();
+          return;
+        }
+
+        if (performance.now() < cooldownUntil && pushingDown && current >= target - 1) {
+          stopInput(event);
+          window.scrollTo(0, target);
+          return;
+        }
+
+        if (phase === "idle" && !pushingDown) return;
+        if (phase === "idle" && !wouldCrossReturnPoint) return;
+
+        stopInput(event);
+        cancelAnimation();
+
+        if (phase === "idle") {
+          phase = "stretching";
+          window.scrollTo(0, target);
+          offset = 0;
+        }
+
+        if (pushingDown) {
+          setOffset(offset + deltaY);
+
+          if (hitBounceWall()) {
+            releaseBounce();
+            return;
+          }
+
+          scheduleRelease();
+          return;
+        }
+
+        setOffset(offset + deltaY);
+
+        if (offset <= 1) {
+          finishBounce();
         } else {
-          snapping = false;
+          scheduleRelease();
         }
       }
 
-      requestAnimationFrame(animate);
-
-        }
-      }
+      window.addEventListener("wheel", handleWheel, { passive: false, capture: true });
 
       window.addEventListener("scroll", () => {
-        if (snapping) return;
+        const target = restingScroll();
 
-        clearTimeout(scrollTimer);
-        scrollTimer = setTimeout(snapBack, 220);
-      });
+        if (phase === "returning") {
+          window.scrollTo(0, target);
+          return;
+        }
+
+        if (phase === "idle" && window.scrollY > target) {
+          window.scrollTo(0, target);
+        }
+      }, { passive: true });
     }
 
     renderAwards();
