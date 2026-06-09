@@ -28,6 +28,8 @@
       --teal: 60, 108, 108;
       --gold-rgb: 212, 175, 55;
       --gold: #d4af37;
+      --sidebar-social-hover-speed: 30ms;
+      --sidebar-social-hover-ease: ease;
       --bg: #f9f9f9;
       --card: #ffffff;
       --highlight: #add0d0ff;
@@ -107,26 +109,41 @@
 
     .sidebar-links {
       display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 14px;
-      font-size: 0.72em;
-      color: #ffffff;
+      flex-wrap: nowrap;
+      justify-content: center;
+      align-items: center;
+      gap: 13px;
+      margin-top: 14px; 
     }
 
     .sidebar-links a {
-      color: #ffffff;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.46);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-bottom: 0;
+      opacity: 0.9;
       transition:
-        color 140ms ease,
-        border-bottom-color 140ms ease;
+        opacity var(--sidebar-social-hover-speed) var(--sidebar-social-hover-ease),
+        transform var(--sidebar-social-hover-speed) var(--sidebar-social-hover-ease);
     }
 
     .sidebar-links a:hover {
-      color: var(--gold);
-      border-bottom-color: rgba(var(--gold-rgb), 0.78);
+      opacity: 1;
+      transform: translateY(-1px) scale(1.08);
     }
 
+    .sidebar-links a:hover .sidebar-social-icon {
+      filter: brightness(0) saturate(100%) invert(72%) sepia(43%) saturate(676%) hue-rotate(5deg) brightness(91%) contrast(88%);
+    }
+
+    .sidebar-social-icon {
+      width: auto;
+      height: 1.45em;
+      display: block;
+      filter: none;
+      transition: filter var(--sidebar-social-hover-speed) var(--sidebar-social-hover-ease);
+      will-change: filter;
+    }
 
     .section-nav { 
       display: flex;
@@ -293,6 +310,58 @@
       text-align: center;
     } 
 
+    .home-bio {
+      margin-top: 0;
+      text-align: justify;
+    }
+
+    .home-bio-link {
+      color: rgb(var(--teal));
+      border-bottom: 2px solid rgba(var(--teal), 0.42);
+      transition:
+        color 170ms ease,
+        border-bottom-color 170ms ease;
+    }
+
+    .home-bio-link:hover {
+      color: var(--gold);
+      border-bottom-color: rgba(var(--gold-rgb), 0.72);
+    }
+
+    .home-bio-link-gold {
+      color: #d4af37;
+      text-decoration: none;
+      border-bottom: 0;
+      transition:
+        color 170ms ease,
+        background 170ms ease;
+    }
+    
+    .home-bio-link-gold:hover {
+      color: var(--gold);
+    }
+    
+    .gold-ref-highlight {
+      background: #e9d27e21;
+      color: #d4af37;
+      padding: 0.05em 0.25em;
+      border-radius: 3px;
+    }
+    
+    .gold-ref-highlight u {
+      text-decoration-color: #d4af37;
+      text-decoration-thickness: 1.5px;
+      text-underline-offset: 0.14em;
+    }
+    
+    .home-bio-link-gold:hover .gold-ref-highlight {
+      background: rgba(var(--gold-rgb), 0.18);
+    }
+
+    .home-bio-link-gold:hover .gold-ref-highlight u {
+      text-decoration-color: #bc9b2f;
+    }
+
     .icon {
       width: auto;
       margin-left: 0.2em;
@@ -360,6 +429,79 @@
       font-size: 0.85em;
     }
 
+    .discussion-panels {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      margin-top: 6px;
+    }
+
+    .discussion-panel {
+      padding: 16px 18px 17px 18px;
+      border: 1px solid rgba(var(--teal), 0.12);
+      border-left: 4px solid rgba(var(--gold-rgb), 0.30);
+      border-radius: 10px;
+      background: linear-gradient(
+        180deg,
+        rgba(var(--gold-rgb), 0.012),
+        rgba(var(--teal), 0.010)
+      );
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.028);
+      text-align: left;
+      transition:
+        background 170ms ease,
+        border-left-color 170ms ease,
+        box-shadow 170ms ease,
+        transform 170ms ease;
+    }
+
+    .discussion-panel:hover,
+    .discussion-panel:focus-within {
+      border-left-color: rgba(var(--gold-rgb), 0.88);
+      background: linear-gradient(
+        180deg,
+        rgba(var(--gold-rgb), 0.045),
+        rgba(var(--teal), 0.018)
+      );
+      box-shadow: 0 10px 22px rgba(0, 0, 0, 0.042);
+      transform: translateX(2px);
+    }
+
+    .discussion-panel-title {
+      margin: 0 0 9px 0;
+      color: var(--gold);
+      font-family: var(--font-title);
+      font-size: 0.90rem;
+      font-weight: 800;
+      letter-spacing: 0.055em;
+      text-transform: uppercase;
+    }
+
+    .discussion-panel p {
+      margin: 0;
+    }
+
+    .discussion-panel p + p {
+      margin-top: 12px;
+    }
+
+    .discussion-panel .discussion-highlight {
+      color: inherit;
+      font-weight: 600;
+      transition: color 170ms ease;
+    }
+
+    .discussion-panel:hover .home-bio-link,
+    .discussion-panel:focus-within .home-bio-link {
+      color: var(--gold);
+      border-bottom-color: rgba(var(--gold-rgb), 0.72);
+    }
+
+    .discussion-panel:hover .discussion-highlight,
+    .discussion-panel:focus-within .discussion-highlight {
+      color: var(--gold);
+    }
+
     .award-list {
       margin: 0;
       padding: 0;
@@ -391,13 +533,13 @@
     .publication-list {
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 36px;
       margin: 0;
       padding: 0;
     }
 
     .publication-item {
-      padding: 0 0 14px 0;
+      padding: 0 0 36px 0;
       border-bottom: 1px solid rgba(var(--teal), 0.14);
       text-align: left;
     }
@@ -411,7 +553,7 @@
       margin: 0 0 4px 0;
       color: rgba(var(--teal), 0.72);
       font-family: var(--font-title);
-      font-size: 0.68em;
+      font-size: 0.70em;
       font-weight: 700;
       letter-spacing: 0.06em;
     }
@@ -420,9 +562,9 @@
       margin: 0 0 5px 0;
       color: rgba(0, 0, 0, 0.88);
       font-family: var(--font-title);
-      font-size: 0.95em;
+      font-size: 1.00em;
       font-weight: 800;
-      line-height: 1.2;
+      line-height: 1.18;
     }
 
     .publication-title-text {
@@ -464,20 +606,20 @@
 
     .publication-authors {
       margin: 0 0 5px 0;
-      font-size: 0.72em;
+      font-size: 0.74em;
       line-height: 1.45;
       opacity: 0.72;
     }
 
     .publication-summary {
       margin: 0;
-      font-size: 0.78em;
-      line-height: 1.5;
+      font-size: 0.80em;
+      line-height: 1.52;
       opacity: 0.92;
     }
 
     .publication-full-list {
-      margin: 0 0 16px 0;
+      margin: 0 0 40px 0;
       color: rgb(var(--teal));
       font-family: var(--font-title);
       font-size: 0.9em;
@@ -493,6 +635,14 @@
     .publication-full-list a:hover {
       color: var(--gold);
       border-bottom-color: rgba(var(--gold-rgb), 0.65);
+    }
+
+    #publications {
+      padding-bottom: 40px;
+    }
+    
+    #news {
+      padding-bottom: 48px;
     }
 
     .publication-scholar-logo {
@@ -557,7 +707,7 @@
 
     .news-list {
       position: relative;
-      margin: 4px 0 0 0;
+      margin: 22px 0 0 0;
       padding: 0 0 0 28px;
     }
 
@@ -565,17 +715,23 @@
       content: "";
       position: absolute;
       left: 8px;
-      top: 8px;
-      bottom: 8px;
+      top: 0px;
+      bottom: 0px;
       width: 2px;
-      background: rgba(var(--teal), 0.22);
+      background: rgba(var(--teal), 0.18);
     }
 
     .news-item {
       position: relative;
-      margin: 0 0 34px 0;
+      margin: 0;
+      padding: 48px 0 50px 0;
+      border-top: 1px solid rgba(var(--teal), 0.14);
       text-align: left;
       border-radius: 8px;
+    }
+
+    .news-list > .news-item:first-of-type {
+      border-top: 0;
     }
 
     .news-date,
@@ -596,7 +752,7 @@
 
     .news-item:hover .news-headline,
     .news-item:focus-within .news-headline {
-      color: rgb(var(--teal));
+      color: rgba(0, 0, 0, 0.88);
       transform: translateX(3px);
     }
 
@@ -607,14 +763,14 @@
     }
 
     .news-item:last-child {
-      margin-bottom: 0;
+      padding-bottom: 0;
     }
 
     .news-item::before {
       content: "";
       position: absolute;
       left: -25px;
-      top: 0.45em;
+      top: -5px;
       width: 11px;
       height: 11px;
       border-radius: 999px;
@@ -627,9 +783,19 @@
         transform 180ms ease;
     }
 
+    .news-item-featured::before {
+      background: var(--gold);
+    }
+
     .news-item:hover::before,
     .news-item:focus-within::before {
       box-shadow: 0 0 0 7px rgba(var(--teal), 0.13);
+      transform: scale(1.18);
+    }
+
+    .news-item-featured:hover::before,
+    .news-item-featured:focus-within::before {
+      box-shadow: 0 0 0 7px rgba(var(--gold-rgb), 0.18);
       transform: scale(1.18);
     }
 
@@ -647,9 +813,9 @@
       margin: 0 0 4px 0;
       color: rgba(0, 0, 0, 0.88);
       font-family: var(--font-title);
-      font-size: 1.12em;
-      font-weight: 900;
-      line-height: 1.16;
+      font-size: 1.00em;
+      font-weight: 850;
+      line-height: 1.18;
     }
 
     .news-image {
@@ -663,9 +829,17 @@
     }
 
     .news-copy {
-      margin: 0;
+      margin: 14px 0 14px 0;
+      padding: 10px 13px 10px 14px;
+      border-left: 3px solid rgba(var(--teal), 0.28);
+      border-radius: 0 7px 7px 0;
+      background: rgba(var(--teal), 0.045);
+      color: rgba(0, 0, 0, 0.49);
+      font-family: Calibri, "DM Sans", Arial, sans-serif;
       font-size: 0.82em;
-      line-height: 1.55;
+      font-style: italic;
+      font-weight: 600;
+      line-height: 1.48;
     }
 
     .news-copy a,
@@ -679,25 +853,18 @@
 
     .news-item:hover .news-headline a,
     .news-item:focus-within .news-headline a,
-    .news-copy a:hover,
     .news-headline a:hover {
+      color: var(--gold);
+      border-bottom-color: rgba(var(--gold-rgb), 0.72);
+    }
+
+    .news-copy a:hover {
       color: rgb(var(--teal));
       border-bottom-color: rgb(var(--teal));
     }
 
     .gold-text {
       color: var(--gold);
-    }
-
-    .news-item-featured .news-headline a {
-      color: var(--gold);
-      border-bottom-color: rgba(var(--gold-rgb), 0.48);
-    }
-
-    .news-item-featured:hover .news-headline a,
-    .news-item-featured:focus-within .news-headline a {
-      color: rgb(var(--teal));
-      border-bottom-color: rgb(var(--teal));
     }
 
     .news-date .gold-text {
@@ -716,12 +883,12 @@
       margin: 90px auto 0 auto;
       padding: 24px 18px 0 18px;
       box-sizing: border-box;
-      color: var(--gold);
+      color: rgba(162, 130, 61, 0.62);
       font-family: var(--font-title);
       font-size: 0.68em;
-      font-weight: 600;
+      font-weight: 400;
       text-align: center;
-      opacity: 0.78;
+      opacity: 1;
     }
 
     .site-footer::before {
@@ -861,12 +1028,21 @@
       <div class="sidebar-name">Sam</div>
       <div class="sidebar-subtitle">Munachiso Samuel Nwadike<br>Research Engineer @ MBZUAI
       <br> Former Researcher @ NYU </div> 
-      <div class="sidebar-links" aria-label="Profile links">
-        <a href="https://scholar.google.com/citations?user=wtjOZ9UAAAAJ&hl=en" target="_blank" rel="noopener noreferrer">Google Scholar</a>
-        <a href="https://x.com/samunaai" target="_blank" rel="noopener noreferrer">X.com</a>
-        <a href="https://www.linkedin.com/in/samunaai/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-        <a href="mailto:msn307@nyu.edu" class="sidebar-email">msn307 at nyu dot edu</a>
+      <div class="sidebar-links" aria-label="Profile links"> 
+        <a href="https://scholar.google.com/citations?user=wtjOZ9UAAAAJ&hl=en" target="_blank" rel="noopener noreferrer" aria-label="Google Scholar">
+          <img src="scholar_logo_white.webp" alt="" class="sidebar-social-icon">
+        </a>
+        <a href="https://x.com/samcompute" target="_blank" rel="noopener noreferrer" aria-label="X.com">
+          <img src="x_logo_white.webp" alt="" class="sidebar-social-icon">
+        </a>
+        <a href="https://www.linkedin.com/in/samcompute/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+          <img src="linkedin_logo_white.webp" alt="" class="sidebar-social-icon">
+        </a>
+        <a href="mailto:msn307@nyu.edu" aria-label="Email">
+          <img src="gmail_logo_white.webp" alt="" class="sidebar-social-icon">
+        </a>
       </div>
+
     </div>
 
     <nav class="section-nav" aria-label="Section navigation">
@@ -877,15 +1053,7 @@
           <img src="nav_buttons/house_icon_gold.webp" class="nav-icon nav-icon-gold" alt="" aria-hidden="true">
         </span>
         <span>Home</span>
-      </a>
-
-      <a href="#quickbio">
-        <span class="nav-icon-wrap">
-          <img src="nav_buttons/scroll_icon_white.webp" class="nav-icon nav-icon-white" alt="" aria-hidden="true">
-          <img src="nav_buttons/scroll_icon_gold.webp" class="nav-icon nav-icon-gold" alt="" aria-hidden="true">
-        </span>
-        <span>Quick Bio</span>
-      </a>
+      </a> 
 
       <a href="#awards">
         <span class="nav-icon-wrap">
@@ -903,12 +1071,12 @@
         <span>Publications</span>
       </a>
 
-      <a href="#detailedbio">
+      <a href="#discussion">
         <span class="nav-icon-wrap">
           <img src="nav_buttons/scroll_icon_white.webp" class="nav-icon nav-icon-white" alt="" aria-hidden="true">
           <img src="nav_buttons/scroll_icon_gold.webp" class="nav-icon nav-icon-gold" alt="" aria-hidden="true">
         </span>
-        <span>Detailed Bio</span>
+        <span>Discussion</span>
       </a>
 
       <a href="#news">
@@ -933,23 +1101,20 @@
   <main class="site-main">
 
 
-  <section class="card">
+  <section class="card" id="home">
     <div class="inner profile-text">
       <p>
         <a href="https://samunaai.github.io" target="_blank" rel="noopener noreferrer" class="profile-name-main"> Munachiso Samuel <span class="accent-word"><b>(Sam)</b></span> Nwadike </a><br>
         <a href="https://scholar.google.com/citations?user=wtjOZ9UAAAAJ&hl=en" target="_blank" rel="noopener noreferrer"><img src="scholar_logo_gold.webp" alt="gscholar" class="icon scholar"></a> <span class="teal-dot">•</span>
-        <a href="https://x.com/samunaai" target="_blank" rel="noopener noreferrer"> <img src="twitter_logo.webp" alt="twitter" class="icon socials"></a> <span class="teal-dot">•</span>
-        <!-- <a href="https://www.linkedin.com/in/samunaai/" target="_blank" rel="noopener noreferrer" class="socials-link"> <img src="linkedin.webp" alt="linkedin" class="icon socials"></a><br> -->
-        <a href="https://www.linkedin.com/in/samunaai/" target="_blank" rel="noopener noreferrer"> <img src="linkedin.webp" alt="linkedin" class="icon socials"></a> <span class="teal-dot">•</span>
+        <a href="https://x.com/samcompute" target="_blank" rel="noopener noreferrer"> <img src="twitter_logo.webp" alt="twitter" class="icon socials"></a> <span class="teal-dot">•</span>
+        <a href="https://www.linkedin.com/in/samcompute/" target="_blank" rel="noopener noreferrer"> <img src="linkedin.webp" alt="linkedin" class="icon socials"></a> <span class="teal-dot">•</span>
         <a href="mailto:munachisnwadike@gmail.com">
           <img src="gmail.webp" alt="gmail" class="icon socials">
         </a><br>
         Research Engineer (II) @ MBZUAI
       </p>
     </div>
-  </section>
-
-  <section class="card" id="home">
+    
     <div class="profile">
       <p class="section-title">IRL Photo: Sam By The Bay</p>
 
@@ -957,19 +1122,15 @@
         <img src="seaside.webp" alt="Photo of Sam at the Bay - Munachiso Samuel Nwadike" class="sam-img">
       </div>
     </div>
-  </section>
 
-  <section class="card" id="quickbio">
-    <div class="inner">
-      <p class="section-title">Quick Bio</p>
-
-      <div class="compact">
-        <p>I earned my degrees at <a href="https://www.nyu.edu/academics/schools-and-colleges.html" target="_blank" rel="noopener noreferrer">
-          <span class="accent-word"><b>New York University</b></span></a> and <a href="https://mbzuai.ac.ae/research-department/machine-learning-department/" target="_blank" rel="noopener noreferrer">MBZUAI</a>. 
-          I am now employed as research-engineer at the latter, a highly-ranked AI institute <a href="https://csrankings.org/#/index?vision&mlmining&nlp&world" target="_blank" rel="noopener noreferrer"><span class="ref-highlight">(<u>see CS Rankings</u>)</span></a>, on the AI model
-          Interpretability Team.</p>  
+    <div class="inner compact home-bio">
+      <p>I am a research-engineer, with dual affiliation to MBZUAI and RIKEN Center for Advanced Intelligence Project, Japan. </p>
+      <p>I earned my degrees at <a href="https://www.nyu.edu/academics/schools-and-colleges.html" target="_blank" rel="noopener noreferrer">
+        <span class="accent-word"><b>New York University</b></span></a> (BSc) 
+        and <a href="https://mbzuai.ac.ae/research-department/machine-learning-department/" target="_blank" rel="noopener noreferrer">MBZUAI (MSc)</a>. </p>
+        <p>For full details, please see my <a href="#discussion" class="home-bio-link-gold"><span class="gold-ref-highlight"><u>"discussion" section below</u></span></a>.</p>
       </div>
-    </div>
+
   </section> 
 
   <section class="card" id="awards">
@@ -1043,15 +1204,64 @@
     </div>
   </section>
 
-  <section class="card" id="detailedbio">
+  <section class="card" id="discussion">
     <div class="inner">
-      <p class="section-title">Detailed Bio</p>
+      <p class="section-title">Discussion</p>
 
-      <div class="compact">
-        <p>I earned my degrees at <a href="https://www.nyu.edu/academics/schools-and-colleges.html" target="_blank" rel="noopener noreferrer">
-          <span class="accent-darker"><b>New York University</b></span></a> and <a href="https://mbzuai.ac.ae/research-department/machine-learning-department/" target="_blank" rel="noopener noreferrer">MBZUAI</a>. 
-          I am now employed as research-engineer at the latter, a highly-ranked AI institute <a href="https://csrankings.org/#/index?vision&mlmining&nlp&world" target="_blank" rel="noopener noreferrer"><span class="ref-highlight">(<u>see CS Rankings</u>)</span></a>, on the AI model
-          Interpretability Team.</p>  
+      <div class="compact discussion-panels">
+
+        <section class="discussion-panel">
+          <h3 class="discussion-panel-title">Current Role & Education</h3>
+          <p>
+            I am a <span class="discussion-highlight">Research Engineer II</span> at Mohamed bin Zayed University of Artificial Intelligence (MBZUAI),  
+            a highly ranked AI university according to 
+            <a href="https://csrankings.org/#/index?vision&mlmining&nlp&world" target="_blank" rel="noopener noreferrer" class="home-bio-link">CSRankings</a>.
+            I work on interpretability and reasoning in large language models. 
+            I earned my M.Sc. in Machine Learning from MBZUAI and my B.Sc. in Computer Science, with a minor in Mathematics, 
+            from <a href="https://nyuad.nyu.edu/en/" target="_blank" rel="noopener noreferrer" class="home-bio-link">New York University Abu Dhabi</a>.
+          </p>
+        </section>
+
+        <section class="discussion-panel">
+          <h3 class="discussion-panel-title">Research Interests</h3>
+          <p>
+            My research interests center on interpretability, reasoning, language models, and what I call the <span class="discussion-highlight">physics of intelligence</span>:
+            the search for principles underlying increasingly competent, reliable, and human-aligned intelligent behavior.
+          </p>
+        </section>
+
+        <section class="discussion-panel">
+          <h3 class="discussion-panel-title">Current Research at MINT</h3>
+          <p>
+            I currently work with 
+            <a href="https://kentaro-inui.github.io/" target="_blank" rel="noopener noreferrer" class="home-bio-link">Dr. Kentaro Inui</a> 
+            at the MBZUAI <span class="discussion-highlight">Interpretability Team</span>, also known as 
+            <a href="https://www.mint-nlp-mbzuai.com/" target="_blank" rel="noopener noreferrer" class="home-bio-link">MINT</a>, 
+            where we study how language and multimodal models represent knowledge, retrieve information, and develop reasoning-like behavior.
+            Motivated by human cognition as a natural reference point for intelligence, I study how mechanistic explanations can help identify 
+            the computational structures and representational dynamics that support flexible and reliable reasoning in AI systems.
+          </p>
+        </section>
+
+        <section class="discussion-panel">
+          <h3 class="discussion-panel-title">Research Training & Prior Work</h3>
+          <p>
+            I have been privileged to receive world-class research training from brilliant researchers in AI. 
+            I received formative training from Dr. Kun Zhang and 
+            <a href="https://scholar.google.com/citations?hl=en&user=qKQD-2cAAAAJ" target="_blank" rel="noopener noreferrer" class="home-bio-link">Dr. Martin Takáč</a>, 
+            and later co-authored RECALL with Dr. Takáč, my first first-author paper as a research engineer at MBZUAI, which appeared in ACL 2025.
+          </p>
+
+          <p>
+            I also worked with 
+            <a href="https://scholar.google.com/citations?hl=en&user=tR3AZbwAAAAJ&view_op=list_works" target="_blank" rel="noopener noreferrer" class="home-bio-link">Dr. Qirong Ho</a> 
+            of Petuum on Bayesian optimization for hyperparameter tuning, helping researchers tune AI systems under strict compute and budget constraints.
+            At NYU, I worked with 
+            <a href="https://nyuad.nyu.edu/en/academics/divisions/engineering/faculty/farah-emad-shamout.html" target="_blank" rel="noopener noreferrer" class="home-bio-link">Dr. Farah Shamout</a> 
+            at the Clinical Artificial Intelligence Lab on security and interpretability in AI for medical imaging.
+          </p>
+        </section>
+
       </div>
     </div>
   </section> 
@@ -1082,37 +1292,37 @@
               How a team of researchers from MBZUAI is using AI to empower businesses with instant data analytics
             </a>
           </h2>
+          <p class="news-copy">
+            I was featured in MBZUAI News for work on using AI to help businesses query raw data
+            and obtain instant analytics.
+          </p>
           <img
-            src="csi.webp"
+            src="news_images/mbzuai_ai_datascientist.webp"
             alt="MBZUAI Data wisdom feature"
             class="news-image"
             loading="lazy"
             decoding="async"
           >
-          <p class="news-copy">
-            I was featured in MBZUAI News for work on using AI to help businesses query raw data
-            and obtain instant analytics.
-          </p>
         </article>
 
         <article class="news-item news-item-featured">
-          <p class="news-date">27 September 2025 · <span class="gold-text">Khaleej Times</span></p>
+          <p class="news-date"><span class="gold-text">27 September 2025 · Khaleej Times</span></p>
           <h2 class="news-headline">
             <a href="https://www.khaleejtimes.com/uae/ai-turns-raw-data-into-business-insights" target="_blank" rel="noopener noreferrer">
               New UAE AI turns raw data into business insights
             </a>
           </h2>
+          <p class="news-copy">
+            I was featured in Khaleej Times in coverage of UAE-based AI work for turning raw data
+            into business insights. The article photos look better on mobile.
+          </p>
           <img
-            src="csi.webp"
+            src="news_images/khaleejtimes_ai_datascientist.webp"
             alt="Khaleej Times feature"
             class="news-image"
             loading="lazy"
             decoding="async"
           >
-          <p class="news-copy">
-            I was featured in Khaleej Times in coverage of UAE-based AI work for turning raw data
-            into business insights. The article photos look better on mobile.
-          </p>
         </article>
 
         <article class="news-item">
@@ -1122,17 +1332,17 @@
               Overcoming the “reversal curse” in LLMs with ReCall
             </a>
           </h2>
+          <p class="news-copy">
+            MBZUAI News covered our work on ReCall, a method aimed at addressing the reversal curse
+            in large language models.
+          </p>
           <img
-            src="csi.webp"
+            src="news_images/recall.webp"
             alt="ReCall reversal curse news feature"
             class="news-image"
             loading="lazy"
             decoding="async"
           >
-          <p class="news-copy">
-            MBZUAI News covered our work on ReCall, a method aimed at addressing the reversal curse
-            in large language models.
-          </p>
         </article>
       </div>
     </div>
@@ -1219,8 +1429,8 @@
       ["MBZUAI Fellowship Award", " (4.5% acceptance rate)", "2021", false],
       ["Deep Learning IndabaX Innovation Grant Awardee", ", USD $8000", "2020", false],
       ["Winner, CEO for a Day", ", Refinitiv (London Stock Exchange)", "2019", false],
-      ["NYU Scholarship Award", " (~3.7% acceptance rate)", "2016", false],
-      [`Whitesands School Best Graduating Student (<span class="award-gold">Valedictorian</span>)`, 
+      ["NYU Scholarship Award", " (3.7% acceptance rate)", "2016", false],
+      [`Whitesands School Best Graduating Student Valedictorian)`, 
         ` · Best in Math, Physics, Chemistry, Biology, and IT`, 
         "2014", 
         false]
@@ -1874,8 +2084,16 @@
       }
 
       function updateActiveSection() {
-        const marker = Math.min(window.innerHeight * 0.38, 300);
+        const marker = window.innerWidth <= 980 ? 110 : 80;
         let activeSection = sections[0];
+        const nearBottom =
+          window.innerHeight + window.scrollY >=
+          document.documentElement.scrollHeight - 4;
+
+        if (nearBottom) {
+          setActive(sections[sections.length - 1].id);
+          return;
+        }
 
         sections.forEach(section => {
           if (section.getBoundingClientRect().top <= marker) {
