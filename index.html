@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="description" content="Sam's research page (Munachiso Samuel Nwadike)">
   <meta name="author" content="Munachiso Samuel Nwadike">
-  <meta name="viewport" content="width=710">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="max-image-preview:large">
 
   <meta property="og:title" content="Sam - Munachiso Samuel Nwadike - Research Page">
@@ -921,92 +921,205 @@
       pointer-events: none;
     }
 
+    .mobile-menu-toggle,
+    .mobile-menu-scrim {
+      display: none;
+    }
+
     @media (max-width: 980px) {
+      html,
       body {
-        width: var(--page);
-        margin: 0 auto;
+        width: 100%;
+      }
+
+      body {
+        margin: 0;
         font-size: 20px;
         line-height: normal;
       }
 
-      .site-sidebar {
-        position: sticky;
+      body.nav-open {
+        overflow: hidden;
+      }
+
+      .mobile-menu-toggle {
+        position: fixed;
         top: 0;
-        bottom: auto;
-        z-index: 95;
-        width: var(--page);
-        margin: 0 auto 18px auto;
-        padding: 12px 14px 10px 14px;
-        overflow: visible;
-        background: rgba(249, 249, 249, 0.96);
-        color: rgb(var(--teal));
-        border-right: 0;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.14);
-        box-shadow: 0 10px 18px rgba(249, 249, 249, 0.92);
-        backdrop-filter: blur(8px);
+        left: 0;
+        z-index: 130;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 6px;
+        width: 64px;
+        height: 64px;
+        padding: 0;
+        border: 0;
+        background: #122529;
+        box-shadow: 4px 4px 18px rgba(0, 0, 0, 0.12);
+        cursor: pointer;
+      }
+
+      .mobile-menu-toggle span {
+        display: block;
+        width: 34px;
+        height: 5px;
+        margin: 0 auto;
+        border-radius: 999px;
+        background: #ffffff;
+      }
+
+      .mobile-menu-scrim {
+        position: fixed;
+        inset: 0;
+        z-index: 105;
+        display: block;
+        pointer-events: none;
+        background: rgba(0, 0, 0, 0);
+        opacity: 0;
+        transition:
+          background 180ms ease,
+          opacity 180ms ease;
+      }
+
+      body.nav-open .mobile-menu-scrim {
+        pointer-events: auto;
+        background: rgba(0, 0, 0, 0.24);
+        opacity: 1;
+      }
+
+      .site-sidebar {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 120;
+        width: min(82vw, var(--sidebar-width));
+        margin: 0;
+        padding: 76px 18px 28px 18px;
+        overflow-y: auto;
+        background: #122529;
+        color: rgba(255, 255, 255, 0.86);
+        border-right: 1px solid rgba(255, 255, 255, 0.08);
+        border-bottom: 0;
+        box-shadow: 10px 0 24px rgba(0, 0, 0, 0.18);
+        backdrop-filter: none;
+        transform: translateX(-100%);
+        transition: transform 190ms ease;
+      }
+
+      body.nav-open .site-sidebar {
+        transform: translateX(0);
       }
 
       .sidebar-profile {
-        display: none;
+        display: block;
       }
- 
+
+      .sidebar-photo {
+        width: 180px;
+        height: 180px;
+      }
+
+      .sidebar-name {
+        color: #ffffff;
+        font-size: 1.65em;
+      }
+
+      .sidebar-subtitle {
+        color: #ffffff;
+        font-size: 1.05em;
+      }
+
       .section-nav {
-        flex-direction: row;
-        justify-content: center;
-        gap: 0;
-        margin: 0;
-        font-family: var(--font-body);
-        font-size: 0.82em;
-        font-weight: 500;
-        text-align: center;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 2px;
+        margin: 22px 0 0 0;
+        font-family: var(--font-title);
+        font-size: 1.05em;
+        font-weight: 600;
+        text-align: left;
       }
 
       .section-nav::before {
-        display: none;
+        display: block;
       }
 
       .section-nav a {
-        padding: 6px 14px;
-        border-left: 0;
-        border-radius: 0;
-        color: rgb(var(--teal));
-        opacity: 0.66;
+        padding: 11px 12px 11px 16px;
+        border-left: 3px solid transparent;
+        border-radius: 5px;
+        color: #ffffff;
+        opacity: 1;
       }
 
       .section-nav a + a {
-        border-left: 1px solid rgba(var(--teal), 0.18);
+        border-left: 3px solid transparent;
       }
 
-      .section-nav a:hover,
-      .section-nav a.is-active {
-        color: rgb(var(--teal));
-        background: transparent;
-        opacity: 1;
+      .section-nav a:hover {
+        color: #f3ecd6;
+        background: rgba(var(--gold-rgb), 0.055);
         transform: none;
       }
 
+      .section-nav a.is-active {
+        color: var(--gold);
+        border-left-color: rgba(var(--gold-rgb), 0.95);
+        background: rgba(var(--gold-rgb), 0.10);
+        transform: translateX(2px);
+      }
+
       .section-nav a.is-active::after {
-        display: block;
-        content: "";
-        position: absolute;
-        left: 14px;
-        right: 14px;
-        bottom: -12px;
-        height: 3px;
-        border-radius: 999px;
-        background: rgb(var(--teal));
+        display: none;
+      }
+
+      .section-nav a.is-active .nav-icon-white {
+        opacity: 0;
+      }
+
+      .section-nav a.is-active .nav-icon-gold {
+        opacity: 1;
       }
 
       .site-main {
-        width: var(--page);
-        margin: 0 auto;
-        padding: 0;
+        width: 100%;
+        margin: 0;
+        padding: 76px 12px 0 12px;
+        box-sizing: border-box;
+      }
+
+      .card {
+        width: 100%;
+        max-width: var(--page);
+        margin: 14px auto;
+      }
+
+      .inner,
+      .profile {
+        width: 100%;
+        max-width: var(--inner);
+      }
+
+      .profile-photo img.sam-img {
+        width: 78%;
+      }
+
+      .nav-card {
+        width: min(100%, calc(var(--page) * 0.5));
+      }
+
+      .site-footer {
+        width: 100%;
+        max-width: var(--page);
+        padding-left: 12px;
+        padding-right: 12px;
       }
 
       .card[id] {
-        scroll-margin-top: 88px;
+        scroll-margin-top: 82px;
       }
-
     }
 
     #life-canvas {
@@ -1023,7 +1136,14 @@
 </head>
 
 <body>
-  <aside class="site-sidebar" aria-label="Site sidebar">
+  <button class="mobile-menu-toggle" type="button" aria-label="Open navigation" aria-controls="site-sidebar" aria-expanded="false">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+  <div class="mobile-menu-scrim" aria-hidden="true"></div>
+  <aside class="site-sidebar" id="site-sidebar" aria-label="Site sidebar">
     <div class="sidebar-profile">
       <img
         src="news_images/samsnow_resize.webp"
@@ -2140,12 +2260,46 @@
       updateActiveSection();
     }
  
+    function startMobileMenu() {
+      const button = document.querySelector(".mobile-menu-toggle");
+      const scrim = document.querySelector(".mobile-menu-scrim");
+      const links = document.querySelectorAll(".section-nav a");
+
+      if (!button || !scrim) return;
+
+      function setOpen(open) {
+        document.body.classList.toggle("nav-open", open);
+        button.setAttribute("aria-expanded", open ? "true" : "false");
+        button.setAttribute("aria-label", open ? "Close navigation" : "Open navigation");
+      }
+
+      button.addEventListener("click", () => {
+        setOpen(!document.body.classList.contains("nav-open"));
+      });
+
+      scrim.addEventListener("click", () => {
+        setOpen(false);
+      });
+
+      links.forEach(link => {
+        link.addEventListener("click", () => {
+          setOpen(false);
+        });
+      });
+
+      document.addEventListener("keydown", event => {
+        if (event.key === "Escape") {
+          setOpen(false);
+        }
+      });
+    }
 
     renderAwards();
     startPaperCloud();
     startSectionNav();
     startTopBounce();
     startBottomBounce();
+    startMobileMenu();
   </script>
 </body>
 </html>
