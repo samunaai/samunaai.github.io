@@ -107,6 +107,33 @@
       line-height: 1.35;
     }
 
+    .sidebar-keywords {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px 9px;
+      margin-top: 15px;
+      padding: 0 8px;
+    }
+
+    .sidebar-keywords span {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 5px 11px;
+      border: 1px solid rgba(var(--gold-rgb), 0.20);
+      border-radius: 999px;
+      background: #e7daad78;
+      color: rgba(255, 248, 226, 0.88);
+      font-size: 0.76em;
+      font-weight: 700;
+      line-height: 1;
+      white-space: nowrap;
+      box-shadow:
+        inset 0 0 0 1px rgba(255, 255, 255, 0.025),
+        0 0 10px rgba(var(--gold-rgb), 0.025); 
+    }
+
     .sidebar-links {
       display: flex;
       flex-wrap: nowrap;
@@ -645,6 +672,17 @@
     #publications {
       padding-bottom: 40px;
     }
+
+    #awards,
+    #publications {
+      border-bottom-color: rgba(var(--gold-rgb), 0.68);
+    }
+
+    #awards .section-title,
+    #publications .section-title {
+      background: rgba(var(--gold-rgb), 0.105);
+      color: var(--gold);
+    }
     
     #news {
       padding-bottom: 48px;
@@ -1035,7 +1073,16 @@
         color: #ffffff;
         font-size: 1.05em;
       }
-
+      .sidebar-keywords {
+        gap: 7px;
+        margin-top: 13px;
+        padding: 0 4px;
+      }
+    
+      .sidebar-keywords span {
+        padding: 4px 9px;
+        font-size: 0.70em;
+      }
       .section-nav {
         flex-direction: column;
         align-items: stretch;
@@ -1160,7 +1207,9 @@
       display: block;
       margin: 6px auto 0;
       border-radius: 9px;
-      box-shadow: 4px 4px 20px rgba(var(--teal), 0.164);
+      box-shadow:
+        4px 4px 22px rgba(var(--gold-rgb), 0.12),
+        0 0 0 1px rgba(var(--gold-rgb), 0.045);
       box-sizing: border-box;
       cursor: default;
     }
@@ -1185,6 +1234,14 @@
       <div class="sidebar-name">Sam</div>
       <div class="sidebar-subtitle">Munachiso Samuel Nwadike<br>Research Engineer @ MBZUAI
       <br> Former Researcher @ NYU </div> 
+
+      <div class="sidebar-keywords" aria-label="Research keywords">
+        <span>AI Reasoning</span>
+        <span>Physics of Intelligence</span>
+        <span>Interpretability</span>
+        <span>LLMs &amp; VLMs</span>
+      </div>
+
       <div class="sidebar-links" aria-label="Profile links"> 
         <a href="https://scholar.google.com/citations?user=wtjOZ9UAAAAJ&hl=en" target="_blank" rel="noopener noreferrer" aria-label="Google Scholar">
           <img src="social_icons/scholar_logo_white.webp" alt="" class="sidebar-social-icon">
@@ -1318,7 +1375,7 @@
         <section class="introduction-panel">
           <h3 class="introduction-panel-title">Research Interests</h3>
           <p>
-            My research interests center on interpretability, reasoning, language models, and what I call the <span class="introduction-highlight">physics of intelligence</span>:
+            My research interests center on interpretability, reasoning, language models, and what I call the <span class="introduction-highlight">physics of intelligence</span>. That is,
             the search for principles underlying increasingly competent, reliable, and human-aligned intelligent behavior.
           </p>
         </section>
@@ -1591,11 +1648,11 @@
       ["ICML Gold Reviewer Award", " (top machine learning conference)", "2026", true],
       ["UAE Golden Residency", " for Talented Persons/Specialists in Science", "2023", false],
       ["Semifinalist Team Leader", ", MBZIRC Robotics Competitions", "2022", false],
-      ["MBZUAI Fellowship Award", " (4.5% acceptance rate)", "2021", false],
-      ["Deep Learning IndabaX Innovation Grant Awardee", ", USD $8000", "2020", false],
+      ["MBZUAI Fellowship Award", ` (<span class="award-gold">4.5% acceptance rate</span>)`, "2021", false],
+      ["Deep Learning IndabaX Innovation Grant Awardee", `, (<span class="award-gold">Research Grant</span>)`, "2020", false],
       ["Winner, CEO for a Day", ", Refinitiv (London Stock Exchange)", "2019", false],
-      ["NYU Scholarship Award", " (3.7% acceptance rate)", "2016", false],
-      [`Whitesands School Best Graduating Student Valedictorian)`, 
+      ["NYU Scholarship Award", ` (<span class="award-gold">3.7% acceptance rate</span>)`, "2016", false],
+      [`Whitesands School Best Graduating Student (Valedictorian)`, 
         ` · Best in Math, Physics, Chemistry, Biology, and IT`, 
         "2014", 
         false]
@@ -1699,7 +1756,7 @@
           const rawX = slot.x + (Math.random() - 0.5) * jitterX;
           const rawY = slot.y + (Math.random() - 0.5) * jitterY;
 
-          const currentSize = isMobilePaper ? 12 : paperCloudSettings.size;
+          const currentSize = isMobilePaper ? 13 : paperCloudSettings.size;
           ctx.font = `${paperCloudSettings.idleWeight} ${currentSize}px ${paperFont}`;
           const halfText = Math.min(ctx.measureText(text).width / 2 + 10, w / 2 - 10);
 
