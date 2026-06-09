@@ -434,14 +434,14 @@
       font-size: 0.85em;
     }
 
-    .discussion-panels {
+    .introduction-panels {
       display: flex;
       flex-direction: column;
       gap: 18px;
       margin-top: 6px;
     }
 
-    .discussion-panel {
+    .introduction-panel {
       padding: 16px 18px 17px 18px;
       border: 1px solid rgba(var(--teal), 0.12);
       border-left: 4px solid rgba(var(--gold-rgb), 0.30);
@@ -460,8 +460,8 @@
         transform 170ms ease;
     }
 
-    .discussion-panel:hover,
-    .discussion-panel:focus-within {
+    .introduction-panel:hover,
+    .introduction-panel:focus-within {
       border-left-color: rgba(var(--gold-rgb), 0.88);
       background: linear-gradient(
         180deg,
@@ -472,7 +472,7 @@
       transform: translateX(2px);
     }
 
-    .discussion-panel-title {
+    .introduction-panel-title {
       margin: 0 0 9px 0;
       color: var(--gold);
       font-family: var(--font-title);
@@ -482,28 +482,28 @@
       text-transform: uppercase;
     }
 
-    .discussion-panel p {
+    .introduction-panel p {
       margin: 0;
     }
 
-    .discussion-panel p + p {
+    .introduction-panel p + p {
       margin-top: 12px;
     }
 
-    .discussion-panel .discussion-highlight {
+    .introduction-panel .introduction-highlight {
       color: inherit;
       font-weight: 600;
       transition: color 170ms ease;
     }
 
-    .discussion-panel:hover .home-bio-link,
-    .discussion-panel:focus-within .home-bio-link {
+    .introduction-panel:hover .home-bio-link,
+    .introduction-panel:focus-within .home-bio-link {
       color: var(--gold);
       border-bottom-color: rgba(var(--gold-rgb), 0.72);
     }
 
-    .discussion-panel:hover .discussion-highlight,
-    .discussion-panel:focus-within .discussion-highlight {
+    .introduction-panel:hover .introduction-highlight,
+    .introduction-panel:focus-within .introduction-highlight {
       color: var(--gold);
     }
 
@@ -938,6 +938,11 @@
         line-height: normal;
       }
 
+      .profile-name-main {
+        font-size: 1.52em;
+        line-height: 1.15;
+      }
+
       body.nav-open {
         overflow: hidden;
       }
@@ -1120,6 +1125,33 @@
       .card[id] {
         scroll-margin-top: 82px;
       }
+      .card,
+      .home-bio,
+      .award-list,
+      .award-list li {
+        text-align: left;
+      }
+    
+      .award-list li {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: start;
+        gap: 16px;
+        margin: 18px 0;
+        line-height: 1.28;
+      }
+    
+      .award-list li > span:first-child {
+        min-width: 0;
+      }
+    
+      .award-year {
+        justify-self: end;
+        padding-top: 0.03em;
+      }
+      #paperbox #life-canvas {
+        height: 300px;
+      }
     }
 
     #life-canvas {
@@ -1188,20 +1220,20 @@
         <span>Awards</span>
       </a>
 
+      <a href="#introduction">
+        <span class="nav-icon-wrap">
+          <img src="nav_buttons/scroll_icon_white.webp" class="nav-icon nav-icon-white" alt="" aria-hidden="true">
+          <img src="nav_buttons/scroll_icon_gold.webp" class="nav-icon nav-icon-gold" alt="" aria-hidden="true">
+        </span>
+        <span>Introduction</span>
+      </a>
+
       <a href="#publications">
         <span class="nav-icon-wrap">
           <img src="nav_buttons/book_icon_white.webp" class="nav-icon nav-icon-white" alt="" aria-hidden="true">
           <img src="nav_buttons/book_icon_gold.webp" class="nav-icon nav-icon-gold" alt="" aria-hidden="true">
         </span>
         <span>Publications</span>
-      </a>
-
-      <a href="#discussion">
-        <span class="nav-icon-wrap">
-          <img src="nav_buttons/scroll_icon_white.webp" class="nav-icon nav-icon-white" alt="" aria-hidden="true">
-          <img src="nav_buttons/scroll_icon_gold.webp" class="nav-icon nav-icon-gold" alt="" aria-hidden="true">
-        </span>
-        <span>Discussion</span>
       </a>
 
       <a href="#news">
@@ -1244,7 +1276,7 @@
       <p class="section-title">IRL Photo: Sam By The Bay</p>
 
       <div class="profile-photo">
-        <img src="news_images/seaside.webp" alt="Photo of Sam at the Bay - Munachiso Samuel Nwadike" class="sam-img">
+        <img src="news_images/samcompute.webp" alt="Photo of Sam at the Bay - Munachiso Samuel Nwadike" class="sam-img">
       </div>
     </div>
 
@@ -1253,7 +1285,7 @@
       <p>I earned my degrees at <a href="https://www.nyu.edu/academics/schools-and-colleges.html" target="_blank" rel="noopener noreferrer">
         <span class="accent-word"><b>New York University</b></span></a> (BSc) 
         and <a href="https://mbzuai.ac.ae/research-department/machine-learning-department/" target="_blank" rel="noopener noreferrer">MBZUAI (MSc)</a>. </p>
-        <p>For full details, please see my <a href="#discussion" class="home-bio-link-gold"><span class="gold-ref-highlight"><u>"discussion" section below</u></span></a>.</p>
+        <p>For full details, please see my <a href="#introduction" class="home-bio-link-gold"><span class="gold-ref-highlight"><u>"introduction" section below</u></span></a>.</p>
       </div>
 
   </section> 
@@ -1264,6 +1296,68 @@
       <ul class="award-list" id="award-list"></ul>
     </div>
   </section>
+
+  <section class="card" id="introduction">
+    <div class="inner">
+      <p class="section-title">Introduction</p>
+
+      <div class="compact introduction-panels">
+
+        <section class="introduction-panel">
+          <h3 class="introduction-panel-title">Current Role & Education</h3>
+          <p>
+            I am a <span class="introduction-highlight">Research Engineer II</span> at Mohamed bin Zayed University of Artificial Intelligence (MBZUAI),  
+            a highly ranked AI university according to 
+            <a href="https://csrankings.org/#/index?vision&mlmining&nlp&world" target="_blank" rel="noopener noreferrer" class="home-bio-link">CSRankings</a>.
+            I work on interpretability and reasoning in large language models. 
+            I earned my M.Sc. in Machine Learning from MBZUAI and my B.Sc. in Computer Science, with a minor in Mathematics, 
+            from <a href="https://nyuad.nyu.edu/en/" target="_blank" rel="noopener noreferrer" class="home-bio-link">New York University Abu Dhabi</a>.
+          </p>
+        </section>
+
+        <section class="introduction-panel">
+          <h3 class="introduction-panel-title">Research Interests</h3>
+          <p>
+            My research interests center on interpretability, reasoning, language models, and what I call the <span class="introduction-highlight">physics of intelligence</span>:
+            the search for principles underlying increasingly competent, reliable, and human-aligned intelligent behavior.
+          </p>
+        </section>
+
+        <section class="introduction-panel">
+          <h3 class="introduction-panel-title">Current Research at MINT</h3>
+          <p>
+            I currently work with 
+            <a href="https://kentaro-inui.github.io/" target="_blank" rel="noopener noreferrer" class="home-bio-link">Dr. Kentaro Inui</a> 
+            at the MBZUAI <span class="introduction-highlight">Interpretability Team</span>, also known as 
+            <a href="https://www.mint-nlp-mbzuai.com/" target="_blank" rel="noopener noreferrer" class="home-bio-link">MINT</a>, 
+            where we study how language and multimodal models represent knowledge, retrieve information, and develop reasoning-like behavior.
+            Motivated by human cognition as a natural reference point for intelligence, I study how mechanistic explanations can help identify 
+            the computational structures and representational dynamics that support flexible and reliable reasoning in AI systems.
+          </p>
+        </section>
+
+        <section class="introduction-panel">
+          <h3 class="introduction-panel-title">Research Training & Prior Work</h3>
+          <p>
+            I have been privileged to receive world-class research training from brilliant researchers in AI. 
+            I received formative training from Dr. Kun Zhang and 
+            <a href="https://scholar.google.com/citations?hl=en&user=qKQD-2cAAAAJ" target="_blank" rel="noopener noreferrer" class="home-bio-link">Dr. Martin Takáč</a>, 
+            and later co-authored RECALL with Dr. Takáč, my first first-author paper as a research engineer at MBZUAI, which appeared in ACL 2025.
+          </p>
+
+          <p>
+            I also worked with 
+            <a href="https://scholar.google.com/citations?hl=en&user=tR3AZbwAAAAJ&view_op=list_works" target="_blank" rel="noopener noreferrer" class="home-bio-link">Dr. Qirong Ho</a> 
+            of Petuum on Bayesian optimization for hyperparameter tuning, helping researchers tune AI systems under strict compute and budget constraints.
+            At NYU, I worked with 
+            <a href="https://nyuad.nyu.edu/en/academics/divisions/engineering/faculty/farah-emad-shamout.html" target="_blank" rel="noopener noreferrer" class="home-bio-link">Dr. Farah Shamout</a> 
+            at the Clinical Artificial Intelligence Lab on security and interpretability in AI for medical imaging.
+          </p>
+        </section>
+
+      </div>
+    </div>
+  </section> 
 
   <section class="card" id="publications">
     <div class="inner">
@@ -1329,87 +1423,33 @@
     </div>
   </section>
 
-  <section class="card" id="discussion">
-    <div class="inner">
-      <p class="section-title">Discussion</p>
-
-      <div class="compact discussion-panels">
-
-        <section class="discussion-panel">
-          <h3 class="discussion-panel-title">Current Role & Education</h3>
-          <p>
-            I am a <span class="discussion-highlight">Research Engineer II</span> at Mohamed bin Zayed University of Artificial Intelligence (MBZUAI),  
-            a highly ranked AI university according to 
-            <a href="https://csrankings.org/#/index?vision&mlmining&nlp&world" target="_blank" rel="noopener noreferrer" class="home-bio-link">CSRankings</a>.
-            I work on interpretability and reasoning in large language models. 
-            I earned my M.Sc. in Machine Learning from MBZUAI and my B.Sc. in Computer Science, with a minor in Mathematics, 
-            from <a href="https://nyuad.nyu.edu/en/" target="_blank" rel="noopener noreferrer" class="home-bio-link">New York University Abu Dhabi</a>.
-          </p>
-        </section>
-
-        <section class="discussion-panel">
-          <h3 class="discussion-panel-title">Research Interests</h3>
-          <p>
-            My research interests center on interpretability, reasoning, language models, and what I call the <span class="discussion-highlight">physics of intelligence</span>:
-            the search for principles underlying increasingly competent, reliable, and human-aligned intelligent behavior.
-          </p>
-        </section>
-
-        <section class="discussion-panel">
-          <h3 class="discussion-panel-title">Current Research at MINT</h3>
-          <p>
-            I currently work with 
-            <a href="https://kentaro-inui.github.io/" target="_blank" rel="noopener noreferrer" class="home-bio-link">Dr. Kentaro Inui</a> 
-            at the MBZUAI <span class="discussion-highlight">Interpretability Team</span>, also known as 
-            <a href="https://www.mint-nlp-mbzuai.com/" target="_blank" rel="noopener noreferrer" class="home-bio-link">MINT</a>, 
-            where we study how language and multimodal models represent knowledge, retrieve information, and develop reasoning-like behavior.
-            Motivated by human cognition as a natural reference point for intelligence, I study how mechanistic explanations can help identify 
-            the computational structures and representational dynamics that support flexible and reliable reasoning in AI systems.
-          </p>
-        </section>
-
-        <section class="discussion-panel">
-          <h3 class="discussion-panel-title">Research Training & Prior Work</h3>
-          <p>
-            I have been privileged to receive world-class research training from brilliant researchers in AI. 
-            I received formative training from Dr. Kun Zhang and 
-            <a href="https://scholar.google.com/citations?hl=en&user=qKQD-2cAAAAJ" target="_blank" rel="noopener noreferrer" class="home-bio-link">Dr. Martin Takáč</a>, 
-            and later co-authored RECALL with Dr. Takáč, my first first-author paper as a research engineer at MBZUAI, which appeared in ACL 2025.
-          </p>
-
-          <p>
-            I also worked with 
-            <a href="https://scholar.google.com/citations?hl=en&user=tR3AZbwAAAAJ&view_op=list_works" target="_blank" rel="noopener noreferrer" class="home-bio-link">Dr. Qirong Ho</a> 
-            of Petuum on Bayesian optimization for hyperparameter tuning, helping researchers tune AI systems under strict compute and budget constraints.
-            At NYU, I worked with 
-            <a href="https://nyuad.nyu.edu/en/academics/divisions/engineering/faculty/farah-emad-shamout.html" target="_blank" rel="noopener noreferrer" class="home-bio-link">Dr. Farah Shamout</a> 
-            at the Clinical Artificial Intelligence Lab on security and interpretability in AI for medical imaging.
-          </p>
-        </section>
-
-      </div>
-    </div>
-  </section> 
-
-  <section class="card image-card">
-    <div class="inner">
-      <img
-        src="news_images/samcompute.webp"
-        alt="Sam at Photo Shoot"
-        class="wide-image"
-        width="1568"
-        height="688"
-        loading="lazy"
-        decoding="async"
-      >
-    </div>
-  </section>
-
   <section class="card" id="news">
     <div class="inner">
       <p class="section-title">News</p>
 
       <div class="news-list">
+
+        <article class="news-item news-item-featured">
+          <p class="news-date"><span class="gold-text">2026 · ICML Seoul</span></p>
+          <h2 class="news-headline">
+            <a href="https://icml.cc/Conferences/2026" target="_blank" rel="noopener noreferrer">
+              Selected as an ICML 2026 Gold Reviewer
+            </a>
+          </h2>
+          <p class="news-copy">
+            I was selected as a Gold Reviewer for ICML 2026 and will be attending the conference
+            in Seoul, Korea. I am grateful for the opportunity to contribute to the review process
+            and to participate in the broader machine learning research community.
+          </p>
+          <img
+            src="news_images/icml.webp"
+            alt="ICML 2026 Seoul"
+            class="news-image"
+            loading="lazy"
+            decoding="async"
+          >
+        </article>  
+
         <article class="news-item">
           <p class="news-date">30 September 2025 · MBZUAI News</p>
           <h2 class="news-headline">
@@ -1607,6 +1647,18 @@
       let words = [];
 
       function makeSlots(count) {
+        const isMobilePaper = window.innerWidth <= 980;
+
+        if (isMobilePaper) {
+          const marginY = 36;
+          const usableH = h - marginY * 2;
+
+          return Array.from({ length: count }, (_, i) => ({
+            x: w / 2,
+            y: count === 1 ? h / 2 : marginY + (usableH * i) / (count - 1)
+          }));
+        }
+
         const rows = count <= 3 ? 1 : count <= 5 ? 2 : count <= 12 ? 3 : Math.ceil(Math.sqrt(count * h / w));
         const cols = Math.ceil(count / rows);
         const marginX = 85;
@@ -1629,7 +1681,6 @@
 
         return shuffle(slots);
       }
-
       function init() {
         const dpr = window.devicePixelRatio || 1;
         w = canvas.clientWidth;
@@ -1639,15 +1690,17 @@
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
         const slots = makeSlots(concepts.length);
-        const jitterX = w * 0.045;
-        const jitterY = h * 0.055;
+        const isMobilePaper = window.innerWidth <= 980;
+        const jitterX = isMobilePaper ? 0 : w * 0.045;
+        const jitterY = isMobilePaper ? 0 : h * 0.055;
 
         words = concepts.map((text, i) => {
           const slot = slots[i];
           const rawX = slot.x + (Math.random() - 0.5) * jitterX;
           const rawY = slot.y + (Math.random() - 0.5) * jitterY;
 
-          ctx.font = `${paperCloudSettings.idleWeight} ${paperCloudSettings.size}px ${paperFont}`;
+          const currentSize = isMobilePaper ? 12 : paperCloudSettings.size;
+          ctx.font = `${paperCloudSettings.idleWeight} ${currentSize}px ${paperFont}`;
           const halfText = Math.min(ctx.measureText(text).width / 2 + 10, w / 2 - 10);
 
           return {
@@ -1657,7 +1710,7 @@
             by: clamp(rawY, 24, h - 24),
             x: 0,
             y: 0,
-            size: paperCloudSettings.size,
+            size: currentSize,
             scale: 1,
             hover: 0,
             selected: false,
