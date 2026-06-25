@@ -773,6 +773,11 @@
       border-radius: 8px;
     }
 
+    .news-card-link {
+      cursor: pointer;
+    }
+
+
     .news-list > .news-item:first-of-type {
       border-top: 0;
     }
@@ -833,6 +838,13 @@
     .news-item:hover::before,
     .news-item:focus-within::before {
       box-shadow: 0 0 0 7px rgba(var(--teal), 0.13);
+      transform: scale(1.18);
+    }
+
+    .news-item.news-card-link:not(.news-item-featured):hover::before,
+    .news-item.news-card-link:not(.news-item-featured):focus-within::before,
+    .news-item.news-card-link:not(.news-item-featured):active::before {
+      box-shadow: 0 0 0 7px rgba(var(--gold-rgb), 0.18);
       transform: scale(1.18);
     }
 
@@ -1487,9 +1499,34 @@
       <div class="news-list">
 
         <article class="news-item news-item-featured">
+          <p class="news-date"><span class="gold-text">2026 · Call for datasets </span></p>
+          <h2 class="news-headline">
+            <a href="https://arxiv.org/abs/XXXX.XXXXX" target="_blank" rel="noopener noreferrer">
+              Einstein World Models
+            </a>
+          </h2>
+          <p class="news-copy">
+            Our new paper, <em>Einstein World Models</em>, proposes both a blueprint and a call
+            for datasets for LLM reasoning systems that interleave language reasoning with
+            counterfactual visual thought experiments. We distinguish Einstein World Models
+            from the world-modules they call, treating generated rollouts as inspectable
+            hypotheses that become part of the reasoning trace. Inspired by Einstein’s famous
+            visual thought experiments, the paper points toward a role for imagination in
+            advancing AI reasoning.
+          </p>
+          <img
+            src="news_images/ewm_caption.webp"
+            alt="Einstein World Models paper"
+            class="news-image"
+            loading="lazy"
+            decoding="async"
+          >
+        </article>
+
+        <article class="news-item news-item-featured">
           <p class="news-date"><span class="gold-text">2026 · ICML Seoul</span></p>
           <h2 class="news-headline">
-            <a href="https://icml.cc/Conferences/2026" target="_blank" rel="noopener noreferrer">
+            <a href="https://x.com/samcompute/status/2054672308342501443" target="_blank" rel="noopener noreferrer">
               Selected as an ICML 2026 Gold Reviewer
             </a>
           </h2>
@@ -2389,7 +2426,24 @@
       window.addEventListener("resize", requestActiveUpdate);
       updateActiveSection();
     }
- 
+
+    function startNewsCards() {
+      document.querySelectorAll(".news-item").forEach(item => {
+        const link = item.querySelector(".news-headline a[href]");
+
+        if (!link) return;
+
+        item.classList.add("news-card-link");
+
+        item.addEventListener("click", event => {
+          if (event.defaultPrevented) return;
+          if (event.target.closest("a")) return;
+
+          link.click();
+        });
+      });
+    }
+
     function startMobileMenu() {
       const button = document.querySelector(".mobile-menu-toggle");
       const scrim = document.querySelector(".mobile-menu-scrim");
@@ -2429,6 +2483,7 @@
     startSectionNav();
     startTopBounce();
     startBottomBounce();
+    startNewsCards();
     startMobileMenu();
   </script>
 </body>
